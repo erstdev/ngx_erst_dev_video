@@ -2,7 +2,29 @@
   "name": "ngx-erst-dev-video",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "nx serve demo",
+    "build": "nx build demo",
+    "build:all": "nx run-many --target=build --all",
+    "test": "nx test",
+    "test:all": "nx run-many --target=test --all",
+    "lint": "nx lint",
+    "lint:all": "nx run-many --target=lint --all",
+    "affected:test": "nx affected --target=test",
+    "affected:build": "nx affected --target=build",
+    "affected:lint": "nx affected --target=lint",
+    "lint:fix": "nx run-many --target=lint --all --fix",
+    "format:check": "nx format:check",
+    "format:write": "nx format:write",
+    "verify": "nx run-many --target=lint,test,build --all",
+    "verify:affected": "nx affected --target=lint,test,build",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,js,html,scss}": [
+      "nx affected --target=lint --fix --files"
+    ]
+  },
   "private": true,
   "dependencies": {
     "@angular/common": "~22.1.0",
@@ -34,7 +56,9 @@
     "autoprefixer": "^10.4.0",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
+    "husky": "^9.1.7",
     "jsonc-eslint-parser": "^2.1.0",
+    "lint-staged": "^17.6.0",
     "ng-packagr": "~22.1.0",
     "nx": "23.2.1",
     "postcss": "^8.4.5",

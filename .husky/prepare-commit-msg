@@ -1,0 +1,17 @@
+#!/bin/sh
+# Хук prepare-commit-msg добавляет имя ветки в начало сообщения коммита
+
+BRANCH=$(git symbolic-ref --short HEAD)
+
+# Пропускаем main/master, чтобы не засорять историю
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
+  exit 0
+fi
+
+# Не дублируем, если префикс уже есть
+if ! grep -q "^\[$BRANCH\]" "$1"; then
+  # Читаем текущее сообщение (игнорируя комментарии Git)
+  MSG=$(grep -v '^#' "$1")
+  # Перезаписываем файл с добавленным префиксом
+  echo "[$BRANCH] $MSG" > "$1"
+fi
