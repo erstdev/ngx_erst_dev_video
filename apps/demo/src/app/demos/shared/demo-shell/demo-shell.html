@@ -1,0 +1,38 @@
+<article class="demo-page">
+  <a class="demo-page__back" routerLink="/">← Все демо</a>
+
+  <header class="demo-page__header">
+    <div class="demo-page__titles">
+      <h1 class="demo-page__title">{{ title() }}</h1>
+      <p class="demo-page__pkg">{{ pkg() }}</p>
+    </div>
+
+    <div class="demo-page__badges">
+      @if (pro()) {
+      <span class="chip chip--pro">PRO</span>
+      }
+      <span [class]="statusClass()">{{ statusLabel() }}</span>
+    </div>
+  </header>
+
+  @if (selector()) {
+  <p class="demo-page__selector">Селектор: <code>{{ selector() }}</code></p>
+  }
+
+  <p class="demo-page__description">{{ description() }}</p>
+
+  @if (responsibilities().length) {
+  <ul class="demo-page__list">
+    @for (item of responsibilities(); track item) {
+    <li>{{ item }}</li>
+    }
+  </ul>
+  }
+
+  <section class="panel">
+    <h2 class="panel__title">Живое демо</h2>
+    <div class="panel__body">
+      <ng-content />
+    </div>
+  </section>
+</article>

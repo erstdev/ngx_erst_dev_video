@@ -27,12 +27,12 @@ const STATE_LABELS: Readonly<Record<VideoState, string>> = {
  * и нативные контролы браузера.
  */
 @Component({
-  selector: 'app-player-demo',
+  selector: 'app-video-service-demo',
   imports: [AsyncPipe, VideoDirective],
-  templateUrl: './player-demo.html',
-  styleUrl: './player-demo.scss',
+  templateUrl: './video-service-demo.html',
+  styleUrl: './video-service-demo.scss',
 })
-export class PlayerDemo {
+export class VideoServiceDemo {
   protected readonly video = inject(VideoService);
 
   protected readonly formatTime = formatTime;

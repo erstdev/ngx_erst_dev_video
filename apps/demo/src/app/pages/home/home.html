@@ -1,0 +1,34 @@
+<section class="home">
+  <header class="home__header">
+    <h1 class="home__title">Демо ngx-video</h1>
+    <p class="home__subtitle">
+      Живые примеры кирпичей экосистемы. У каждого кирпича своя страница:
+      готовые показывают работу, запланированные — контракт и место под демо.
+    </p>
+  </header>
+
+  @for (group of groups; track group.id) {
+  <section class="group">
+    <header class="group__header">
+      <h2 class="group__title">{{ group.title }}</h2>
+      @if (group.pro) {
+      <span class="chip chip--pro">PRO</span>
+      }
+      <code class="group__pkg">{{ group.pkg }}</code>
+    </header>
+
+    <ul class="group__list">
+      @for (demo of group.demos; track demo.id) {
+      <li class="group__item">
+        <a class="group__link" [routerLink]="'/' + demo.path">
+          {{ demo.title }}
+        </a>
+        <span [class]="'chip chip--' + demo.status">
+          {{ statusLabels[demo.status] }}
+        </span>
+      </li>
+      }
+    </ul>
+  </section>
+  }
+</section>

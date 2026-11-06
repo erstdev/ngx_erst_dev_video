@@ -22,3 +22,50 @@ body {
 *::after {
   box-sizing: border-box;
 }
+
+/* Статусы кирпичей: используются и на главной, и на страницах демо. */
+.chip {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.chip--ready {
+  border-color: #065f46;
+  background: #064e3b;
+  color: #6ee7b7;
+}
+
+.chip--wip {
+  border-color: #92400e;
+  background: #78350f;
+  color: #fcd34d;
+}
+
+.chip--planned {
+  border-color: #334155;
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+.chip--pro {
+  border-color: #9a3412;
+  background: #7c2d12;
+  color: #fdba74;
+}
+
+/* Заглушка в слоте живого демо (контент проецируется из демо-страниц). */
+.demo-placeholder {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border: 1px dashed #374151;
+  border-radius: 0.5rem;
+  color: #9ca3af;
+  line-height: 1.6;
+}
