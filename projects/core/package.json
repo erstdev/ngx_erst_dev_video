@@ -1,7 +1,11 @@
 {
   "name": "@erst_dev/ngx-video-core",
   "version": "0.0.1",
-  "peerDependencies": {},
+  "peerDependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "rxjs": "^7.8.0"
+  },
   "sideEffects": false,
   "publishConfig": {
     "access": "public"

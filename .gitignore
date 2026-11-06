@@ -1,50 +1,50 @@
-# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# =============================================================================
+# ngx-erst-dev-video — правила игнорирования Git
+# =============================================================================
 
-# compiled output
-dist
-tmp
-out-tsc
+# --- Зависимости -------------------------------------------------------------
+/node_modules/
 
-# dependencies
-node_modules
+# --- Артефакты сборки --------------------------------------------------------
+/dist
+/tmp
+/out-tsc
+*.tsbuildinfo
 
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-
-# System Files
-.DS_Store
-Thumbs.db
-
+# --- Кеши Nx и Angular -------------------------------------------------------
 .nx/cache
 .nx/workspace-data
 .nx/migrate-runs
+/.angular
+
+# --- Логи --------------------------------------------------------------------
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Переменные окружения -----------------------------------------------------
+.env
+.env.*
+!.env.example
+
+# --- Редакторы и IDE ----------------------------------------------------------
+.idea/
+.vscode/
+*.iml
+
+# --- Операционная система ------------------------------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Прочее ----------------------------------------------------------------------
+.eslintcache
 .claude/worktrees
 .claude/settings.local.json
 
-.angular
-
+# Личный рабочий файл-«сейв» проекта (раздел 9 CONTEXT.md). Уберите строку,
+# если хотите версионировать документ.
 CONTEXT.md
