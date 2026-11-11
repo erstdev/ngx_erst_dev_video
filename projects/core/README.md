@@ -137,7 +137,7 @@ interface VideoError {
   readonly cause?: unknown;
 }
 
-interface Quality {
+interface QualityInterface {
   readonly id: string;
   readonly label: string;
   readonly width?: number;

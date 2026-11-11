@@ -3,7 +3,7 @@
  *
  * Используется пакетом `ngx-video-sources` (HLS/DASH) и компонентами выбора качества.
  */
-export interface Quality {
+export interface QualityInterface {
   /** Стабильный идентификатор уровня (например, `"720p"` или `"auto"`). */
   readonly id: string;
   /** Подпись для интерфейса (например, `"720p"`). */

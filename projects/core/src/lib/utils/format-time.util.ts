@@ -8,7 +8,7 @@
  * @param seconds — время в секундах.
  * @returns строка вида `"03:07"` или `"1:03:07"`.
  */
-export function formatTime(seconds: number | null | undefined): string {
+export const formatTime = (seconds: number | null | undefined): string => {
   if (seconds === null || seconds === undefined) {
     return '00:00';
   }
@@ -26,4 +26,4 @@ export function formatTime(seconds: number | null | undefined): string {
   const ss = String(restSeconds).padStart(2, '0');
 
   return hours > 0 ? `${hours}:${mm}:${ss}` : `${mm}:${ss}`;
-}
+};

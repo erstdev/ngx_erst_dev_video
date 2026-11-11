@@ -2,9 +2,11 @@
  * Внутренняя точка сборки библиотеки.
  * Публичный API объявляется в `src/index.ts`.
  *
- * Структура: один кирпич — одна папка со своим `index.ts`.
- * В `shared/` лежит только то, что используется несколькими кирпичами.
+ * Каждый слой имеет собственный `index.ts`-баррел и реэкспортируется здесь.
  */
 
-export * from './shared';
-export * from './video-service';
+export * from './directives';
+export * from './interfaces';
+export * from './services';
+export * from './types';
+export * from './utils';

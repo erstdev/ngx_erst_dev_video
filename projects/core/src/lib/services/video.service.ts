@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import type { Observable } from 'rxjs';
-
-import type { VideoError, VideoErrorCode } from './video-error';
-import type { VideoState } from './video-state';
+import { VideoErrorCode } from '../types';
+import { VideoState } from '../types';
+import { VideoError } from '../interfaces';
 
 /** Тексты сообщений по умолчанию. Код ошибки — контракт, текст можно менять. */
 const ERROR_MESSAGES: Readonly<Record<VideoErrorCode, string>> = {

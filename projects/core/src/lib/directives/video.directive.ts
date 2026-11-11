@@ -6,7 +6,7 @@ import {
   inject,
 } from '@angular/core';
 
-import { VideoService } from './video.service';
+import { VideoService } from '../services/video.service';
 
 /**
  * Связывает `<video>` с `VideoService`.

@@ -15,7 +15,7 @@ import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
 export class QualitySwitcherDemo {
   protected readonly responsibilities = [
     'Входы: qualities, activeId, customClass; выход: qualityChange.',
-    'Тип Quality объявлен в core.',
+    'Тип QualityInterface объявлен в core.',
     'Не парсит манифесты и не хранит состояние.',
   ];
 }
