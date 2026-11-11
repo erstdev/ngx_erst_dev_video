@@ -1,9 +1,10 @@
 /*
  * Внутренняя точка сборки библиотеки.
  * Публичный API объявляется в `src/index.ts`.
+ *
+ * Структура: один кирпич — одна папка со своим `index.ts`.
+ * В `shared/` лежит только то, что используется несколькими кирпичами.
  */
 
-export * from './directives/video.directive';
-export * from './services/video.service';
-export * from './types';
-export * from './utils/format-time';
+export * from './shared';
+export * from './video-service';
