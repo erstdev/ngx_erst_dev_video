@@ -16,7 +16,7 @@
 | `VolumeSliderComponent`       | `ngx-volume-slider`       | ✅ готов |
 | `TimeDisplayComponent`        | `ngx-time-display`        | ✅ готов |
 | `FullscreenButtonComponent`   | `ngx-fullscreen-button`   | ✅ готов |
-| `BufferingIndicatorComponent` | `ngx-buffering-indicator` | ⏳ план  |
+| `BufferingIndicatorComponent` | `ngx-buffering-indicator` | ✅ готов |
 
 ## Требования
 
@@ -560,6 +560,95 @@ interface FullscreenButtonIconContext {
 Компонент не обращается к DOM API и Fullscreen API: в шаблоне только привязки
 и SVG, поэтому безопасно рендерится на сервере вместе с остальным плеером.
 
+## BufferingIndicatorComponent
+
+Индикатор загрузки (спиннер). Показывается, когда переданное состояние равно
+`buffering`. Момент включения буферизации определяет `VideoService`, а не
+компонент: он только отражает состояние.
+
+```html
+<ngx-buffering-indicator [state]="video.state()" />
+```
+
+### Входы
+
+| Вход          | Тип          | По умолчанию | Описание                                                                         |
+| ------------- | ------------ | ------------ | -------------------------------------------------------------------------------- |
+| `state`       | `VideoState` | — (required) | Текущее состояние плеера; индикатор виден только при `buffering`                 |
+| `delay`       | `number`     | `0`          | Задержка появления в миллисекундах; защищает от мигания при короткой буферизации |
+| `customClass` | `string`     | `''`         | Дополнительный CSS-класс для хост-элемента `<ngx-buffering-indicator>`           |
+
+### Выходы
+
+Выходов нет: компонент только отображает переданное состояние.
+
+### Поведение
+
+- Индикатор рендерится только при `state === 'buffering'`; в остальных состояниях
+  в DOM ничего нет.
+- `delay` задерживает появление: если буферизация закончилась раньше, спиннер не
+  мелькнёт. Отрицательные и некорректные значения считаются нулём.
+- Компонент не решает, когда включать буферизацию, и не хранит состояние плеера:
+  вход `state` обновляет родитель.
+
+### CSS-переменные
+
+| Переменная                    | По умолчанию                | Описание                    |
+| ----------------------------- | --------------------------- | --------------------------- |
+| `--ngx-buffering-size`        | `32px`                      | Размер спиннера             |
+| `--ngx-buffering-thickness`   | `3px`                       | Толщина кольца              |
+| `--ngx-buffering-color`       | `#ffffff`                   | Цвет активной части кольца  |
+| `--ngx-buffering-track-color` | `rgba(255, 255, 255, 0.25)` | Цвет трека кольца           |
+| `--ngx-buffering-speed`       | `0.8s`                      | Длительность одного оборота |
+
+### Стилизация
+
+Переопределение на самом компоненте:
+
+```scss
+ngx-buffering-indicator {
+  --ngx-buffering-size: 48px;
+  --ngx-buffering-thickness: 4px;
+  --ngx-buffering-color: #34d399;
+  --ngx-buffering-track-color: rgba(52, 211, 153, 0.25);
+  --ngx-buffering-speed: 0.6s;
+}
+```
+
+Через `customClass` — класс вешается на **хост-элемент** `<ngx-buffering-indicator>`:
+
+```html
+<ngx-buffering-indicator customClass="my-buffering" [state]="video.state()" />
+```
+
+```scss
+/* player.component.scss — обычные scoped-стили, без ::ng-deep */
+.my-buffering {
+  --ngx-buffering-size: 48px;
+  --ngx-buffering-color: #34d399;
+  --ngx-buffering-track-color: rgba(52, 211, 153, 0.25);
+}
+```
+
+`customClass` не затрагивает классы, заданные на элементе вручную:
+`<ngx-buffering-indicator class="layout-wide" customClass="my-buffering">`
+сохранит оба.
+
+### Доступность
+
+- Обёртка рендерится с `role="status"`: появление индикатора объявляется
+  скринридером.
+- Видимый спиннер помечен `aria-hidden="true"`, рядом лежит визуально скрытый
+  текст «Загрузка…».
+- При `prefers-reduced-motion: reduce` вращение отключается — остаётся статичное
+  кольцо.
+
+### SSR
+
+Таймер задержки создаётся только в браузере (`isPlatformBrowser`); на сервере
+индикатор отдаётся сразу по состоянию. Анимация — чистый CSS, DOM API компонент
+не использует.
+
 ## Размещение на плеере
 
 Контролы не знают, где находятся: layout — задача контейнера плеера.
@@ -606,7 +695,6 @@ CSS — без специальных входов и без `::ng-deep`.
     <ngx-volume-slider [volume]="video.volume()" (volumeChange)="video.setVolume($event)" />
     <ngx-time-display [currentTime]="video.time()" [duration]="video.duration()" />
     <ngx-fullscreen-button [fullscreen]="video.fullscreen()" (toggle)="video.toggleFullscreen()" />
-    <!-- здесь появится buffering-indicator -->
   </div>
 </div>
 ```
@@ -661,7 +749,6 @@ CSS — без специальных входов и без `::ng-deep`.
   <ngx-volume-slider [volume]="video.volume()" (volumeChange)="video.setVolume($event)" />
   <ngx-time-display [currentTime]="video.time()" [duration]="video.duration()" />
   <ngx-fullscreen-button [fullscreen]="video.fullscreen()" (toggle)="video.toggleFullscreen()" />
-  <!-- здесь появится buffering-indicator и т.д. -->
 </div>
 ```
 

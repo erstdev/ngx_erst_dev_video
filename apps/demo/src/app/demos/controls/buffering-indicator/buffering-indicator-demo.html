@@ -2,11 +2,110 @@
   title="BufferingIndicatorComponent"
   pkg="@erst_dev/ngx-video-controls"
   selector="ngx-buffering-indicator"
-  status="planned"
+  status="ready"
   description="Индикатор загрузки (спиннер). Показывается, когда переданное состояние равно buffering; момент включения буферизации определяет VideoService."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="examples__hint">
+    Индикатор ничего не решает сам: состояние приходит через вход
+    <code>state</code>. Под каждым примером — блок «Код примера».
   </p>
+
+  <div class="examples">
+    <section class="example example--wide">
+      <h3 class="example__title">Базовый: индикатор поверх видео</h3>
+
+      <div class="player">
+        <video
+          class="player__video"
+          ngxVideo
+          [src]="src"
+          preload="metadata"
+          playsinline
+          (click)="video.toggle()"
+        ></video>
+
+        <div class="player__overlay">
+          <ngx-buffering-indicator [state]="video.state()" />
+        </div>
+      </div>
+
+      <p class="example__note">
+        Индикатор виден только при <code>state === 'buffering'</code>. Момент
+        включения определяет <code>VideoService</code>, поэтому на быстром видео
+        спиннер может не успеть появиться. Ниже состояние можно переключить
+        вручную.
+      </p>
+
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example example--wide">
+      <h3 class="example__title">Состояние задаёт родитель</h3>
+
+      <div class="example__stages">
+        <div class="stage">
+          <ngx-buffering-indicator [state]="demoState()" />
+          <span class="stage__label">delay 0 — сразу</span>
+        </div>
+
+        <div class="stage">
+          <ngx-buffering-indicator [state]="demoState()" [delay]="300" />
+          <span class="stage__label">delay 300 мс</span>
+        </div>
+      </div>
+
+      <div class="example__row">
+        <button
+          type="button"
+          class="state-button"
+          (click)="setDemoState('buffering')"
+        >
+          buffering
+        </button>
+        <button
+          type="button"
+          class="state-button"
+          (click)="setDemoState('playing')"
+        >
+          playing
+        </button>
+        <span class="example__state">state: {{ demoState() }}</span>
+      </div>
+
+      <p class="example__note">
+        При задержке <code>300</code> мс индикатор появится, только если
+        буферизация длится дольше: короткие провалы не мигают. По умолчанию
+        <code>delay</code> равен <code>0</code> — показывать сразу.
+      </p>
+
+      <app-code-snippet [code]="code.manual" />
+    </section>
+
+    <section class="example example--wide">
+      <h3 class="example__title">Свои размер и цвета</h3>
+
+      <div class="example__stages">
+        <div class="stage">
+          <ngx-buffering-indicator [state]="bufferingState" />
+          <span class="stage__label">по умолчанию</span>
+        </div>
+
+        <div class="stage">
+          <ngx-buffering-indicator
+            customClass="demo-buffering"
+            [state]="bufferingState"
+          />
+          <span class="stage__label">customClass</span>
+        </div>
+      </div>
+
+      <p class="example__note">
+        Класс из <code>customClass</code> вешается на хост-элемент, поэтому
+        переменные задаются обычными стилями — без <code>::ng-deep</code>.
+      </p>
+
+      <app-code-snippet [code]="code.custom" />
+    </section>
+  </div>
 </app-demo-shell>

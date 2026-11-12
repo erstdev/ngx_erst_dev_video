@@ -1,0 +1,54 @@
+:host {
+  --ngx-buffering-size: 32px;
+  --ngx-buffering-thickness: 3px;
+  --ngx-buffering-color: #ffffff;
+  --ngx-buffering-track-color: rgba(255, 255, 255, 0.25);
+  --ngx-buffering-speed: 0.8s;
+
+  display: inline-flex;
+  line-height: 0;
+}
+
+.ngx-buffering-indicator {
+  display: inline-flex;
+  width: var(--ngx-buffering-size);
+  height: var(--ngx-buffering-size);
+}
+
+.ngx-buffering-indicator__spinner {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: var(--ngx-buffering-thickness) solid var(--ngx-buffering-track-color);
+  border-top-color: var(--ngx-buffering-color);
+  border-radius: 50%;
+  animation: ngx-buffering-spin var(--ngx-buffering-speed) linear infinite;
+}
+
+@keyframes ngx-buffering-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/*
+ * Текст для скринридеров: сам спиннер помечен aria-hidden, а роль status
+ * объявляет «Загрузка…» при появлении индикатора.
+ */
+.ngx-buffering-indicator__text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-buffering-indicator__spinner {
+    animation: none;
+  }
+}

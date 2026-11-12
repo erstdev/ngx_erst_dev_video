@@ -15,14 +15,14 @@ Headless-библиотеки для видео-плеера в Angular. Не м
 
 ## Пакеты
 
-| Пакет                          | Версия | Статус      | Что внутри                                                                                                                    |
-| ------------------------------ | ------ | ----------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `@erst_dev/ngx-video-core`     | 0.0.1  | ✅ готов    | `VideoService`, `VideoDirective`, типы состояния, `formatTime`                                                                |
-| `@erst_dev/ngx-video-controls` | 0.0.1  | 🚧 в работе | `PlayButtonComponent`, `VolumeSliderComponent`, `TimeDisplayComponent`, `FullscreenButtonComponent`; далее BufferingIndicator |
-| `@erst_dev/ngx-video-timeline` | —      | ⏳ план     | Timeline, TimelinePreview, ChapterMarkers                                                                                     |
-| `@erst_dev/ngx-video-extras`   | —      | ⏳ план     | ClickToPlayOverlay, ErrorDisplay, SpeedControl, KeyboardShortcuts, Gesture, SubtitleRenderer                                  |
-| `@erst_dev/ngx-video-sources`  | —      | ⏳ план     | HlsSource, DashSource, QualitySwitcher                                                                                        |
-| `@erst_dev/ngx-video-capture`  | —      | 💰 PRO      | CaptureService, ScreenshotButton, ClipRecorder                                                                                |
+| Пакет                          | Версия | Статус   | Что внутри                                                                                                                         |
+| ------------------------------ | ------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `@erst_dev/ngx-video-core`     | 0.0.1  | ✅ готов | `VideoService`, `VideoDirective`, типы состояния, `formatTime`                                                                     |
+| `@erst_dev/ngx-video-controls` | 0.0.1  | ✅ готов | `PlayButtonComponent`, `VolumeSliderComponent`, `TimeDisplayComponent`, `FullscreenButtonComponent`, `BufferingIndicatorComponent` |
+| `@erst_dev/ngx-video-timeline` | —      | ⏳ план  | Timeline, TimelinePreview, ChapterMarkers                                                                                          |
+| `@erst_dev/ngx-video-extras`   | —      | ⏳ план  | ClickToPlayOverlay, ErrorDisplay, SpeedControl, KeyboardShortcuts, Gesture, SubtitleRenderer                                       |
+| `@erst_dev/ngx-video-sources`  | —      | ⏳ план  | HlsSource, DashSource, QualitySwitcher                                                                                             |
+| `@erst_dev/ngx-video-capture`  | —      | 💰 PRO   | CaptureService, ScreenshotButton, ClipRecorder                                                                                     |
 
 Пакеты пока не опубликованы в npm: версия `0.0.1` — рабочая. Внутри монорепо они
 подключаются через `paths` в `tsconfig.base.json`.

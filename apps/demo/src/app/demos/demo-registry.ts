@@ -79,7 +79,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'buffering-indicator',
         path: 'controls/buffering-indicator',
         title: 'BufferingIndicatorComponent',
-        status: 'planned',
+        status: 'ready',
       },
     ],
   },
