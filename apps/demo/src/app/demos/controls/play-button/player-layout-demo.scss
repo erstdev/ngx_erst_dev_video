@@ -1,0 +1,60 @@
+:host {
+  display: block;
+}
+
+.player {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background: #000;
+}
+
+.player__video {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/*
+ * По центру поверх видео: хост кнопки — обычный элемент в потоке, поэтому
+ * позиционируем его абсолютно относительно контейнера плеера.
+ */
+.player__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+
+  --ngx-play-size: 72px;
+  --ngx-play-bg: rgba(0, 0, 0, 0.5);
+  --ngx-play-hover-bg: rgba(0, 0, 0, 0.75);
+}
+
+/* Панель контролов снизу, появляется при наведении и фокусе внутри неё. */
+.player__controls {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.player:hover .player__controls,
+.player:focus-within .player__controls {
+  opacity: 1;
+}
+
+.player__state {
+  color: #e5e7eb;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}

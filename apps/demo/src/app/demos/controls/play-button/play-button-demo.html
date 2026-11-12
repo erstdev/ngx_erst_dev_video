@@ -2,11 +2,91 @@
   title="PlayButtonComponent"
   pkg="@erst_dev/ngx-video-controls"
   selector="ngx-play-button"
-  status="planned"
+  status="ready"
   description="Кнопка Play/Pause: показывает иконку по переданному состоянию и сообщает наружу о клике. Сама не вызывает методы медиа-элемента — решение принимает родитель."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="examples__hint">
+    Под каждым примером — блок «Код примера»: HTML и SCSS можно скопировать в
+    свой проект.
   </p>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Стандартная кнопка</h3>
+      <video
+        ngxVideo
+        class="example__video"
+        [src]="src"
+        preload="metadata"
+        playsinline
+        (click)="video.toggle()"
+      ></video>
+      <div class="example__row">
+        <ngx-play-button [state]="video.state()" (toggle)="video.toggle()" />
+        <span class="example__state">state: {{ video.state() }}</span>
+      </div>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Свои размер и цвета</h3>
+      <div class="example__row">
+        <ngx-play-button
+          customClass="demo-play"
+          ariaLabel="Воспроизведение видео"
+          [state]="video.state()"
+          (toggle)="video.toggle()"
+        />
+      </div>
+      <p class="example__note">
+        Класс из <code>customClass</code> вешается на хост-элемент, поэтому
+        переменные задаются обычными стилями — без <code>::ng-deep</code>.
+      </p>
+      <app-code-snippet [code]="code.custom" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Своя иконка через ng-template</h3>
+      <div class="example__row">
+        <ngx-play-button
+          [state]="video.state()"
+          [iconTemplate]="customIcon"
+          (toggle)="video.toggle()"
+        />
+      </div>
+      <p class="example__note">
+        В шаблон передаётся контекст <code>PlayButtonIconContext</code>:
+        <code>playing</code> и <code>state</code>.
+      </p>
+      <app-code-snippet [code]="code.icon" />
+    </section>
+
+    <section class="example example--wide">
+      <h3 class="example__title">Поверх видео по центру</h3>
+      <app-player-layout-demo layout="center" />
+      <p class="example__note">
+        Контейнер плеера — <code>position: relative</code>, кнопка —
+        <code>position: absolute</code> с центрированием через
+        <code>translate(-50%, -50%)</code>.
+      </p>
+      <app-code-snippet [code]="code.center" />
+    </section>
+
+    <section class="example example--wide">
+      <h3 class="example__title">В панели снизу, как в YouTube и VK</h3>
+      <app-player-layout-demo layout="controls-bar" />
+      <p class="example__note">
+        Панель контролов прижата к нижней кромке и появляется при наведении на
+        плеер или фокусе внутри неё.
+      </p>
+      <app-code-snippet [code]="code.controlsBar" />
+    </section>
+  </div>
+
+  <ng-template #customIcon let-playing="playing" let-state="state">
+    <span class="demo-icon" [attr.title]="state">
+      {{ playing ? '⏸' : '▶' }}
+    </span>
+  </ng-template>
 </app-demo-shell>

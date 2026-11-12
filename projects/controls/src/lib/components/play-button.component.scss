@@ -1,0 +1,50 @@
+:host {
+  --ngx-play-size: 48px;
+  --ngx-play-icon-size: 55%;
+  --ngx-play-color: #ffffff;
+  --ngx-play-bg: rgba(0, 0, 0, 0.7);
+  --ngx-play-hover-bg: rgba(0, 0, 0, 0.9);
+  --ngx-play-border-radius: 50%;
+  --ngx-play-transition: 0.15s ease;
+
+  display: inline-flex;
+}
+
+.ngx-play-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ngx-play-size);
+  height: var(--ngx-play-size);
+  padding: 0;
+  border: none;
+  border-radius: var(--ngx-play-border-radius);
+  background: var(--ngx-play-bg);
+  color: var(--ngx-play-color);
+  cursor: pointer;
+  transition:
+    background var(--ngx-play-transition),
+    color var(--ngx-play-transition);
+}
+
+.ngx-play-button:hover {
+  background: var(--ngx-play-hover-bg);
+}
+
+.ngx-play-button:focus-visible {
+  outline: 2px solid var(--ngx-play-color);
+  outline-offset: 2px;
+}
+
+.ngx-play-button__icon {
+  display: block;
+  width: var(--ngx-play-icon-size);
+  height: var(--ngx-play-icon-size);
+  fill: currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-play-button {
+    transition: none;
+  }
+}

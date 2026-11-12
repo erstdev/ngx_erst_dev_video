@@ -1,102 +1,105 @@
-# NgxErstDevVideo
+# ngx-video
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Headless-библиотеки для видео-плеера в Angular. Не монолит, а набор «кирпичей»:
+каждый пакет решает одну задачу, не навязывает разметку и стили и собирается в плеер
+любой сложности — от одной кнопки Play до собственного таймлайна с превью кадров.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+Философия проекта:
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- **Один кирпич — один npm-пакет.**
+- **Состояние — сигналы, потоки — RxJS.** Публичный API сервисов существует в двух
+  представлениях, всегда согласованных.
+- **Стилизация без навязывания.** CSS-переменные, `customClass` и `ng-template` вместо
+  жёстких стилей.
+- **Доступность — часть API**, а не опция.
 
-## Run tasks
+## Пакеты
 
-To run the dev server for your app, use:
+| Пакет                          | Версия | Статус      | Что внутри                                                                                   |
+| ------------------------------ | ------ | ----------- | -------------------------------------------------------------------------------------------- |
+| `@erst_dev/ngx-video-core`     | 0.0.1  | ✅ готов    | `VideoService`, `VideoDirective`, типы состояния, `formatTime`                               |
+| `@erst_dev/ngx-video-controls` | 0.0.1  | 🚧 в работе | `PlayButtonComponent`; далее VolumeSlider, TimeDisplay, FullscreenButton, BufferingIndicator |
+| `@erst_dev/ngx-video-timeline` | —      | ⏳ план     | Timeline, TimelinePreview, ChapterMarkers                                                    |
+| `@erst_dev/ngx-video-extras`   | —      | ⏳ план     | ClickToPlayOverlay, ErrorDisplay, SpeedControl, KeyboardShortcuts, Gesture, SubtitleRenderer |
+| `@erst_dev/ngx-video-sources`  | —      | ⏳ план     | HlsSource, DashSource, QualitySwitcher                                                       |
+| `@erst_dev/ngx-video-capture`  | —      | 💰 PRO      | CaptureService, ScreenshotButton, ClipRecorder                                               |
 
-```sh
-npx nx serve demo
-```
+Пакеты пока не опубликованы в npm: версия `0.0.1` — рабочая. Внутри монорепо они
+подключаются через `paths` в `tsconfig.base.json`.
 
-To create a production bundle:
+## Требования
 
-```sh
-npx nx build demo
-```
+- **Angular 22+**, **RxJS 7.8+** — для использования пакетов.
+- **Node 22+**, **npm 10+** — для разработки.
+- **Nx 23** — сборка и запуск задач.
 
-To see all available targets to run for a project, run:
-
-```sh
-npx nx show project demo
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
+## Разработка
 
 ```sh
-npx nx g @nx/angular:app demo
+npm install
+
+npm start          # демо-песочница в watch-режиме (nx serve demo)
+npm run build:all  # сборка всех пакетов
+npm run lint       # линт всех проектов
+npm run verify     # lint + build по всем проектам
 ```
 
-To generate a new library, use:
+### Скрипты
+
+| Скрипт                                     | Что делает                                                       |
+| ------------------------------------------ | ---------------------------------------------------------------- |
+| `npm start`                                | dev-сервер демо-песочницы                                        |
+| `npm run build`                            | сборка демо-приложения                                           |
+| `npm run build:all`                        | сборка всех проектов (`nx run-many --target=build`)              |
+| `npm run lint` / `npm run lint:all`        | линт всех проектов                                               |
+| `npm run lint:fix`                         | линт с автоисправлениями                                         |
+| `npm run lint-staged:fix`                  | линт и фиксы только для staged-файлов (`lint-staged --relative`) |
+| `npm run affected:build` / `affected:lint` | задачи только для затронутых проектов                            |
+| `npm run format:check` / `format:write`    | проверка и применение Prettier                                   |
+| `npm run verify`                           | `lint + build` по всем проектам                                  |
+| `npm run verify:affected`                  | `lint + build` только для затронутых                             |
+
+Полезные команды Nx напрямую:
 
 ```sh
-npx nx g @nx/angular:lib mylib
+npx nx build core
+npx nx build controls
+npx nx lint controls
+npx nx graph                 # граф проектов
+npx nx show project controls # список целей проекта
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+Pre-commit-хук (`husky` + `lint-staged`) прогоняет линтер только по staged-файлам
+через `nx affected --target=lint --fix --files`.
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Структура репозитория
 
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
+```
+ngx-erst-dev-video/
+├── projects/
+│   ├── core/          ← @erst_dev/ngx-video-core
+│   └── controls/      ← @erst_dev/ngx-video-controls
+├── apps/
+│   └── demo/          ← песочница с живыми примерами (документация не ведётся)
+├── CONTEXT.md         ← рабочий документ проекта (не версионируется)
+├── nx.json
+├── tsconfig.base.json ← paths пакетов для локальной разработки
+└── package.json
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+Каждый пакет устроен одинаково: слои `components/`, `directives/`, `services/`,
+`types/`, `utils/` внутри `src/lib`, баррелы `index.ts` и публичный API через
+`src/index.ts`. Подробнее — в README соответствующих пакетов.
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Документация
 
-### Step 2
+- [@erst_dev/ngx-video-core](projects/core/README.md) — сервис, директива, типы, утилиты.
+- [@erst_dev/ngx-video-controls](projects/controls/README.md) — готовые контролы плеера.
+- `CONTEXT.md` — внутренний документ проекта: архитектура, соглашения, роадмап.
+  В git не входит, при работе с новым чатом копируется в начало разговора.
 
-Use the following command to configure a CI workflow for your workspace:
+## Лицензия
 
-```sh
-npx nx g ci-workflow
-```
+MIT. Файл [LICENSE](LICENSE) распространяется на все пакеты экосистемы.
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Автор: erst_dev.

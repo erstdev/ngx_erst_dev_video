@@ -55,7 +55,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'play-button',
         path: 'controls/play-button',
         title: 'PlayButtonComponent',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'volume-slider',

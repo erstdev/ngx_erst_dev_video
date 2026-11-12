@@ -72,6 +72,20 @@
     </button>
   </div>
 
+  <section class="snippets">
+    <h2 class="snippets__title">Код примера</h2>
+    <p class="snippets__hint">
+      Раскройте блок — внутри HTML и TypeScript, которые можно скопировать в
+      свой проект.
+    </p>
+
+    <app-code-snippet title="Подключение сервиса" [code]="code.setup" />
+    <app-code-snippet title="Команды управления" [code]="code.commands" />
+    <app-code-snippet title="Сигналы и Observable" [code]="code.reactivity" />
+    <app-code-snippet title="Несколько плееров" [code]="code.multiple" />
+    <app-code-snippet title="Обработка ошибок" [code]="code.errors" />
+  </section>
+
   <table class="fields">
     <caption class="fields__caption">
       Все публичные поля
