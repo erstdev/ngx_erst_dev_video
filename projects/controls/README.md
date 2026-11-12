@@ -14,7 +14,7 @@
 | ----------------------------- | ------------------------- | -------- |
 | `PlayButtonComponent`         | `ngx-play-button`         | ✅ готов |
 | `VolumeSliderComponent`       | `ngx-volume-slider`       | ✅ готов |
-| `TimeDisplayComponent`        | `ngx-time-display`        | ⏳ план  |
+| `TimeDisplayComponent`        | `ngx-time-display`        | ✅ готов |
 | `FullscreenButtonComponent`   | `ngx-fullscreen-button`   | ⏳ план  |
 | `BufferingIndicatorComponent` | `ngx-buffering-indicator` | ⏳ план  |
 
@@ -353,9 +353,94 @@ ngx-volume-slider {
 привязка, а классы хоста синхронизируются через `ElementRef` так же, как
 в `PlayButtonComponent`.
 
+## TimeDisplayComponent
+
+Показывает текущую позицию и длительность в виде «текущее / общее». Оба значения
+форматируются общей утилитой `formatTime` из `@erst_dev/ngx-video-core`.
+
+```html
+<ngx-time-display [currentTime]="video.time()" [duration]="video.duration()" />
+```
+
+### Входы
+
+| Вход          | Тип      | По умолчанию | Описание                                                         |
+| ------------- | -------- | ------------ | ---------------------------------------------------------------- |
+| `currentTime` | `number` | — (required) | Текущая позиция в секундах                                       |
+| `duration`    | `number` | — (required) | Общая длительность в секундах; `0`, пока метаданные не загружены |
+| `customClass` | `string` | `''`         | Дополнительный CSS-класс для хост-элемента `<ngx-time-display>`  |
+
+### Выходы
+
+Выходов нет: компонент только отображает переданные значения.
+
+### Поведение
+
+- До часа формат `мм:сс`, начиная с часа — `ч:мм:сс`.
+- Некорректные значения (`NaN`, `Infinity`, отрицательные, `null`/`undefined`)
+  превращаются в `00:00` — это поведение `formatTime`.
+- Компонент не подписывается на `VideoService` и не следит за `<video>`:
+  обновление приходит от родителя через `currentTime` и `duration`.
+- Дробная часть секунд отбрасывается: `formatTime` использует `Math.floor`.
+
+### CSS-переменные
+
+| Переменная                   | По умолчанию               | Описание                    |
+| ---------------------------- | -------------------------- | --------------------------- |
+| `--ngx-time-color`           | `#ffffff`                  | Цвет текста                 |
+| `--ngx-time-separator-color` | `rgba(255, 255, 255, 0.6)` | Цвет разделителя            |
+| `--ngx-time-font-size`       | `0.875rem`                 | Размер шрифта               |
+| `--ngx-time-gap`             | `0.25rem`                  | Отступ между частями вывода |
+
+Цифры выводятся с `font-variant-numeric: tabular-nums`, поэтому ширина текста не
+скачет при смене секунд.
+
+### Стилизация
+
+```scss
+ngx-time-display {
+  --ngx-time-color: #34d399;
+  --ngx-time-separator-color: rgba(52, 211, 153, 0.6);
+  --ngx-time-font-size: 1rem;
+  --ngx-time-gap: 0.4rem;
+}
+```
+
+Через `customClass` — класс вешается на **хост-элемент** `<ngx-time-display>`:
+
+```html
+<ngx-time-display customClass="my-time" [currentTime]="video.time()" [duration]="video.duration()" />
+```
+
+```scss
+/* player.component.scss — обычные scoped-стили, без ::ng-deep */
+.my-time {
+  --ngx-time-color: #34d399;
+  --ngx-time-font-size: 1rem;
+}
+```
+
+`customClass` не затрагивает классы, заданные на элементе вручную:
+`<ngx-time-display class="layout-wide" customClass="my-time">` сохранит оба.
+
+### Доступность
+
+- Текст читается как «00:07 из 01:30»: видимый `/` скрыт через
+  `aria-hidden="true"`, вместо него добавлено визуально скрытое «из».
+- `aria-live` не используется: время меняется каждую секунду, и озвучивание
+  каждого обновления мешало бы. Скринридер прочитает значение при переходе
+  к элементу.
+- Компонент неинтерактивен, поэтому не попадает в порядок табуляции.
+
+### SSR
+
+Компонент не обращается к `window`/`document`: только форматирование и привязки,
+а классы хоста синхронизируются через `ElementRef` так же, как в
+`PlayButtonComponent`.
+
 ## Размещение на плеере
 
-Кнопка и слайдер не знают, где находятся: layout — задача контейнера плеера.
+Контролы не знают, где находятся: layout — задача контейнера плеера.
 Компонент рендерит обычный элемент в потоке, поэтому позиционируется стандартным
 CSS — без специальных входов и без `::ng-deep`.
 
@@ -397,7 +482,8 @@ CSS — без специальных входов и без `::ng-deep`.
   <div class="player__controls">
     <ngx-play-button [state]="video.state()" (toggle)="video.toggle()" />
     <ngx-volume-slider [volume]="video.volume()" (volumeChange)="video.setVolume($event)" />
-    <!-- здесь появятся time-display, fullscreen-button -->
+    <ngx-time-display [currentTime]="video.time()" [duration]="video.duration()" />
+    <!-- здесь появятся fullscreen-button -->
   </div>
 </div>
 ```
@@ -450,7 +536,8 @@ CSS — без специальных входов и без `::ng-deep`.
 <div class="controls">
   <ngx-play-button [state]="video.state()" (toggle)="video.toggle()" />
   <ngx-volume-slider [volume]="video.volume()" (volumeChange)="video.setVolume($event)" />
-  <!-- здесь появятся time-display, fullscreen-button и т.д. -->
+  <ngx-time-display [currentTime]="video.time()" [duration]="video.duration()" />
+  <!-- здесь появятся fullscreen-button и т.д. -->
 </div>
 ```
 

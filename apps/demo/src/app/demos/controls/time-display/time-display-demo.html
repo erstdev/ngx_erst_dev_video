@@ -2,11 +2,86 @@
   title="TimeDisplayComponent"
   pkg="@erst_dev/ngx-video-controls"
   selector="ngx-time-display"
-  status="planned"
-  description="Текстовая пара «текущее время / длительность». Форматирует значения через formatTime и ничего не запрашивает у сервиса."
+  status="ready"
+  description="Пара «текущее время / длительность»: форматирует значения через formatTime из core и ничего не запрашивает у сервиса — данные приходят через входы."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="examples__hint">
+    Время обновляется сигналами <code>VideoService</code>: клик по видео
+    запускает воспроизведение. Под каждым примером — блок «Код примера».
   </p>
+
+  <div class="examples">
+    <section class="example example--wide">
+      <h3 class="example__title">Базовый: видео и время через VideoService</h3>
+
+      <div class="player">
+        <video
+          class="player__video"
+          ngxVideo
+          [src]="src"
+          preload="metadata"
+          playsinline
+          (click)="video.toggle()"
+        ></video>
+
+        <div class="player__bar">
+          <ngx-time-display
+            [currentTime]="video.time()"
+            [duration]="video.duration()"
+          />
+          <span class="player__hint">
+            {{ video.isPlaying() ? 'идёт воспроизведение' : 'клик по видео —
+            play/pause' }}
+          </span>
+        </div>
+      </div>
+
+      <p class="example__note">
+        Компонент только форматирует переданные числа. Подписку на
+        <code>video.time()</code> и <code>video.duration()</code> держит шаблон
+        родителя, поэтому компонент не знает о сервисе.
+      </p>
+
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Свои цвет и размер</h3>
+
+      <div class="example__row">
+        <ngx-time-display
+          customClass="demo-time"
+          [currentTime]="video.time()"
+          [duration]="video.duration()"
+        />
+      </div>
+
+      <p class="example__note">
+        Класс из <code>customClass</code> вешается на хост-элемент, поэтому
+        переменные задаются обычными стилями — без <code>::ng-deep</code>.
+      </p>
+
+      <app-code-snippet [code]="code.custom" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Длинное видео: формат с часами</h3>
+
+      <div class="example__row">
+        <ngx-time-display
+          [currentTime]="longCurrent"
+          [duration]="longDuration"
+        />
+      </div>
+
+      <p class="example__note">
+        Значения больше часа <code>formatTime</code> выводит как
+        <code>ч:мм:сс</code>: <code>1:02:05 / 2:02:05</code>. До часа формат
+        остаётся <code>мм:сс</code>.
+      </p>
+
+      <app-code-snippet [code]="code.long" />
+    </section>
+  </div>
 </app-demo-shell>

@@ -67,7 +67,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'time-display',
         path: 'controls/time-display',
         title: 'TimeDisplayComponent',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'fullscreen-button',

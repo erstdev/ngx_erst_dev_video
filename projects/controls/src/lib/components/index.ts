@@ -4,4 +4,5 @@
  */
 
 export * from './play-button';
+export * from './time-display';
 export * from './volume-slider';
