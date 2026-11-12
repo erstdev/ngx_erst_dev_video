@@ -9,14 +9,7 @@ import {
   output,
 } from '@angular/core';
 
-/** Зажимает значение в диапазон `0…1`; некорректные числа превращаются в `0`. */
-function clamp(value: number): number {
-  if (!Number.isFinite(value)) {
-    return 0;
-  }
-
-  return Math.min(Math.max(value, 0), 1);
-}
+import { clamp } from '../../utils';
 
 /**
  * Ползунок громкости.
@@ -77,7 +70,9 @@ export class VolumeSliderComponent {
   readonly volumeChange = output<number>();
 
   /** Уровень, зажатый в диапазон `0…1`, — основа для отображения. */
-  protected readonly normalizedVolume = computed(() => clamp(this.volume()));
+  protected readonly normalizedVolume = computed(() =>
+    clamp(this.volume(), 0, 1),
+  );
 
   /** Уровень в процентах — для `aria-valuetext` и заливки трека. */
   protected readonly volumePercent = computed(() =>
@@ -92,7 +87,7 @@ export class VolumeSliderComponent {
       return;
     }
 
-    this.volumeChange.emit(clamp(value));
+    this.volumeChange.emit(clamp(value, 0, 1));
   }
 
   /**
