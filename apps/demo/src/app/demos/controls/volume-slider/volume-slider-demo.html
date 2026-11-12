@@ -2,11 +2,99 @@
   title="VolumeSliderComponent"
   pkg="@erst_dev/ngx-video-controls"
   selector="ngx-volume-slider"
-  status="planned"
-  description="Ползунок громкости: показывает текущий уровень, обрабатывает клики и перетаскивание, генерирует событие изменения. Не управляет mute и не хранит состояние сам."
+  status="ready"
+  description="Ползунок громкости: показывает переданный уровень и сообщает новое значение. Состояние не хранит, методы видео не вызывает и mute не управляет — это задачи родителя и отдельной кнопки."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="examples__hint">
+    Все слайдеры привязаны к одному <code>VideoService</code>: изменение в одном
+    примере сразу видно в остальных. Под каждым примером — блок «Код примера».
   </p>
+
+  <div class="examples">
+    <section class="example example--wide">
+      <h3 class="example__title">
+        Базовый: видео и слайдер через VideoService
+      </h3>
+
+      <div class="player">
+        <video
+          class="player__video"
+          ngxVideo
+          [src]="src"
+          preload="metadata"
+          playsinline
+          (click)="video.toggle()"
+        ></video>
+
+        <div class="player__controls">
+          <ngx-volume-slider
+            [volume]="video.volume()"
+            (volumeChange)="video.setVolume($event)"
+          />
+          <span class="player__value">{{ volumePercent(video.volume()) }}</span>
+          <button
+            type="button"
+            class="player__mute"
+            (click)="video.toggleMute()"
+          >
+            {{ video.muted() ? 'Включить звук' : 'Без звука' }}
+          </button>
+        </div>
+      </div>
+
+      <p class="example__note">
+        Слайдер только эмитит <code>volumeChange</code>, а
+        <code>video.setVolume()</code> вызывает родитель. Mute — отдельная
+        кнопка: при выключенном звуке слайдер продолжает показывать громкость, а
+        не ноль.
+      </p>
+
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Свои цвета и размеры</h3>
+
+      <div class="example__row">
+        <ngx-volume-slider
+          customClass="demo-volume"
+          ariaLabel="Громкость видео"
+          [volume]="video.volume()"
+          (volumeChange)="video.setVolume($event)"
+        />
+        <span class="example__value">{{ volumePercent(video.volume()) }}</span>
+      </div>
+
+      <p class="example__note">
+        Класс из <code>customClass</code> вешается на хост-элемент, поэтому
+        переменные задаются обычными стилями — без <code>::ng-deep</code>.
+      </p>
+
+      <app-code-snippet [code]="code.custom" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Вертикальный вид</h3>
+
+      <div class="example__vertical">
+        <ngx-volume-slider
+          customClass="demo-volume-vertical"
+          [volume]="video.volume()"
+          (volumeChange)="video.setVolume($event)"
+        />
+      </div>
+
+      <span class="example__value example__value--center">
+        {{ volumePercent(video.volume()) }}
+      </span>
+
+      <p class="example__note">
+        Ориентация — это раскладка потребителя, а не вход компонента: слайдер
+        повёрнут на <code>-90deg</code>, поэтому заливка растёт снизу вверх.
+      </p>
+
+      <app-code-snippet [code]="code.vertical" />
+    </section>
+  </div>
 </app-demo-shell>
