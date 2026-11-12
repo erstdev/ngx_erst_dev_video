@@ -3,7 +3,6 @@
   --ngx-buffering-thickness: 3px;
   --ngx-buffering-color: #ffffff;
   --ngx-buffering-track-color: rgba(255, 255, 255, 0.25);
-  --ngx-buffering-animation-name: ngx-buffering-spin;
   --ngx-buffering-speed: 0.8s;
   --ngx-buffering-easing: linear;
   --ngx-buffering-delay: 0s;
@@ -29,7 +28,12 @@
   border: var(--ngx-buffering-thickness) solid var(--ngx-buffering-track-color);
   border-top-color: var(--ngx-buffering-color);
   border-radius: 50%;
-  animation-name: var(--ngx-buffering-animation-name);
+  /*
+   * Имя keyframes — литерал: Angular скоупит @keyframes компонента и
+   * переписывает только литеральные ссылки. Через var() имя осталось бы
+   * нескоупленным и не совпало бы с keyframes.
+   */
+  animation-name: ngx-buffering-spin;
   animation-duration: var(--ngx-buffering-speed);
   animation-timing-function: var(--ngx-buffering-easing);
   animation-delay: var(--ngx-buffering-delay);
