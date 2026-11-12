@@ -11,18 +11,7 @@ import {
   output,
 } from '@angular/core';
 
-/**
- * Контекст, доступный в пользовательском шаблоне иконки.
- *
- * @example
- * ```html
- * <ng-template #icon let-fullscreen="fullscreen">...</ng-template>
- * ```
- */
-export interface FullscreenButtonIconContext {
-  /** Полноэкранный режим включён. */
-  readonly fullscreen: boolean;
-}
+import type { FullscreenButtonIconContext } from '../../interfaces';
 
 /**
  * Кнопка входа и выхода из полноэкранного режима.
