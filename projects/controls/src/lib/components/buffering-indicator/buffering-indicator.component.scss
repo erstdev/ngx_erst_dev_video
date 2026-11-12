@@ -4,6 +4,7 @@
   --ngx-buffering-color: #ffffff;
   --ngx-buffering-track-color: rgba(255, 255, 255, 0.25);
   --ngx-buffering-speed: 0.8s;
+  --ngx-buffering-easing: linear;
 
   display: inline-flex;
   line-height: 0;
@@ -22,7 +23,10 @@
   border: var(--ngx-buffering-thickness) solid var(--ngx-buffering-track-color);
   border-top-color: var(--ngx-buffering-color);
   border-radius: 50%;
-  animation: ngx-buffering-spin var(--ngx-buffering-speed) linear infinite;
+  animation-name: ngx-buffering-spin;
+  animation-duration: var(--ngx-buffering-speed);
+  animation-timing-function: var(--ngx-buffering-easing);
+  animation-iteration-count: infinite;
 }
 
 @keyframes ngx-buffering-spin {

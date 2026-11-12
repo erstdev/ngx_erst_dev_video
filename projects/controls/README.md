@@ -593,13 +593,18 @@ interface FullscreenButtonIconContext {
 
 ### CSS-переменные
 
-| Переменная                    | По умолчанию                | Описание                    |
-| ----------------------------- | --------------------------- | --------------------------- |
-| `--ngx-buffering-size`        | `32px`                      | Размер спиннера             |
-| `--ngx-buffering-thickness`   | `3px`                       | Толщина кольца              |
-| `--ngx-buffering-color`       | `#ffffff`                   | Цвет активной части кольца  |
-| `--ngx-buffering-track-color` | `rgba(255, 255, 255, 0.25)` | Цвет трека кольца           |
-| `--ngx-buffering-speed`       | `0.8s`                      | Длительность одного оборота |
+| Переменная                    | По умолчанию                | Описание                     |
+| ----------------------------- | --------------------------- | ---------------------------- |
+| `--ngx-buffering-size`        | `32px`                      | Размер спиннера              |
+| `--ngx-buffering-thickness`   | `3px`                       | Толщина кольца               |
+| `--ngx-buffering-color`       | `#ffffff`                   | Цвет активной части кольца   |
+| `--ngx-buffering-track-color` | `rgba(255, 255, 255, 0.25)` | Цвет трека кольца            |
+| `--ngx-buffering-speed`       | `0.8s`                      | Длительность одного оборота  |
+| `--ngx-buffering-easing`      | `linear`                    | Функция сглаживания анимации |
+
+`--ngx-buffering-easing` принимает любое значение CSS-свойства
+`animation-timing-function`: `linear`, `ease-in`, `ease-in-out`,
+`cubic-bezier(...)` и т.д.
 
 ### Стилизация
 
@@ -612,6 +617,7 @@ ngx-buffering-indicator {
   --ngx-buffering-color: #34d399;
   --ngx-buffering-track-color: rgba(52, 211, 153, 0.25);
   --ngx-buffering-speed: 0.6s;
+  --ngx-buffering-easing: ease-in;
 }
 ```
 
