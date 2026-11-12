@@ -9,6 +9,8 @@ import {
   type VideoState,
 } from '@erst_dev/ngx-video-core';
 
+import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
+
 /** Человекочитаемые подписи для значений `VideoState`. */
 const STATE_LABELS: Readonly<Record<VideoState, string>> = {
   idle: 'idle — нет данных',
@@ -21,14 +23,14 @@ const STATE_LABELS: Readonly<Record<VideoState, string>> = {
 };
 
 /**
- * Демо Спринта 1: сырой `<video>`, управляемый через `VideoService`.
+ * Демо для VideoService: сырой `<video>`, управляемый через сервис.
  *
  * Здесь нет ни одного компонента-«кирпича» — только сервис, директива
- * и нативные контролы браузера.
+ * и нативные контролы браузера. Под примерами — блоки с готовым кодом.
  */
 @Component({
   selector: 'app-video-service-demo',
-  imports: [AsyncPipe, VideoDirective],
+  imports: [AsyncPipe, CodeSnippetComponent, VideoDirective],
   templateUrl: './video-service-demo.html',
   styleUrl: './video-service-demo.scss',
 })
@@ -41,6 +43,86 @@ export class VideoServiceDemo {
 
   protected readonly src =
     'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
+
+  /** Рецепты для блоков «Код примера». */
+  protected readonly code = {
+    setup: `// player.component.ts
+import { Component, inject } from '@angular/core';
+import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
+
+@Component({
+  selector: 'app-player',
+  imports: [VideoDirective],
+  templateUrl: './player.component.html',
+})
+export class PlayerComponent {
+  readonly video = inject(VideoService);
+  readonly src = 'https://example.com/video.mp4';
+}
+
+<!-- player.component.html -->
+<video ngxVideo [src]="src" playsinline></video>`,
+
+    commands: `<!-- player.component.html -->
+<button type="button" (click)="video.toggle()">
+  {{ video.isPlaying() ? 'Пауза' : 'Играть' }}
+</button>
+
+<input
+  type="range"
+  min="0"
+  [max]="video.duration()"
+  [value]="video.time()"
+  (input)="onSeek($event)"
+/>
+
+<button type="button" (click)="video.toggleMute()">Звук</button>
+<button type="button" (click)="video.toggleFullscreen()">Фуллскрин</button>
+
+// player.component.ts
+protected onSeek(event: Event): void {
+  this.video.seek(Number((event.target as HTMLInputElement).value));
+}`,
+
+    reactivity: `<!-- сигналы: шаблон обновляется сам -->
+<span>{{ video.time() }} / {{ video.duration() }}</span>
+<span>state: {{ video.state() }}</span>
+
+// Observable-зеркало — когда нужны операторы RxJS
+import { toSignal } from '@angular/core/rxjs-interop';
+
+readonly buffered = toSignal(inject(VideoService).buffered$, {
+  initialValue: 0,
+});
+
+<!-- либо напрямую в шаблоне -->
+<span>{{ video.time$ | async }}</span>`,
+
+    multiple: `@Component({
+  selector: 'app-player',
+  imports: [VideoDirective],
+  // свой экземпляр сервиса на каждый плеер
+  providers: [VideoService],
+  templateUrl: './player.component.html',
+})
+export class PlayerComponent {
+  readonly video = inject(VideoService);
+}
+
+<!-- без providers все <video ngxVideo> делили бы один root-сервис,
+     и состояние перескакивало бы между элементами -->`,
+
+    errors: `<!-- ошибка нормализована: код + сообщение -->
+@if (video.error(); as error) {
+  <p role="alert">{{ error.message }} ({{ error.code }})</p>
+}
+
+// повторный запуск после ошибки
+protected retry(): void {
+  this.video.seek(0);
+  void this.video.play();
+}`,
+  } as const;
 
   /** Время: `мм:сс` плюс точное значение в секундах. */
   protected timeValue(seconds: number | null | undefined): string {

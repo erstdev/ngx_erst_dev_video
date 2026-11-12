@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.code {
+  margin: 0;
+  border: 1px solid #1f2937;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #0b1120;
+}
+
+.code__summary {
+  padding: 0.5rem 0.75rem;
+  color: #9ca3af;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.code__summary:hover {
+  color: #e5e7eb;
+}
+
+.code[open] .code__summary {
+  border-bottom: 1px solid #1f2937;
+  color: #e5e7eb;
+}
+
+.code__body {
+  max-height: 320px;
+  margin: 0;
+  padding: 0.75rem;
+  overflow: auto;
+  color: #d1d5db;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  tab-size: 2;
+}

@@ -1,0 +1,23 @@
+<div class="player">
+  <video
+    class="player__video"
+    ngxVideo
+    [src]="src"
+    preload="metadata"
+    playsinline
+    (click)="video.toggle()"
+  ></video>
+
+  @if (layout() === 'center') {
+  <ngx-play-button
+    customClass="player__play"
+    [state]="video.state()"
+    (toggle)="video.toggle()"
+  />
+  } @else {
+  <div class="player__controls">
+    <ngx-play-button [state]="video.state()" (toggle)="video.toggle()" />
+    <span class="player__state">state: {{ video.state() }}</span>
+  </div>
+  }
+</div>
