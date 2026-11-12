@@ -1,0 +1,53 @@
+:host {
+  --ngx-fullscreen-size: 48px;
+  --ngx-fullscreen-icon-size: 55%;
+  --ngx-fullscreen-color: #ffffff;
+  --ngx-fullscreen-bg: rgba(0, 0, 0, 0.7);
+  --ngx-fullscreen-hover-bg: rgba(0, 0, 0, 0.9);
+  --ngx-fullscreen-border-radius: 50%;
+  --ngx-fullscreen-transition: 0.15s ease;
+
+  display: inline-flex;
+}
+
+.ngx-fullscreen-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ngx-fullscreen-size);
+  height: var(--ngx-fullscreen-size);
+  padding: 0;
+  border: none;
+  border-radius: var(--ngx-fullscreen-border-radius);
+  background: var(--ngx-fullscreen-bg);
+  color: var(--ngx-fullscreen-color);
+  cursor: pointer;
+  transition:
+    background var(--ngx-fullscreen-transition),
+    color var(--ngx-fullscreen-transition);
+}
+
+.ngx-fullscreen-button:hover {
+  background: var(--ngx-fullscreen-hover-bg);
+}
+
+.ngx-fullscreen-button:focus-visible {
+  outline: 2px solid var(--ngx-fullscreen-color);
+  outline-offset: 2px;
+}
+
+.ngx-fullscreen-button__icon {
+  display: block;
+  width: var(--ngx-fullscreen-icon-size);
+  height: var(--ngx-fullscreen-icon-size);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-fullscreen-button {
+    transition: none;
+  }
+}

@@ -2,11 +2,99 @@
   title="FullscreenButtonComponent"
   pkg="@erst_dev/ngx-video-controls"
   selector="ngx-fullscreen-button"
-  status="planned"
-  description="Кнопка входа и выхода из полноэкранного режима: меняет иконку и генерирует событие. Fullscreen API вызывает сервис, а не кнопка."
+  status="ready"
+  description="Кнопка входа и выхода из полноэкранного режима: меняет иконку и подпись по состоянию и сообщает наружу о клике. Fullscreen API вызывает сервис, а не кнопка."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="examples__hint">
+    Состояние приходит из <code>VideoService</code>, а запрос выполняет
+    <code>video.toggleFullscreen()</code> в обработчике родителя. Под каждым
+    примером — блок «Код примера».
   </p>
+
+  <div class="examples">
+    <section class="example example--wide">
+      <h3 class="example__title">Базовый: кнопка на плеере</h3>
+
+      <div class="player">
+        <video
+          class="player__video"
+          ngxVideo
+          [src]="src"
+          preload="metadata"
+          playsinline
+          (click)="video.toggle()"
+        ></video>
+
+        <div class="player__bar">
+          <ngx-fullscreen-button
+            [fullscreen]="video.fullscreen()"
+            (toggle)="video.toggleFullscreen()"
+          />
+          <span class="player__hint">
+            {{ video.fullscreen() ? 'полноэкранный режим' : 'обычный режим —
+            клик по кнопке развернёт видео' }}
+          </span>
+        </div>
+      </div>
+
+      <p class="example__note">
+        Кнопка только эмитит <code>toggle</code>: вызов
+        <code>requestFullscreen()</code> и выход из режима — задача
+        <code>VideoService</code>. В полноэкранном режиме виден сам
+        <code>&lt;video&gt;</code>, поэтому выйти можно клавишей Esc.
+      </p>
+
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Свои размер и цвета</h3>
+
+      <div class="example__row">
+        <ngx-fullscreen-button
+          customClass="demo-fullscreen"
+          [fullscreen]="video.fullscreen()"
+          (toggle)="video.toggleFullscreen()"
+        />
+        <span class="example__state">
+          fullscreen: {{ video.fullscreen() ? 'да' : 'нет' }}
+        </span>
+      </div>
+
+      <p class="example__note">
+        Класс из <code>customClass</code> вешается на хост-элемент, поэтому
+        переменные задаются обычными стилями — без <code>::ng-deep</code>.
+      </p>
+
+      <app-code-snippet [code]="code.custom" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Своя иконка через ng-template</h3>
+
+      <div class="example__row">
+        <ngx-fullscreen-button
+          [fullscreen]="video.fullscreen()"
+          [iconTemplate]="customIcon"
+          (toggle)="video.toggleFullscreen()"
+        />
+        <span class="example__state">
+          fullscreen: {{ video.fullscreen() ? 'да' : 'нет' }}
+        </span>
+      </div>
+
+      <p class="example__note">
+        В шаблон передаётся контекст
+        <code>FullscreenButtonIconContext</code> с полем
+        <code>fullscreen</code>.
+      </p>
+
+      <app-code-snippet [code]="code.icon" />
+    </section>
+  </div>
+
+  <ng-template #customIcon let-fullscreen="fullscreen">
+    <span class="demo-icon">{{ fullscreen ? '⤡' : '⤢' }}</span>
+  </ng-template>
 </app-demo-shell>

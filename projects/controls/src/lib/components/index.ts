@@ -3,6 +3,7 @@
  * Слой реэкспортирует только папки, а не файлы напрямую.
  */
 
+export * from './fullscreen-button';
 export * from './play-button';
 export * from './time-display';
 export * from './volume-slider';

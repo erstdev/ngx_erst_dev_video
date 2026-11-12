@@ -73,7 +73,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'fullscreen-button',
         path: 'controls/fullscreen-button',
         title: 'FullscreenButtonComponent',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'buffering-indicator',
