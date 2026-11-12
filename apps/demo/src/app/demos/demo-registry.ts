@@ -61,7 +61,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'volume-slider',
         path: 'controls/volume-slider',
         title: 'VolumeSliderComponent',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'time-display',

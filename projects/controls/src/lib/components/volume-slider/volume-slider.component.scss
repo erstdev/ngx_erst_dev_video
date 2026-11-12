@@ -1,0 +1,99 @@
+:host {
+  --ngx-volume-width: 120px;
+  --ngx-volume-track-height: 4px;
+  --ngx-volume-track-color: rgba(255, 255, 255, 0.3);
+  --ngx-volume-fill-color: #ffffff;
+  --ngx-volume-thumb-color: #ffffff;
+  --ngx-volume-thumb-hover-color: #e5e7eb;
+  --ngx-volume-thumb-size: 14px;
+  --ngx-volume-border-radius: 999px;
+  --ngx-volume-thumb-border-radius: 50%;
+  --ngx-volume-transition: 0.15s ease;
+
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.ngx-volume-slider__input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--ngx-volume-width);
+  height: var(--ngx-volume-thumb-size);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ngx-volume-border-radius);
+  /*
+   * Видимый трек рисуем фоном самого input: его высота равна ползунку,
+   * поэтому ползунок и трек выравниваются по центру без ручных отступов.
+   * Процент заливки приходит из шаблона в --ngx-volume-fill.
+   */
+  background-color: transparent;
+  background-image: linear-gradient(
+    to right,
+    var(--ngx-volume-fill-color) 0,
+    var(--ngx-volume-fill-color) var(--ngx-volume-fill, 0%),
+    var(--ngx-volume-track-color) var(--ngx-volume-fill, 0%),
+    var(--ngx-volume-track-color) 100%
+  );
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% var(--ngx-volume-track-height);
+  cursor: pointer;
+}
+
+/* Нативные треки прозрачные: видимый трек — фон input выше. */
+.ngx-volume-slider__input::-webkit-slider-runnable-track {
+  width: 100%;
+  height: var(--ngx-volume-thumb-size);
+  background: transparent;
+}
+
+.ngx-volume-slider__input::-moz-range-track {
+  width: 100%;
+  height: var(--ngx-volume-thumb-size);
+  background: transparent;
+}
+
+.ngx-volume-slider__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--ngx-volume-thumb-size);
+  height: var(--ngx-volume-thumb-size);
+  border: none;
+  border-radius: var(--ngx-volume-thumb-border-radius);
+  background: var(--ngx-volume-thumb-color);
+  cursor: pointer;
+  transition: background var(--ngx-volume-transition);
+}
+
+.ngx-volume-slider__input::-moz-range-thumb {
+  width: var(--ngx-volume-thumb-size);
+  height: var(--ngx-volume-thumb-size);
+  border: none;
+  border-radius: var(--ngx-volume-thumb-border-radius);
+  background: var(--ngx-volume-thumb-color);
+  cursor: pointer;
+  transition: background var(--ngx-volume-transition);
+}
+
+.ngx-volume-slider__input:hover::-webkit-slider-thumb {
+  background: var(--ngx-volume-thumb-hover-color);
+}
+
+.ngx-volume-slider__input:hover::-moz-range-thumb {
+  background: var(--ngx-volume-thumb-hover-color);
+}
+
+.ngx-volume-slider__input:focus-visible {
+  outline: 2px solid var(--ngx-volume-fill-color);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-volume-slider__input::-webkit-slider-thumb,
+  .ngx-volume-slider__input::-moz-range-thumb {
+    transition: none;
+  }
+}

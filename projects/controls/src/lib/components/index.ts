@@ -1,1 +1,7 @@
-export * from './play-button.component';
+/*
+ * Каждый компонент живёт в собственной папке со своим `index.ts`-баррелом.
+ * Слой реэкспортирует только папки, а не файлы напрямую.
+ */
+
+export * from './play-button';
+export * from './volume-slider';

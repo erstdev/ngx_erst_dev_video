@@ -1,0 +1,12 @@
+<input
+  class="ngx-volume-slider__input"
+  type="range"
+  min="0"
+  max="1"
+  step="0.01"
+  [value]="normalizedVolume()"
+  [attr.aria-label]="label()"
+  [attr.aria-valuetext]="volumePercent() + '%'"
+  [style.--ngx-volume-fill]="volumePercent() + '%'"
+  (input)="onInput($event)"
+/>
