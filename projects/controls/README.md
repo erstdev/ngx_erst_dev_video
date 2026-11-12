@@ -593,14 +593,25 @@ interface FullscreenButtonIconContext {
 
 ### CSS-переменные
 
-| Переменная                    | По умолчанию                | Описание                     |
-| ----------------------------- | --------------------------- | ---------------------------- |
-| `--ngx-buffering-size`        | `32px`                      | Размер спиннера              |
-| `--ngx-buffering-thickness`   | `3px`                       | Толщина кольца               |
-| `--ngx-buffering-color`       | `#ffffff`                   | Цвет активной части кольца   |
-| `--ngx-buffering-track-color` | `rgba(255, 255, 255, 0.25)` | Цвет трека кольца            |
-| `--ngx-buffering-speed`       | `0.8s`                      | Длительность одного оборота  |
-| `--ngx-buffering-easing`      | `linear`                    | Функция сглаживания анимации |
+| Переменная                        | По умолчанию                | Описание                                           |
+| --------------------------------- | --------------------------- | -------------------------------------------------- |
+| `--ngx-buffering-size`            | `32px`                      | Размер спиннера                                    |
+| `--ngx-buffering-thickness`       | `3px`                       | Толщина кольца                                     |
+| `--ngx-buffering-color`           | `#ffffff`                   | Цвет активной части кольца                         |
+| `--ngx-buffering-track-color`     | `rgba(255, 255, 255, 0.25)` | Цвет трека кольца                                  |
+| `--ngx-buffering-animation-name`  | `ngx-buffering-spin`        | Имя keyframes-анимации (`animation-name`)          |
+| `--ngx-buffering-speed`           | `0.8s`                      | Длительность одного оборота (`animation-duration`) |
+| `--ngx-buffering-easing`          | `linear`                    | Функция сглаживания (`animation-timing-function`)  |
+| `--ngx-buffering-delay`           | `0s`                        | Задержка старта (`animation-delay`)                |
+| `--ngx-buffering-iteration-count` | `infinite`                  | Количество повторов (`animation-iteration-count`)  |
+| `--ngx-buffering-direction`       | `normal`                    | Направление (`animation-direction`)                |
+| `--ngx-buffering-fill-mode`       | `none`                      | Режим заполнения (`animation-fill-mode`)           |
+| `--ngx-buffering-play-state`      | `running`                   | `running` / `paused` (`animation-play-state`)      |
+
+Набор повторяет свойства CSS-анимации: скорость, сглаживание, направление,
+количество повторов, задержку и паузу можно менять независимо. Например,
+`--ngx-buffering-direction: alternate` заставит спиннер крутиться сначала в одну
+сторону, затем в другую.
 
 `--ngx-buffering-easing` принимает любое значение CSS-свойства
 `animation-timing-function`: `linear`, `ease-in`, `ease-in-out`,
@@ -618,6 +629,7 @@ ngx-buffering-indicator {
   --ngx-buffering-track-color: rgba(52, 211, 153, 0.25);
   --ngx-buffering-speed: 0.6s;
   --ngx-buffering-easing: ease-in;
+  --ngx-buffering-direction: alternate;
 }
 ```
 
@@ -639,6 +651,39 @@ ngx-buffering-indicator {
 `customClass` не затрагивает классы, заданные на элементе вручную:
 `<ngx-buffering-indicator class="layout-wide" customClass="my-buffering">`
 сохранит оба.
+
+### Своя анимация
+
+Если стандартного вращения мало, можно подменить `animation-name` и задать
+собственные `@keyframes` — например, покачивание:
+
+```scss
+/* styles.scss — глобальные стили */
+@keyframes my-buffering {
+  0% {
+    transform: rotate(-40deg) scale(0.9);
+  }
+  50% {
+    transform: rotate(40deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(-40deg) scale(0.9);
+  }
+}
+```
+
+```scss
+ngx-buffering-indicator {
+  --ngx-buffering-animation-name: my-buffering;
+  --ngx-buffering-speed: 1.4s;
+  --ngx-buffering-easing: ease-in-out;
+}
+```
+
+`--ngx-buffering-animation-name` меняет только имя анимации: длительность,
+сглаживание, повторы, направление и пауза продолжают работать через остальные
+токены. Keyframes объявляйте в глобальных стилях: Angular не скоупит их имена,
+но стили компонента удаляются вместе с ним.
 
 ### Доступность
 

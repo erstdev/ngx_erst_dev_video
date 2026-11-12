@@ -96,13 +96,17 @@
             customClass="demo-buffering"
             [state]="bufferingState"
           />
-          <span class="stage__label">customClass</span>
+          <span class="stage__label">customClass + alternate</span>
         </div>
       </div>
 
       <p class="example__note">
         Класс из <code>customClass</code> вешается на хост-элемент, поэтому
-        переменные задаются обычными стилями — без <code>::ng-deep</code>.
+        переменные задаются обычными стилями — без <code>::ng-deep</code>. Здесь
+        же задан <code>--ngx-buffering-direction: alternate</code>: спиннер
+        крутится в одну сторону, затем в другую. Через
+        <code>--ngx-buffering-animation-name</code> можно подставить собственные
+        <code>@keyframes</code>.
       </p>
 
       <app-code-snippet [code]="code.custom" />

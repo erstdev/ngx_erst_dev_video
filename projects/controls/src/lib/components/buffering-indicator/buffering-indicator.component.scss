@@ -3,8 +3,14 @@
   --ngx-buffering-thickness: 3px;
   --ngx-buffering-color: #ffffff;
   --ngx-buffering-track-color: rgba(255, 255, 255, 0.25);
+  --ngx-buffering-animation-name: ngx-buffering-spin;
   --ngx-buffering-speed: 0.8s;
   --ngx-buffering-easing: linear;
+  --ngx-buffering-delay: 0s;
+  --ngx-buffering-iteration-count: infinite;
+  --ngx-buffering-direction: normal;
+  --ngx-buffering-fill-mode: none;
+  --ngx-buffering-play-state: running;
 
   display: inline-flex;
   line-height: 0;
@@ -23,10 +29,14 @@
   border: var(--ngx-buffering-thickness) solid var(--ngx-buffering-track-color);
   border-top-color: var(--ngx-buffering-color);
   border-radius: 50%;
-  animation-name: ngx-buffering-spin;
+  animation-name: var(--ngx-buffering-animation-name);
   animation-duration: var(--ngx-buffering-speed);
   animation-timing-function: var(--ngx-buffering-easing);
-  animation-iteration-count: infinite;
+  animation-delay: var(--ngx-buffering-delay);
+  animation-iteration-count: var(--ngx-buffering-iteration-count);
+  animation-direction: var(--ngx-buffering-direction);
+  animation-fill-mode: var(--ngx-buffering-fill-mode);
+  animation-play-state: var(--ngx-buffering-play-state);
 }
 
 @keyframes ngx-buffering-spin {

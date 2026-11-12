@@ -44,7 +44,7 @@ export class BufferingIndicatorDemo {
   protected readonly responsibilities = [
     'Входы: state, delay (задержка появления, мс), customClass; выходов нет.',
     'Показывается только при state === "buffering"; момент включения определяет VideoService.',
-    'CSS-переменные: --ngx-buffering-size, --ngx-buffering-thickness, --ngx-buffering-color, --ngx-buffering-track-color, --ngx-buffering-speed, --ngx-buffering-easing.',
+    'CSS-переменные: --ngx-buffering-size/-thickness/-color/-track-color и все параметры анимации — --ngx-buffering-animation-name, -speed, -easing, -delay, -iteration-count, -direction, -fill-mode, -play-state.',
     'role="status" и скрытый текст «Загрузка…» сообщают скринридеру о загрузке.',
   ];
 
@@ -95,6 +95,7 @@ readonly state = signal<VideoState>('buffering');`,
   --ngx-buffering-track-color: rgba(52, 211, 153, 0.25);
   --ngx-buffering-speed: 0.6s;
   --ngx-buffering-easing: ease-in;
+  --ngx-buffering-direction: alternate;
 }`,
   } as const;
 
