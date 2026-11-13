@@ -9,7 +9,7 @@ import {
   output,
 } from '@angular/core';
 
-import { clamp } from '../../utils';
+import { clamp } from './utils';
 
 /**
  * Ползунок громкости.

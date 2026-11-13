@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import type { VideoState } from '@erst_dev/ngx-video-core';
 
-import type { PlayButtonIconContext } from '../../interfaces';
+import type { PlayButtonIconContext } from './interfaces';
 
 /**
  * Кнопка Play/Pause.

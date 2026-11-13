@@ -11,7 +11,7 @@ import {
   output,
 } from '@angular/core';
 
-import type { FullscreenButtonIconContext } from '../../interfaces';
+import type { FullscreenButtonIconContext } from './interfaces';
 
 /**
  * Кнопка входа и выхода из полноэкранного режима.
