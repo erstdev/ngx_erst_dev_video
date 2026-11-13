@@ -109,5 +109,32 @@
 
       <app-code-snippet [code]="code.custom" />
     </section>
+
+    <section class="example example--wide">
+      <h3 class="example__title">Своя анимация через indicatorTemplate</h3>
+
+      <div class="example__stages">
+        <div class="stage">
+          <ngx-buffering-indicator
+            [state]="bufferingState"
+            [indicatorTemplate]="customIndicator"
+          />
+          <span class="stage__label">свои @keyframes</span>
+        </div>
+      </div>
+
+      <p class="example__note">
+        Шаблон заменяет только визуальный спиннер: обёртка с
+        <code>role="status"</code> и скрытым текстом «Загрузка…» остаются за
+        компонентом. Свои <code>@keyframes</code> объявляются в стилях
+        потребителя — Angular скоупит их вместе с шаблоном.
+      </p>
+
+      <app-code-snippet [code]="code.template" />
+    </section>
   </div>
+
+  <ng-template #customIndicator>
+    <span class="demo-indicator"></span>
+  </ng-template>
 </app-demo-shell>

@@ -1,0 +1,140 @@
+<app-demo-shell
+  title="Полный плеер"
+  pkg="@erst_dev/ngx-video-controls"
+  status="ready"
+  description="Полноценный плеер из кирпичей controls: видео с кликом play/pause, overlay play и buffering, нижняя панель с громкостью, отдельным mute, временем и fullscreen на контейнер плеера."
+  [responsibilities]="responsibilities"
+>
+  <p class="examples__hint">
+    Это не набор отдельных примеров, а один собранный плеер. Ниже — блоки «Код
+    примера»: разметка, компонент с fullscreen на контейнер и ключевые стили.
+  </p>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Живой плеер</h3>
+
+      <div
+        #player
+        class="player"
+        [class.player--show-controls]="!video.isPlaying()"
+      >
+        <video
+          class="player__video"
+          ngxVideo
+          [src]="src"
+          preload="metadata"
+          playsinline
+          (click)="video.toggle()"
+        ></video>
+
+        @if (showCenterPlay()) {
+        <ngx-play-button
+          customClass="player__center-play"
+          [state]="video.state()"
+          (toggle)="video.toggle()"
+        />
+        }
+
+        <div class="player__buffering">
+          <ngx-buffering-indicator [state]="video.state()" [delay]="200" />
+        </div>
+
+        <div class="player__bar">
+          <ngx-play-button
+            customClass="player__control"
+            [state]="video.state()"
+            (toggle)="video.toggle()"
+          />
+
+          <button
+            type="button"
+            class="player__mute"
+            [attr.aria-label]="muteLabel()"
+            [attr.aria-pressed]="video.muted()"
+            (click)="video.toggleMute()"
+          >
+            @if (video.muted()) {
+            <svg
+              class="player__mute-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M4 9v6h4l5 4V5L8 9H4z" />
+              <path d="M16 9l5 6M21 9l-5 6" />
+            </svg>
+            } @else {
+            <svg
+              class="player__mute-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M4 9v6h4l5 4V5L8 9H4z" />
+              <path d="M16.5 8.5a5 5 0 0 1 0 7" />
+              <path d="M19 6a9 9 0 0 1 0 12" />
+            </svg>
+            }
+          </button>
+
+          <ngx-volume-slider
+            customClass="player__volume"
+            [volume]="video.volume()"
+            (volumeChange)="video.setVolume($event)"
+          />
+
+          <ngx-time-display
+            customClass="player__time"
+            [currentTime]="video.time()"
+            [duration]="video.duration()"
+          />
+
+          <span class="player__spacer"></span>
+
+          <ngx-fullscreen-button
+            customClass="player__control"
+            [fullscreen]="isFullscreen()"
+            (toggle)="toggleFullscreen()"
+          />
+        </div>
+      </div>
+
+      <p class="example__note">
+        Клик по видео запускает и ставит паузу. Пока воспроизведение не идёт,
+        поверх видео видна большая кнопка play, при буферизации — спиннер. В
+        полноэкранном режиме (кнопка справа) панель остаётся внутри контейнера и
+        доступна.
+      </p>
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Разметка</h3>
+      <p class="example__note">
+        SVG-иконки mute в сниппете сокращены до комментария: в живом примере это
+        две разные иконки для состояний «звук включён» и «звук выключен».
+      </p>
+      <app-code-snippet [code]="code.markup" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Компонент: сервис и fullscreen контейнера</h3>
+      <p class="example__note">
+        <code>providers: [VideoService]</code> даёт плееру собственный экземпляр
+        сервиса. Fullscreen вызывается на <code>.player</code>, а состояние
+        синхронизируется по <code>fullscreenchange</code>.
+      </p>
+      <app-code-snippet [code]="code.component" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Стили: панель, оверлеи и fullscreen</h3>
+      <p class="example__note">
+        Панель скрывается, пока идёт воспроизведение, и появляется при
+        наведении, фокусе внутри или паузе. В fullscreen видео заполняет экран,
+        а панель остаётся снизу.
+      </p>
+      <app-code-snippet [code]="code.styles" />
+    </section>
+  </div>
+</app-demo-shell>

@@ -48,6 +48,11 @@ export const appRoutes: Routes = [
       ).then((m) => m.BufferingIndicatorDemo),
   },
   {
+    path: 'controls/player',
+    loadComponent: () =>
+      import('./demos/controls/player/player-demo').then((m) => m.PlayerDemo),
+  },
+  {
     path: 'timeline/timeline',
     loadComponent: () =>
       import('./demos/timeline/timeline/timeline-demo').then(

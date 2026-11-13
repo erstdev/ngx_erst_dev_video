@@ -1,6 +1,12 @@
 @if (visible()) {
   <span class="ngx-buffering-indicator" role="status">
-    <span class="ngx-buffering-indicator__spinner" aria-hidden="true"></span>
+    @if (indicatorTemplate(); as indicator) {
+      <span class="ngx-buffering-indicator__custom" aria-hidden="true">
+        <ng-container [ngTemplateOutlet]="indicator" />
+      </span>
+    } @else {
+      <span class="ngx-buffering-indicator__spinner" aria-hidden="true"></span>
+    }
     <span class="ngx-buffering-indicator__text">Загрузка…</span>
   </span>
 }

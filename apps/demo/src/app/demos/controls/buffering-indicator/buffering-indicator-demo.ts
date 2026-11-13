@@ -13,8 +13,9 @@ import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
 /**
  * Демо для BufferingIndicatorComponent.
  *
- * Три сценария: живой индикатор поверх видео, ручное переключение состояния
- * (включая задержку появления) и стилизация через `customClass`.
+ * Четыре сценария: живой индикатор поверх видео, ручное переключение состояния
+ * (включая задержку появления), стилизация через `customClass` и собственный
+ * индикатор через `indicatorTemplate` со своими `@keyframes`.
  *
  * Компонент не решает, когда включать буферизацию: состояние приходит снаружи.
  */
@@ -42,10 +43,10 @@ export class BufferingIndicatorDemo {
   protected readonly bufferingState: VideoState = 'buffering';
 
   protected readonly responsibilities = [
-    'Входы: state, delay (задержка появления, мс), customClass; выходов нет.',
+    'Входы: state, delay (задержка появления, мс), indicatorTemplate, customClass; выходов нет.',
     'Показывается только при state === "buffering"; момент включения определяет VideoService.',
     'CSS-переменные: --ngx-buffering-size/-thickness/-color/-track-color и все параметры анимации — --ngx-buffering-speed, -easing, -delay, -iteration-count, -direction, -fill-mode, -play-state.',
-    'role="status" и скрытый текст «Загрузка…» сообщают скринридеру о загрузке.',
+    'indicatorTemplate заменяет визуальный спиннер и позволяет задать свои @keyframes в стилях потребителя; role="status" и скрытый текст «Загрузка…» остаются за компонентом.',
   ];
 
   /** Рецепты для блоков «Код примера». */
@@ -96,6 +97,37 @@ readonly state = signal<VideoState>('buffering');`,
   --ngx-buffering-speed: 0.6s;
   --ngx-buffering-easing: ease-in;
   --ngx-buffering-direction: alternate;
+}`,
+
+    template: `<!-- player.component.html -->
+<ngx-buffering-indicator
+  [state]="video.state()"
+  [indicatorTemplate]="myIndicator"
+/>
+
+<ng-template #myIndicator>
+  <span class="my-indicator"></span>
+</ng-template>
+
+/* player.component.scss — свои @keyframes в стилях потребителя */
+.my-indicator {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(#34d399 0 30%, rgba(52, 211, 153, 0.2) 0);
+  animation: my-indicator-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes my-indicator-pulse {
+  from {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }`,
   } as const;
 

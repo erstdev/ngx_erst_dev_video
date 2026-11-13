@@ -21,6 +21,18 @@
   height: var(--ngx-buffering-size);
 }
 
+/*
+ * Обёртка пользовательского индикатора: шаблон заменяет только визуальную
+ * часть, размер по умолчанию берётся из --ngx-buffering-size.
+ */
+.ngx-buffering-indicator__custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
 .ngx-buffering-indicator__spinner {
   box-sizing: border-box;
   width: 100%;

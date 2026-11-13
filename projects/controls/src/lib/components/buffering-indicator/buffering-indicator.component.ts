@@ -1,9 +1,10 @@
-import { isPlatformBrowser } from '@angular/common';
+import { NgTemplateOutlet, isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
   PLATFORM_ID,
+  TemplateRef,
   effect,
   inject,
   input,
@@ -25,6 +26,7 @@ import type { VideoState } from '@erst_dev/ngx-video-core';
  */
 @Component({
   selector: 'ngx-buffering-indicator',
+  imports: [NgTemplateOutlet],
   templateUrl: './buffering-indicator.component.html',
   styleUrl: './buffering-indicator.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -78,6 +80,21 @@ export class BufferingIndicatorComponent {
    * глобальных стилей. CSS-переменные с хоста наследуются внутрь.
    */
   readonly customClass = input('');
+
+  /**
+   * Пользовательский визуальный индикатор вместо стандартного спиннера.
+   *
+   * Шаблон заменяет только визуальную часть: обёртка с `role="status"` и
+   * скрытым текстом «Загрузка…» остаётся за компонентом. Содержимое шаблона
+   * помечается `aria-hidden="true"`, потому что о загрузке уже сообщает
+   * скрытый текст. Контекст в шаблон не передаётся.
+   *
+   * Собственные `@keyframes` задаются в стилях компонента-потребителя:
+   * Angular скоупит их вместе с шаблоном, поэтому имя анимации можно писать
+   * литералом. Это закрывает ограничение стандартного спиннера, у которого
+   * имя keyframes зашито.
+   */
+  readonly indicatorTemplate = input<TemplateRef<void> | null>(null);
 
   /** Виден ли индикатор с учётом задержки появления. */
   protected readonly visible = this.show.asReadonly();

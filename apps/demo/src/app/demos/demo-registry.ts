@@ -52,6 +52,12 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
     pkg: '@erst_dev/ngx-video-controls',
     demos: [
       {
+        id: 'player',
+        path: 'controls/player',
+        title: 'Полный плеер',
+        status: 'ready',
+      },
+      {
         id: 'play-button',
         path: 'controls/play-button',
         title: 'PlayButtonComponent',
