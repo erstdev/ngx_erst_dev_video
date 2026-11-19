@@ -28,6 +28,16 @@
 - Соблюдать `docs/conventions.md`: Angular 22, signals, OnPush, `input()`/`output()`,
   `customClass` на хост, CSS-переменные с дефолтами в `:host`, README на русском.
 
+## Репозитории
+
+- **GitHub — основной:** сюда идут коммиты и публичные ссылки.
+- **GitLab — приватное зеркало и CI:** `.gitlab-ci.yml` запускает install, lint
+  и build на каждый пуш.
+- У `origin` два push URL, поэтому обычный `git push` обновляет и GitHub, и
+  GitLab. Только зеркало: `git push gitlab`.
+- Если GitLab был недоступен во время пуша, повторите `git push gitlab` — GitHub
+  к этому моменту уже обновлён.
+
 ## Завершение задачи
 
 1. `npx prettier --write` по изменённым файлам.
