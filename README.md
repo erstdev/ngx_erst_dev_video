@@ -21,7 +21,7 @@ Headless-библиотеки для видео-плеера в Angular. Не м
 | `@erst_dev/ngx-video-controls` | 0.0.1  | ✅ готов    | `PlayButtonComponent`, `VolumeSliderComponent`, `TimeDisplayComponent`, `FullscreenButtonComponent`, `BufferingIndicatorComponent`                |
 | `@erst_dev/ngx-video-timeline` | 0.0.1  | ✅ готов    | `TimelineComponent`, `TimelinePreviewComponent`, `ChapterMarkersComponent`                                                                        |
 | `@erst_dev/ngx-video-extras`   | 0.0.1  | 🚧 в работе | `ClickToPlayOverlayComponent`, `ErrorDisplayComponent`, `SpeedControlComponent`, `KeyboardShortcutsDirective` (готовы), Gesture, SubtitleRenderer |
-| `@erst_dev/ngx-video-sources`  | —      | ⏳ план     | HlsSource, DashSource, QualitySwitcher                                                                                                            |
+| `@erst_dev/ngx-video-sources`  | 0.0.1  | 🚧 в работе | `HlsSourceDirective` (готов), DashSource, QualitySwitcher                                                                                         |
 | `@erst_dev/ngx-video-capture`  | —      | 💰 PRO      | CaptureService, ScreenshotButton, ClipRecorder                                                                                                    |
 
 Пакеты пока не опубликованы в npm: версия `0.0.1` — рабочая. Внутри монорепо они
@@ -80,6 +80,7 @@ ngx-erst-dev-video/
 │   ├── core/          ← @erst_dev/ngx-video-core
 │   ├── controls/      ← @erst_dev/ngx-video-controls
 │   ├── extras/        ← @erst_dev/ngx-video-extras
+│   ├── sources/       ← @erst_dev/ngx-video-sources
 │   └── timeline/      ← @erst_dev/ngx-video-timeline
 ├── apps/
 │   └── demo/          ← песочница с живыми примерами (документация не ведётся)
@@ -98,6 +99,7 @@ ngx-erst-dev-video/
 - [@erst_dev/ngx-video-core](projects/core/README.md) — сервис, директива, типы, утилиты.
 - [@erst_dev/ngx-video-controls](projects/controls/README.md) — готовые контролы плеера.
 - [@erst_dev/ngx-video-extras](projects/extras/README.md) — дополнительные кирпичи: оверлей первого запуска и другие.
+- [@erst_dev/ngx-video-sources](projects/sources/README.md) — источники потокового видео: HLS через hls.js.
 - [@erst_dev/ngx-video-timeline](projects/timeline/README.md) — таймлайн, превью кадров и главы.
 - [docs/](docs/README.md) — архитектура, соглашения, roadmap, журнал и workflow.
 - `CONTEXT.md` — короткая локальная точка входа для нового чата. В git не входит;

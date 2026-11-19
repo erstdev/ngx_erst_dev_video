@@ -166,7 +166,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'hls-source',
         path: 'sources/hls-source',
         title: 'HlsSourceDirective',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'dash-source',

@@ -334,8 +334,8 @@ projects/controls/src/
 ### 18. HlsSourceDirective / DashSourceDirective
 
 **Что делает:** Подключение потокового видео (HLS/DASH).
-**За что отвечает:** Инициализация библиотек (hls.js / dash.js), передача манифеста, обработка событий качества и уровней.
-**Чего НЕ делает:** Не управляет интерфейсом. Только "прокидывает" поток в VideoService.
+**За что отвечает:** `HlsSourceDirective` (`[ngxHlsSource]`) доставляет HLS-манифест в `<video>`. В браузере с MSE он динамически импортирует `hls.js`, создаёт экземпляр, привязывает его к элементу и загружает манифест; если MSE нет (iOS Safari) или `Hls.isSupported()` вернул `false`, библиотека не загружается, а URL выставляется в `video.src` (native HLS). После `MANIFEST_PARSED` директива отдаёт `levelsChange` (уровни как `QualityInterface`, без «auto»), применяет вход `level` (`id` уровня, `null` — auto) и запускает `video.play()` при `autoplay`; на `LEVEL_SWITCHED` эмитит `levelChange` (`null` — автоматический выбор). Фатальные ошибки hls.js, неподдерживаемый браузер и заблокированный autoplay нормализуются в `VideoError` с кодами `network`, `decode`, `source-not-supported`, `playback-blocked`, `unknown`; нефатальные ошибки и автоматический recover отсутствуют. Смена URL и `enabled = false` полностью пересоздают или очищают источник (`hls.destroy()`, снятие слушателей, `removeAttribute('src')` и `video.load()`); от гонок защищает токен поколения, очистка выполняется в `DestroyRef`. Динамический импорт библиотеки идёт только в браузере через `isPlatformBrowser`, поэтому SSR не трогает DOM и не тянет `hls.js`.
+**Чего НЕ делает:** Не управляет интерфейсом: селект качества, кнопки и сообщения об ошибке рисует потребитель, `QualitySwitcherComponent` — отдельный кирпич. Не вызывает `VideoService.play()`, `pause()`, `seek()` и другие команды: состояние видео ведёт сервис, директива только доставляет поток. Не грузит манифест через `fetch`/`HttpClient`, не восстанавливается после ошибок автоматически, не поддерживает DASH (`DashSourceDirective` — следующий шаг) и не меняет публичный API `core`.
 
 ### 19. QualitySwitcherComponent
 

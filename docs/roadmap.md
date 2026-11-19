@@ -64,11 +64,15 @@
 Оба кирпича готовы, Спринт 5 завершён. Следующим идёт Спринт 6
 (`ngx-video-sources`). Публикация — в финальной фазе после всех спринтов.
 
-### ⏳ Спринт 6: ngx-video-sources (2 недели) — следующий
+### 🚧 Спринт 6: ngx-video-sources (2 недели) — в работе
 
-- [ ] `HlsSourceDirective` (hls.js)
+- [x] `HlsSourceDirective` (hls.js)
 - [ ] `DashSourceDirective` (Shaka Player / dash.js)
 - [ ] `QualitySwitcherComponent`
+
+Пакет `sources` создан, `HlsSourceDirective` готов, демо `/sources/hls-source` —
+`ready`. Следующим идёт `DashSourceDirective`. Публикация — в финальной фазе
+после всех спринтов.
 
 ### ⏳ Спринт 7: ngx-video-capture — PRO (4 недели)
 
@@ -234,7 +238,7 @@
 | 15  | `KeyboardShortcutsDirective`  | extras   | ★★        | ✅     |
 | 16  | `GestureDirective`            | extras   | ★★★★      | ✅     |
 | 17  | `SubtitleRendererComponent`   | extras   | ★★★★      | ✅     |
-| 18  | `HlsSourceDirective`          | sources  | ★★★       | ⏳     |
+| 18  | `HlsSourceDirective`          | sources  | ★★★       | ✅     |
 | 19  | `DashSourceDirective`         | sources  | ★★★       | ⏳     |
 | 20  | `QualitySwitcherComponent`    | sources  | ★★★★      | ⏳     |
 | 21  | `CaptureService`              | capture  | ★★★       | 💰     |

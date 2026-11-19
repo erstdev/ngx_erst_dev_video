@@ -1,0 +1,14 @@
+{
+  "name": "@erst_dev/ngx-video-sources",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@erst_dev/ngx-video-core": "^0.0.1",
+    "hls.js": "^1.7.4"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  }
+}
