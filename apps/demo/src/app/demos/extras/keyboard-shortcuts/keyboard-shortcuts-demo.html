@@ -2,11 +2,190 @@
   title="KeyboardShortcutsDirective"
   pkg="@erst_dev/ngx-video-extras"
   selector="[ngxKeyboardShortcuts]"
-  status="planned"
+  status="ready"
   description="Горячие клавиши: Space — play/pause, стрелки — перемотка и громкость, F — фуллскрин, M — mute. Переводит клавиши в события, логику плеера не содержит."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-hint">
+    Кликните по плееру или нажмите <kbd>Tab</kbd>, затем используйте клавиши.
+    Space переключает воспроизведение, стрелки — перемотку и громкость,
+    <kbd>F</kbd> — полноэкранный режим, <kbd>M</kbd> — звук.
   </p>
+
+  <div
+    class="player"
+    ngxKeyboardShortcuts
+    tabindex="0"
+    [enabled]="shortcutsEnabled()"
+    [seekStep]="seekStep()"
+    [volumeStep]="volumeStep()"
+    (togglePlay)="video.toggle()"
+    (seekBy)="onSeekBy($event)"
+    (volumeChange)="onVolumeChange($event)"
+    (toggleMute)="video.toggleMute()"
+    (toggleFullscreen)="video.toggleFullscreen()"
+  >
+    <video
+      #videoEl
+      ngxVideo
+      class="player__video"
+      [src]="src"
+      preload="metadata"
+      playsinline
+      tabindex="-1"
+    ></video>
+
+    <div class="player__controls">
+      <ngx-speed-control
+        [playbackRate]="video.playbackRate()"
+        (rateChange)="video.setPlaybackRate($event)"
+      />
+    </div>
+  </div>
+
+  <div class="demo-toolbar">
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="shortcutsEnabled()"
+      [attr.aria-pressed]="shortcutsEnabled()"
+      (click)="toggleShortcuts()"
+    >
+      Клавиши: {{ shortcutsEnabled() ? 'вкл' : 'выкл' }}
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="largeSteps()"
+      [attr.aria-pressed]="largeSteps()"
+      (click)="toggleLargeSteps()"
+    >
+      Шаг: {{ largeSteps() ? 'большой' : 'обычный' }} ({{ seekStep() }} с / {{
+      volumeStep() }})
+    </button>
+  </div>
+
+  <dl class="demo-status">
+    <div class="demo-status__item">
+      <dt class="demo-status__label">state</dt>
+      <dd class="demo-status__value">
+        <code>{{ video.state() }}</code>
+      </dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">currentTime</dt>
+      <dd class="demo-status__value">{{ video.time().toFixed(1) }} с</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">volume</dt>
+      <dd class="demo-status__value">{{ volumePercent() }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">muted</dt>
+      <dd class="demo-status__value">{{ mutedLabel() }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">fullscreen</dt>
+      <dd class="demo-status__value">{{ fullscreenLabel() }}</dd>
+    </div>
+  </dl>
+
+  <p class="demo-note">
+    Фокус в <code>&lt;select&gt;</code> скорости не перехватывается: стрелки
+    меняют скорость, а не громкость. Так же игнорируются <code>input</code>,
+    <code>textarea</code>, <code>button</code>, <code>a</code> и
+    <code>contenteditable</code>. В полноэкранном режиме демо возвращает фокус
+    на видео — иначе F не закрыла бы режим; это забота потребителя, а не
+    директивы.
+  </p>
+
+  <section class="shortcuts">
+    <h3 class="shortcuts__title">Горячие клавиши</h3>
+
+    <div class="shortcuts__table-wrap">
+      <table class="shortcuts__table">
+        <thead>
+          <tr>
+            <th scope="col">Клавиша</th>
+            <th scope="col">Действие</th>
+            <th scope="col">Выход</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><kbd>Space</kbd></td>
+            <td>Воспроизведение / пауза</td>
+            <td><code>togglePlay</code></td>
+          </tr>
+          <tr>
+            <td><kbd>→</kbd></td>
+            <td>Вперёд на {{ seekStep() }} с</td>
+            <td><code>seekBy(+{{ seekStep() }})</code></td>
+          </tr>
+          <tr>
+            <td><kbd>←</kbd></td>
+            <td>Назад на {{ seekStep() }} с</td>
+            <td><code>seekBy(-{{ seekStep() }})</code></td>
+          </tr>
+          <tr>
+            <td><kbd>↑</kbd></td>
+            <td>Громче на {{ volumeStep() }}</td>
+            <td><code>volumeChange(+{{ volumeStep() }})</code></td>
+          </tr>
+          <tr>
+            <td><kbd>↓</kbd></td>
+            <td>Тише на {{ volumeStep() }}</td>
+            <td><code>volumeChange(-{{ volumeStep() }})</code></td>
+          </tr>
+          <tr>
+            <td><kbd>F</kbd> / <kbd>f</kbd></td>
+            <td>Полноэкранный режим</td>
+            <td><code>toggleFullscreen</code></td>
+          </tr>
+          <tr>
+            <td><kbd>M</kbd> / <kbd>m</kbd></td>
+            <td>Беззвучный режим</td>
+            <td><code>toggleMute</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Базовая разметка</h3>
+      <p class="example__text">
+        Директива ставится на контейнер плеера. <code>tabindex="0"</code> делает
+        его фокусируемым, а <code>preventDefault()</code> для распознанных
+        клавиш не даёт Space и стрелкам прокручивать страницу.
+      </p>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Обработчики через VideoService</h3>
+      <p class="example__text">
+        Директива только эмитит выходы. Перемотку и громкость применяет
+        родитель: смещения передаются в <code>seekBy()</code> и
+        <code>setVolume()</code>.
+      </p>
+      <app-code-snippet [code]="code.handlers" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Шаги и enabled</h3>
+      <p class="example__text">
+        <code>seekStep</code> и <code>volumeStep</code> задают величину шага, а
+        <code>enabled</code> полностью выключает обработку клавиш и снимает
+        <code>aria-keyshortcuts</code> с контейнера.
+      </p>
+      <app-code-snippet [code]="code.settings" />
+    </section>
+  </div>
 </app-demo-shell>

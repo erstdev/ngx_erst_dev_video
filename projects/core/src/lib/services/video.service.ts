@@ -11,17 +11,8 @@ import type { Observable } from 'rxjs';
 import { VideoErrorCode } from '../types';
 import { VideoState } from '../types';
 import { VideoError } from '../interfaces';
-
-/** Тексты сообщений по умолчанию. Код ошибки — контракт, текст можно менять. */
-const ERROR_MESSAGES: Readonly<Record<VideoErrorCode, string>> = {
-  aborted: 'Загрузка видео была прервана.',
-  network: 'Не удалось загрузить видео из-за ошибки сети.',
-  decode: 'Не удалось декодировать видео.',
-  'source-not-supported': 'Этот формат видео не поддерживается браузером.',
-  'playback-blocked':
-    'Браузер заблокировал автовоспроизведение. Нужен клик пользователя.',
-  unknown: 'Не удалось воспроизвести видео.',
-};
+import { ERROR_MESSAGES } from './constants';
+import { bufferedEnd, normalizeError, resolveState } from './utils';
 
 /**
  * Единственный источник правды о состоянии медиа-элемента.
@@ -389,7 +380,7 @@ export class VideoService {
       this._state.set('idle');
     });
 
-    on('progress', () => this._buffered.set(this.bufferedEnd(element)));
+    on('progress', () => this._buffered.set(bufferedEnd(element)));
 
     on('volumechange', () => {
       this._volume.set(element.volume);
@@ -405,7 +396,7 @@ export class VideoService {
         return;
       }
 
-      this._error.set(this.normalizeError(mediaError));
+      this._error.set(normalizeError(mediaError));
       this._state.set('error');
     });
 
@@ -426,70 +417,18 @@ export class VideoService {
     this._volume.set(element.volume);
     this._muted.set(element.muted);
     this._playbackRate.set(element.playbackRate);
-    this._buffered.set(this.bufferedEnd(element));
+    this._buffered.set(bufferedEnd(element));
     this._fullscreen.set(
       typeof document !== 'undefined' && document.fullscreenElement === element,
     );
 
     if (element.error) {
-      this._error.set(this.normalizeError(element.error));
+      this._error.set(normalizeError(element.error));
       this._state.set('error');
       return;
     }
 
-    this._state.set(this.resolveState(element));
-  }
-
-  private resolveState(element: HTMLVideoElement): VideoState {
-    if (element.error) {
-      return 'error';
-    }
-
-    if (element.ended) {
-      return 'ended';
-    }
-
-    if (element.readyState === 0) {
-      return 'idle';
-    }
-
-    return element.paused ? 'paused' : 'playing';
-  }
-
-  private bufferedEnd(element: HTMLVideoElement): number {
-    const ranges = element.buffered;
-    const time = element.currentTime;
-
-    for (let index = 0; index < ranges.length; index += 1) {
-      const start = ranges.start(index);
-      const end = ranges.end(index);
-
-      if (start <= time && time <= end) {
-        return end;
-      }
-    }
-
-    return 0;
-  }
-
-  private normalizeError(mediaError: MediaError): VideoError {
-    const code = this.resolveErrorCode(mediaError.code);
-    return { code, message: ERROR_MESSAGES[code], cause: mediaError };
-  }
-
-  private resolveErrorCode(nativeCode: number): VideoErrorCode {
-    switch (nativeCode) {
-      case 1:
-        return 'aborted';
-      case 2:
-        return 'network';
-      case 3:
-        return 'decode';
-      case 4:
-        return 'source-not-supported';
-      default:
-        return 'unknown';
-    }
+    this._state.set(resolveState(element));
   }
 
   private fail(code: VideoErrorCode, cause?: unknown): void {

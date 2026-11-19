@@ -14,6 +14,8 @@ import {
 } from '@angular/core';
 import { formatTime } from '@erst_dev/ngx-video-core';
 
+import { waitForMetadata, waitForSeek } from './utils';
+
 /**
  * Превью кадра для таймлайна.
  *
@@ -207,7 +209,7 @@ export class TimelinePreviewComponent {
     this.seeking = true;
 
     try {
-      await this.waitForMetadata(video);
+      await waitForMetadata(video);
 
       if (!this.isCurrent(generation)) {
         return;
@@ -215,7 +217,7 @@ export class TimelinePreviewComponent {
 
       if (Math.abs(video.currentTime - target) > 0.05) {
         video.currentTime = target;
-        await this.waitForSeek(video);
+        await waitForSeek(video);
       }
 
       if (!this.isCurrent(generation) || video.readyState < 2) {
@@ -245,42 +247,6 @@ export class TimelinePreviewComponent {
       generation === this.generation &&
       this.video !== null
     );
-  }
-
-  /** Ждёт метаданные, чтобы можно было выставить `currentTime`. */
-  private waitForMetadata(video: HTMLVideoElement): Promise<void> {
-    if (video.readyState >= 1) {
-      return Promise.resolve();
-    }
-
-    return new Promise((resolve) => {
-      const done = (): void => {
-        clearTimeout(timer);
-        video.removeEventListener('loadedmetadata', done);
-        video.removeEventListener('error', done);
-        resolve();
-      };
-
-      const timer = setTimeout(done, 4000);
-      video.addEventListener('loadedmetadata', done);
-      video.addEventListener('error', done);
-    });
-  }
-
-  /** Ждёт завершения seek, но не блокирует компонент навсегда при ошибке. */
-  private waitForSeek(video: HTMLVideoElement): Promise<void> {
-    return new Promise((resolve) => {
-      const done = (): void => {
-        clearTimeout(timer);
-        video.removeEventListener('seeked', done);
-        video.removeEventListener('error', done);
-        resolve();
-      };
-
-      const timer = setTimeout(done, 1500);
-      video.addEventListener('seeked', done);
-      video.addEventListener('error', done);
-    });
   }
 
   /** Рисует текущий кадр видео в canvas с сохранением пропорций. */

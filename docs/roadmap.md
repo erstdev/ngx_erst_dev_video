@@ -46,15 +46,15 @@
 - [x] README пакета и каждого кирпича, демо-страницы `/timeline/*`
 - [ ] Позже, после базовой версии: live-scrub (вариант B) — `seek` во время drag с throttle, чтобы видео следовало за ползунком. Не блокирует завершение Спринта 3.
 
-### 🚧 Спринт 4: ngx-video-extras (2 недели) — в работе
+### ✅ Спринт 4: ngx-video-extras (2 недели) — завершён
 
 - [x] `ClickToPlayOverlayComponent`
 - [x] `ErrorDisplayComponent`
 - [x] `SpeedControlComponent`
-- [ ] `KeyboardShortcutsDirective`
+- [x] `KeyboardShortcutsDirective`
 
-Пакет `@erst_dev/ngx-video-extras` создан, три кирпича готовы; остался
-`KeyboardShortcutsDirective`.
+Четыре кирпича готовы, Спринт 4 завершён. Публикация пакета — в финальной фазе
+после всех спринтов.
 
 ### ⏳ Спринт 5: жесты и субтитры (3 недели)
 
@@ -228,7 +228,7 @@
 | 12  | `ClickToPlayOverlayComponent` | extras   | ★★        | ✅     |
 | 13  | `ErrorDisplayComponent`       | extras   | ★         | ✅     |
 | 14  | `SpeedControlComponent`       | extras   | ★         | ✅     |
-| 15  | `KeyboardShortcutsDirective`  | extras   | ★★        | ⏳     |
+| 15  | `KeyboardShortcutsDirective`  | extras   | ★★        | ✅     |
 | 16  | `GestureDirective`            | extras   | ★★★★      | ⏳     |
 | 17  | `SubtitleRendererComponent`   | extras   | ★★★★      | ⏳     |
 | 18  | `HlsSourceDirective`          | sources  | ★★★       | ⏳     |
@@ -240,9 +240,9 @@
 
 **Легенда:** ✅ готово · 🚧 в работе · ⏳ запланировано · 💰 PRO (платный)
 
-> Все кирпичи `core`, `controls` и `timeline` реализованы и проверены; публикация
-> **всех** пакетов отложена до завершения всех спринтов (см. раздел 7,
-> «Финальная публикация»).
+> Все кирпичи `core`, `controls`, `timeline` и первые четыре `extras` реализованы
+> и проверены; публикация **всех** пакетов отложена до завершения всех спринтов
+> (см. раздел 7, «Финальная публикация»).
 
 ---
 
@@ -268,7 +268,7 @@
 
 Завершённые спринты и их решения. Текущий статус — в `CONTEXT.md`.
 
-### ✅ Спринт 3: ngx-video-timeline (архив; Спринт 4 ещё не начат)
+### ✅ Спринт 3: ngx-video-timeline (архив)
 
 **Статус:** завершён. Все три кирпича, демо-страницы и README готовы; проверки
 зелёные, браузерный прогон пройден.

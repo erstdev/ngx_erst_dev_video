@@ -106,7 +106,8 @@ capture (зависит от core) — PRO, платный
 Внутри `projects/<пакет>/src/lib` — **слои по назначению**, у каждого слоя свой
 `index.ts`-баррел. Имя файла: `<сущность>.<назначение>.ts` — `video.service.ts`,
 `video.directive.ts`, `video-state.type.ts`, `video-error.interface.ts`,
-`format-time.util.ts`. Компоненты лежат в своих папках: `<имя>/<имя>.component.ts`.
+`format-time.util.ts`, `error-messages.constants.ts`. Компоненты лежат в своих
+папках: `<имя>/<имя>.component.ts`.
 
 ```
 projects/core/src/
@@ -189,14 +190,18 @@ projects/controls/src/
 `lib`: компоненты — в `components/`, директивы — в `directives/`, сервисы — в
 `services/`, типы — в `types/`.
 
-Интерфейсы и чистые функции кладём на **ближайшем общем уровне использования**:
+Интерфейсы, константы и чистые функции кладём на **ближайшем общем уровне
+использования**:
 
 - нужны одному кирпичу → в его папке: `components/<кирпич>/interfaces/`,
-  `components/<кирпич>/utils/`;
+  `components/<кирпич>/constants/`, `components/<кирпич>/utils/`;
 - нужны нескольким соседним кирпичам → на уровне их общего родителя:
-  `components/interfaces/`, `components/utils/` (а не в `lib/interfaces`);
+  `components/interfaces/`, `components/constants/`, `components/utils/`
+  (а не в `lib/interfaces`);
 - нужны разным слоям пакета (компоненту и сервису/директиве) → на уровне пакета:
-  `lib/interfaces/`, `lib/utils/`.
+  `lib/interfaces/`, `lib/constants/`, `lib/utils/`;
+- внутренние помощники сервиса → рядом с сервисом: `services/constants/`,
+  `services/utils/`. Они не попадают в публичный баррел пакета.
 
 Например, для `components/component-1` и `components/component-2`: `Interface1`
 лежит в `components/component-1/interfaces/`, `Interface2` — в
@@ -204,8 +209,8 @@ projects/controls/src/
 `components/interfaces/`.
 
 У каждого уровня свой `index.ts`-баррел. Если появляется общий слой
-`components/interfaces/` или `components/utils/`, `components/index.ts`
-реэкспортирует и его. Внутри `components/` у каждого компонента своя папка с
+`components/interfaces/`, `components/constants/` или `components/utils/`,
+`components/index.ts` реэкспортирует и его. Внутри `components/` у каждого компонента своя папка с
 локальным `index.ts`-баррелом и файлами `<имя>.component.ts|html|scss`.
 Каждый слой имеет непустой `index.ts`-баррел; `lib/index.ts` реэкспортирует слои,
 `src/index.ts` — `lib`.
@@ -311,8 +316,8 @@ projects/controls/src/
 ### 15. KeyboardShortcutsDirective
 
 **Что делает:** Обработка горячих клавиш (Space, стрелки, F, M).
-**За что отвечает:** Слушает keydown на элементе, эмитит соответствующие события (togglePlay, seekBy, toggleMute).
-**Чего НЕ делает:** Не содержит логику самого плеера, только трансляцию клавиш в команды.
+**За что отвечает:** Слушает keydown на хост-элементе и эмитит `togglePlay`, `seekBy`, `volumeChange`, `toggleMute`, `toggleFullscreen`. Для распознанных клавиш вызывает `preventDefault()`; игнорирует выключенное состояние, Ctrl/Meta/Alt, уже отменённые события, интерактивные цели и повтор для переключающих команд. Пока директива включена, выставляет на хост `aria-keyshortcuts`.
+**Чего НЕ делает:** Не содержит логику плеера, не хранит состояние, не вызывает медиа-методы, не управляет фокусом и не добавляет `tabindex` — только транслирует клавиши в команды.
 
 ### 16. GestureDirective
 

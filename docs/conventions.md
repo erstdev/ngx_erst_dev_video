@@ -11,12 +11,17 @@
 - **CSS-переменные:** префикс `--ngx-` → `--ngx-play-size`, `--ngx-timeline-color`
 - **Сервисы:** суффикс `Service` → `VideoService`, `CaptureService`
 - **Файлы:** kebab-case с суффиксом слоя → `play-button.component.ts`, `video.service.ts`,
-  `video.directive.ts`, `video-state.type.ts`, `video-error.interface.ts`, `format-time.util.ts`
+  `video.directive.ts`, `video-state.type.ts`, `video-error.interface.ts`,
+  `format-time.util.ts`, `error-messages.constants.ts`
 - **Интерфейсы:** на ближайшем общем уровне — `components/<кирпич>/interfaces/…`,
   `components/interfaces/…` для нескольких кирпичей, `lib/interfaces/…` для разных
   слоёв пакета.
 - **Чистые функции:** аналогично — `components/<кирпич>/utils/…`,
   `components/utils/…`, `lib/utils/…` (`format-time.util.ts`).
+- **Константы:** не объявляем внутри компонентов и директив; кладём на ближайшем
+  общем уровне — `components/<кирпич>/constants/…`, `components/constants/…`,
+  `lib/constants/…`, `services/constants/…` для внутренних констант сервиса
+  (`error-messages.constants.ts`).
 - **Классы:** PascalCase → `PlayButtonComponent`, `VideoService`
 
 ### Компоненты

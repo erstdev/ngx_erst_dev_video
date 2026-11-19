@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { formatTime } from '@erst_dev/ngx-video-core';
 
+import { chapterLabel } from './utils';
 import type { ChapterInterface } from './interfaces';
 import type { ChapterMarkerView } from './interfaces/chapter-marker-view.interface';
 
@@ -105,20 +106,18 @@ export class ChapterMarkersComponent {
 
   protected readonly label = computed(() => this.ariaLabel() ?? 'Главы');
 
+  /** Форматирование времени главы для шаблона. */
+  protected readonly formatTime = formatTime;
+
+  /** Подпись маркера для скринридера. */
+  protected readonly chapterLabel = chapterLabel;
+
   constructor() {
     effect(() => this.syncCustomClass(this.customClass()));
   }
 
   protected isActive(chapter: ChapterInterface): boolean {
     return this.activeChapter() === chapter;
-  }
-
-  protected chapterTime(chapter: ChapterInterface): string {
-    return formatTime(chapter.time);
-  }
-
-  protected chapterLabel(chapter: ChapterInterface): string {
-    return `Глава: ${chapter.title}, ${this.chapterTime(chapter)}`;
   }
 
   protected onSelect(chapter: ChapterInterface, event: MouseEvent): void {

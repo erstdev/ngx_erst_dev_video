@@ -9,10 +9,7 @@ import {
   output,
 } from '@angular/core';
 
-/** Скорость можно показать и применить, только если она конечная и больше нуля. */
-function isValidRate(rate: number): boolean {
-  return Number.isFinite(rate) && rate > 0;
-}
+import { formatRate, isValidRate } from './utils';
 
 /**
  * Селектор скорости воспроизведения.
@@ -101,9 +98,8 @@ export class SpeedControlComponent {
     return options.includes(current) ? current : (options[0] ?? current);
   });
 
-  protected formatRate(rate: number): string {
-    return `${rate}x`;
-  }
+  /** Подпись скорости для шаблона. */
+  protected readonly formatRate = formatRate;
 
   protected onChange(event: Event): void {
     const rate = Number((event.target as HTMLSelectElement).value);

@@ -141,7 +141,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'keyboard-shortcuts',
         path: 'extras/keyboard-shortcuts',
         title: 'KeyboardShortcutsDirective',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'gesture',

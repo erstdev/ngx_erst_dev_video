@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { formatTime } from '@erst_dev/ngx-video-core';
 
+import { clamp } from './utils';
 import type { TimelinePreviewContext } from './interfaces';
 
 /**
@@ -106,7 +107,7 @@ export class TimelineComponent {
   protected readonly displayTime = computed(() => {
     const duration = this.safeDuration();
     const value = this.dragging() ? this.dragTime() : this.currentTime();
-    return this.clamp(value, 0, duration);
+    return clamp(value, 0, duration);
   });
 
   protected readonly progressPercent = computed(() => {
@@ -117,7 +118,7 @@ export class TimelineComponent {
   protected readonly bufferedPercent = computed(() => {
     const duration = this.safeDuration();
     return duration > 0
-      ? (this.clamp(this.buffered(), 0, duration) / duration) * 100
+      ? (clamp(this.buffered(), 0, duration) / duration) * 100
       : 0;
   });
 
@@ -231,7 +232,7 @@ export class TimelineComponent {
     }
 
     event.preventDefault();
-    this.seek.emit(this.clamp(target, 0, duration));
+    this.seek.emit(clamp(target, 0, duration));
   }
 
   /** Переводит координату указателя в секунды с учётом границ полосы. */
@@ -241,7 +242,7 @@ export class TimelineComponent {
       return 0;
     }
 
-    const ratio = this.clamp((event.clientX - rect.left) / rect.width, 0, 1);
+    const ratio = clamp((event.clientX - rect.left) / rect.width, 0, 1);
     return ratio * this.safeDuration();
   }
 
@@ -253,14 +254,6 @@ export class TimelineComponent {
   private safeStep(): number {
     const step = this.keyboardStep();
     return Number.isFinite(step) && step > 0 ? step : 5;
-  }
-
-  private clamp(value: number, min: number, max: number): number {
-    if (!Number.isFinite(value)) {
-      return min;
-    }
-
-    return Math.min(Math.max(value, min), max);
   }
 
   private releasePointerCapture(pointerId: number): void {

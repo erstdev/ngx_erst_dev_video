@@ -10,8 +10,7 @@ import {
 } from '@angular/core';
 import type { VideoError } from '@erst_dev/ngx-video-core';
 
-/** Сообщение, если в `VideoError.message` ничего не пришло. */
-const FALLBACK_MESSAGE = 'Не удалось воспроизвести видео';
+import { resolveErrorMessage } from './utils';
 
 /**
  * Карточка с сообщением об ошибке плеера и кнопкой «Повторить».
@@ -68,8 +67,8 @@ export class ErrorDisplayComponent {
   readonly retry = output<void>();
 
   /** Текст ошибки; пустой `message` заменяется на нейтральный fallback. */
-  protected readonly message = computed(
-    () => this.error()?.message.trim() || FALLBACK_MESSAGE,
+  protected readonly message = computed(() =>
+    resolveErrorMessage(this.error()),
   );
 
   protected onRetry(): void {
