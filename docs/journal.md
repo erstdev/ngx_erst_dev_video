@@ -51,6 +51,7 @@
 | 2026-11-19 | Реализован `ErrorDisplayComponent` (`error`/`customClass`, выход `retry`, `@if` при `null`, fallback-сообщение, `role="alert"`, CSS-переменные `--ngx-error-*`, README); демо `/extras/error-display` — `ready`; вопрос i18n закрыт.                                                                                                             |
 | 2026-11-19 | Реализован `SpeedControlComponent` (`playbackRate`/`rates`/`customClass`, выход `rateChange`, нативный `<select>`, добавление текущей скорости в конец списка, CSS-переменные `--ngx-speed-*`, README); демо `/extras/speed-control` — `ready`.                                                                                                  |
 | 2026-11-19 | В план финальной публикации добавлен чек-лист описаний на npm: README пакета, таблица кирпичей, метаданные `package.json`, проверка tarball и partial compilation.                                                                                                                                                                               |
+| 2026-11-19 | Запланирован публичный сайт с демо и документацией на VPS: исходники остаются приватными, наружу публикуется только `public/`, ссылки в npm ведут на сайт.                                                                                                                                                                                       |
 
 > Обновляй таблицу при каждом существенном изменении. Мелочи (опечатки) — не считаются.
 
