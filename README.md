@@ -97,8 +97,9 @@ ngx-erst-dev-video/
 - [@erst_dev/ngx-video-core](projects/core/README.md) — сервис, директива, типы, утилиты.
 - [@erst_dev/ngx-video-controls](projects/controls/README.md) — готовые контролы плеера.
 - [@erst_dev/ngx-video-timeline](projects/timeline/README.md) — таймлайн, превью кадров и главы.
-- `CONTEXT.md` — внутренний документ проекта: архитектура, соглашения, роадмап.
-  В git не входит, при работе с новым чатом копируется в начало разговора.
+- [docs/](docs/README.md) — архитектура, соглашения, roadmap, журнал и workflow.
+- `CONTEXT.md` — короткая локальная точка входа для нового чата. В git не входит;
+  подробности вынесены в `docs/`.
 
 ## Лицензия
 
