@@ -49,6 +49,7 @@
 | 2026-11-19 | Добавлен GitHub Actions CI (`.github/workflows/ci.yml`): install, lint, build и artifacts на push в `master` и pull request.                                                                                                                                                                                                                     |
 | 2026-11-19 | В roadmap добавлена финальная фаза CI/CD: полный набор пайплайнов для GitHub Actions и GitLab CI (quality, security, release, deploy).                                                                                                                                                                                                           |
 | 2026-11-19 | Реализован `ErrorDisplayComponent` (`error`/`customClass`, выход `retry`, `@if` при `null`, fallback-сообщение, `role="alert"`, CSS-переменные `--ngx-error-*`, README); демо `/extras/error-display` — `ready`; вопрос i18n закрыт.                                                                                                             |
+| 2026-11-19 | Реализован `SpeedControlComponent` (`playbackRate`/`rates`/`customClass`, выход `rateChange`, нативный `<select>`, добавление текущей скорости в конец списка, CSS-переменные `--ngx-speed-*`, README); демо `/extras/speed-control` — `ready`.                                                                                                  |
 
 > Обновляй таблицу при каждом существенном изменении. Мелочи (опечатки) — не считаются.
 

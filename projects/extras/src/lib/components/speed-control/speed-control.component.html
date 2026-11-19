@@ -1,0 +1,11 @@
+<select
+  class="ngx-speed-control__select"
+  aria-label="Скорость воспроизведения"
+  (change)="onChange($event)"
+>
+  @for (rate of options(); track rate) {
+    <option [value]="rate" [selected]="rate === selectedRate()">
+      {{ formatRate(rate) }}
+    </option>
+  }
+</select>

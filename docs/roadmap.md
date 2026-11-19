@@ -50,11 +50,11 @@
 
 - [x] `ClickToPlayOverlayComponent`
 - [x] `ErrorDisplayComponent`
-- [ ] `SpeedControlComponent`
+- [x] `SpeedControlComponent`
 - [ ] `KeyboardShortcutsDirective`
 
-Пакет `@erst_dev/ngx-video-extras` создан, два кирпича готовы; остальные
-кирпичи спринта — в работе.
+Пакет `@erst_dev/ngx-video-extras` создан, три кирпича готовы; остался
+`KeyboardShortcutsDirective`.
 
 ### ⏳ Спринт 5: жесты и субтитры (3 недели)
 
@@ -174,7 +174,7 @@
 | 11  | `ChapterMarkersComponent`     | timeline | ★★★       | ✅     |
 | 12  | `ClickToPlayOverlayComponent` | extras   | ★★        | ✅     |
 | 13  | `ErrorDisplayComponent`       | extras   | ★         | ✅     |
-| 14  | `SpeedControlComponent`       | extras   | ★         | ⏳     |
+| 14  | `SpeedControlComponent`       | extras   | ★         | ✅     |
 | 15  | `KeyboardShortcutsDirective`  | extras   | ★★        | ⏳     |
 | 16  | `GestureDirective`            | extras   | ★★★★      | ⏳     |
 | 17  | `SubtitleRendererComponent`   | extras   | ★★★★      | ⏳     |

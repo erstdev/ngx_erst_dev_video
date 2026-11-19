@@ -135,7 +135,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'speed-control',
         path: 'extras/speed-control',
         title: 'SpeedControlComponent',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'keyboard-shortcuts',

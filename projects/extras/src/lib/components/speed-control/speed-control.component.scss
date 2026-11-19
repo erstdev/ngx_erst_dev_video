@@ -1,0 +1,42 @@
+:host {
+  --ngx-speed-bg: rgba(0, 0, 0, 0.6);
+  --ngx-speed-color: #ffffff;
+  --ngx-speed-border-color: rgba(255, 255, 255, 0.3);
+  --ngx-speed-border-radius: 0.375rem;
+  --ngx-speed-padding: 0.25rem 0.5rem;
+  --ngx-speed-font-size: 0.8125rem;
+  --ngx-speed-focus-color: #60a5fa;
+  --ngx-speed-transition: 0.15s ease;
+
+  display: inline-flex;
+  align-items: center;
+}
+
+.ngx-speed-control__select {
+  padding: var(--ngx-speed-padding);
+  border: 1px solid var(--ngx-speed-border-color);
+  border-radius: var(--ngx-speed-border-radius);
+  background: var(--ngx-speed-bg);
+  color: var(--ngx-speed-color);
+  font: inherit;
+  font-size: var(--ngx-speed-font-size);
+  cursor: pointer;
+  transition:
+    border-color var(--ngx-speed-transition),
+    background var(--ngx-speed-transition);
+}
+
+.ngx-speed-control__select:hover {
+  border-color: var(--ngx-speed-color);
+}
+
+.ngx-speed-control__select:focus-visible {
+  outline: 2px solid var(--ngx-speed-focus-color);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-speed-control__select {
+    transition: none;
+  }
+}
