@@ -19,7 +19,7 @@ Headless-библиотеки для видео-плеера в Angular. Не м
 | ------------------------------ | ------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `@erst_dev/ngx-video-core`     | 0.0.1  | ✅ готов | `VideoService`, `VideoDirective`, типы состояния, `formatTime`                                                                     |
 | `@erst_dev/ngx-video-controls` | 0.0.1  | ✅ готов | `PlayButtonComponent`, `VolumeSliderComponent`, `TimeDisplayComponent`, `FullscreenButtonComponent`, `BufferingIndicatorComponent` |
-| `@erst_dev/ngx-video-timeline` | —      | ⏳ план  | Timeline, TimelinePreview, ChapterMarkers                                                                                          |
+| `@erst_dev/ngx-video-timeline` | 0.0.1  | ✅ готов | `TimelineComponent`, `TimelinePreviewComponent`, `ChapterMarkersComponent`                                                         |
 | `@erst_dev/ngx-video-extras`   | —      | ⏳ план  | ClickToPlayOverlay, ErrorDisplay, SpeedControl, KeyboardShortcuts, Gesture, SubtitleRenderer                                       |
 | `@erst_dev/ngx-video-sources`  | —      | ⏳ план  | HlsSource, DashSource, QualitySwitcher                                                                                             |
 | `@erst_dev/ngx-video-capture`  | —      | 💰 PRO   | CaptureService, ScreenshotButton, ClipRecorder                                                                                     |
@@ -78,7 +78,8 @@ Pre-commit-хук (`husky` + `lint-staged`) прогоняет линтер то
 ngx-erst-dev-video/
 ├── projects/
 │   ├── core/          ← @erst_dev/ngx-video-core
-│   └── controls/      ← @erst_dev/ngx-video-controls
+│   ├── controls/      ← @erst_dev/ngx-video-controls
+│   └── timeline/      ← @erst_dev/ngx-video-timeline
 ├── apps/
 │   └── demo/          ← песочница с живыми примерами (документация не ведётся)
 ├── CONTEXT.md         ← рабочий документ проекта (не версионируется)
@@ -95,6 +96,7 @@ ngx-erst-dev-video/
 
 - [@erst_dev/ngx-video-core](projects/core/README.md) — сервис, директива, типы, утилиты.
 - [@erst_dev/ngx-video-controls](projects/controls/README.md) — готовые контролы плеера.
+- [@erst_dev/ngx-video-timeline](projects/timeline/README.md) — таймлайн, превью кадров и главы.
 - `CONTEXT.md` — внутренний документ проекта: архитектура, соглашения, роадмап.
   В git не входит, при работе с новым чатом копируется в начало разговора.
 

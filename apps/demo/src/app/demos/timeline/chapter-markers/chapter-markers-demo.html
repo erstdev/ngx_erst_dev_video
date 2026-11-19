@@ -2,11 +2,86 @@
   title="ChapterMarkersComponent"
   pkg="@erst_dev/ngx-video-timeline"
   selector="ngx-chapter-markers"
-  status="planned"
-  description="Метки глав поверх таймлайна: рисует маркеры по массиву «время + название» и обрабатывает клик для перехода к главе."
+  status="ready"
+  description="Метки глав поверх таймлайна: рисует маркеры по массиву «время + название», подсвечивает активную главу и отдаёт chapterSelect с полным объектом главы."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="examples__hint">
+    Маркеры — это отдельный слой над таймлайном. Наведите или сфокусируйте
+    маркер, чтобы увидеть название и время; клик перематывает к главе.
   </p>
+
+  <div class="examples">
+    <section class="example example--wide">
+      <h3 class="example__title">Живой плеер с главами</h3>
+
+      <div class="player">
+        <video
+          class="player__video"
+          ngxVideo
+          [src]="src"
+          preload="metadata"
+          playsinline
+          (click)="video.toggle()"
+        ></video>
+
+        <div class="player__timeline">
+          <div class="player__timeline-track">
+            <ngx-timeline
+              [currentTime]="video.time()"
+              [duration]="video.duration()"
+              [buffered]="video.buffered()"
+              (seek)="video.seek($event)"
+            />
+
+            <ngx-chapter-markers
+              customClass="demo-chapters"
+              [chapters]="chapters"
+              [duration]="video.duration()"
+              [currentTime]="video.time()"
+              (chapterSelect)="onChapterSelect($event)"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="example__row">
+        <span class="example__state">state: {{ video.state() }}</span>
+        <span class="example__state">
+          выбрано: {{ selectedChapter() ?? '—' }}
+        </span>
+      </div>
+
+      <p class="example__note">
+        Маркер отдаёт весь объект <code>ChapterInterface</code>, поэтому
+        родитель сразу знает <code>time</code>, <code>title</code> и
+        <code>id</code>. Перемотку применяет
+        <code>video.seek($event.time)</code>.
+      </p>
+
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example example--wide">
+      <h3 class="example__title">Что приходит в chapterSelect</h3>
+
+      <p class="example__note">
+        В отличие от таймлайна, маркеры эмитят не число, а главу целиком. Это
+        удобно для аналитики и показа названия выбранной главы.
+      </p>
+
+      <app-code-snippet [code]="code.select" />
+    </section>
+
+    <section class="example example--wide">
+      <h3 class="example__title">Свои цвета и размер</h3>
+
+      <p class="example__note">
+        Класс из <code>customClass</code> вешается на хост-элемент, поэтому
+        переменные задаются обычными стилями — без <code>::ng-deep</code>.
+      </p>
+
+      <app-code-snippet [code]="code.custom" />
+    </section>
+  </div>
 </app-demo-shell>

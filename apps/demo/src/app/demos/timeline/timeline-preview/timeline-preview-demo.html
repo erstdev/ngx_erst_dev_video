@@ -2,11 +2,86 @@
   title="TimelinePreviewComponent"
   pkg="@erst_dev/ngx-video-timeline"
   selector="ngx-timeline-preview"
-  status="planned"
-  description="Всплывающее превью кадра при наведении на таймлайн: вычисляет координаты, запрашивает кадр по времени и отрисовывает его."
+  status="ready"
+  description="Превью кадра под курсором: отдельное скрытое видео и canvas, поэтому наведение на таймлайн не сбивает воспроизведение. Превью можно полностью отключить."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="examples__hint">
+    Наведите курсор на таймлайн — над полосой появится кадр из выбранного
+    момента. Под примерами — блоки «Код примера».
   </p>
+
+  <div class="examples">
+    <section class="example example--wide">
+      <h3 class="example__title">Живой плеер с превью</h3>
+
+      <div class="player">
+        <video
+          class="player__video"
+          ngxVideo
+          [src]="src"
+          preload="metadata"
+          playsinline
+          (click)="video.toggle()"
+        ></video>
+
+        <div class="player__timeline">
+          <ngx-timeline
+            [currentTime]="video.time()"
+            [duration]="video.duration()"
+            [buffered]="video.buffered()"
+            [previewTemplate]="preview"
+            (seek)="video.seek($event)"
+          />
+        </div>
+      </div>
+
+      <div class="example__row">
+        <button type="button" class="state-button" (click)="togglePreview()">
+          {{ previewEnabled() ? 'Отключить превью' : 'Включить превью' }}
+        </button>
+        <span class="example__state">
+          preview: {{ previewEnabled() ? 'включено' : 'выключено' }}
+        </span>
+      </div>
+
+      <p class="example__note">
+        При выключении компонент не создаёт скрытое видео и не делает seek —
+        нагрузка пропадает полностью, а не только скрывается картинка.
+      </p>
+
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example example--wide">
+      <h3 class="example__title">Отключение превью</h3>
+
+      <p class="example__note">
+        Достаточно передать <code>[enabled]="false"</code> в
+        <code>ngx-timeline-preview</code>. Таймлайн и перемотка продолжают
+        работать.
+      </p>
+
+      <app-code-snippet [code]="code.disable" />
+    </section>
+
+    <section class="example example--wide">
+      <h3 class="example__title">Свои размер и оформление</h3>
+
+      <p class="example__note">
+        Класс из <code>customClass</code> вешается на хост-элемент, поэтому
+        переменные задаются обычными стилями — без <code>::ng-deep</code>.
+      </p>
+
+      <app-code-snippet [code]="code.style" />
+    </section>
+  </div>
+
+  <ng-template #preview let-time="time">
+    <ngx-timeline-preview
+      [time]="time"
+      [src]="src"
+      [enabled]="previewEnabled()"
+    />
+  </ng-template>
 </app-demo-shell>

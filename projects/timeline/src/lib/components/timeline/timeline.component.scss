@@ -1,0 +1,102 @@
+:host {
+  --ngx-timeline-height: 4px;
+  --ngx-timeline-hit-height: 28px;
+  --ngx-timeline-track-color: rgba(255, 255, 255, 0.25);
+  --ngx-timeline-buffered-color: rgba(255, 255, 255, 0.45);
+  --ngx-timeline-progress-color: #ffffff;
+  --ngx-timeline-thumb-color: #ffffff;
+  --ngx-timeline-thumb-size: 14px;
+  --ngx-timeline-border-radius: 999px;
+  --ngx-timeline-transition: 0.15s ease;
+  --ngx-timeline-focus-color: #ffffff;
+  --ngx-timeline-preview-gap: 0.5rem;
+
+  display: block;
+}
+
+.ngx-timeline {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+
+.ngx-timeline:focus-visible {
+  border-radius: var(--ngx-timeline-border-radius);
+  outline: 2px solid var(--ngx-timeline-focus-color);
+  outline-offset: 4px;
+}
+
+.ngx-timeline[aria-disabled='true'] {
+  cursor: default;
+}
+
+/*
+ * Высота track — это hit-area: сама полоса тонкая, но попасть по ней должно
+ * быть удобно и на десктопе, и на тач-экране.
+ */
+.ngx-timeline__track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--ngx-timeline-hit-height);
+}
+
+.ngx-timeline__track::before {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: var(--ngx-timeline-height);
+  border-radius: var(--ngx-timeline-border-radius);
+  background: var(--ngx-timeline-track-color);
+  content: '';
+}
+
+.ngx-timeline__buffered,
+.ngx-timeline__progress {
+  position: absolute;
+  left: 0;
+  height: var(--ngx-timeline-height);
+  border-radius: var(--ngx-timeline-border-radius);
+  pointer-events: none;
+}
+
+.ngx-timeline__buffered {
+  background: var(--ngx-timeline-buffered-color);
+}
+
+.ngx-timeline__progress {
+  background: var(--ngx-timeline-progress-color);
+}
+
+.ngx-timeline__thumb {
+  position: absolute;
+  top: 50%;
+  width: var(--ngx-timeline-thumb-size);
+  height: var(--ngx-timeline-thumb-size);
+  border-radius: 50%;
+  background: var(--ngx-timeline-thumb-color);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform var(--ngx-timeline-transition);
+}
+
+.ngx-timeline:hover .ngx-timeline__thumb,
+.ngx-timeline:focus-visible .ngx-timeline__thumb {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.ngx-timeline__preview {
+  position: absolute;
+  bottom: calc(100% + var(--ngx-timeline-preview-gap));
+  z-index: 10;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-timeline__thumb {
+    transition: none;
+  }
+}

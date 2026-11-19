@@ -1,0 +1,127 @@
+:host {
+  --ngx-timeline-chapter-color: rgba(255, 255, 255, 0.6);
+  --ngx-timeline-chapter-active-color: #ffffff;
+  --ngx-timeline-chapter-size: 8px;
+  --ngx-timeline-chapter-height: 14px;
+  --ngx-timeline-chapter-hit-size: 24px;
+  --ngx-timeline-chapter-radius: 2px;
+  --ngx-timeline-chapter-transition: 0.15s ease;
+  --ngx-timeline-chapter-tooltip-bg: rgba(0, 0, 0, 0.85);
+  --ngx-timeline-chapter-tooltip-color: #ffffff;
+  --ngx-timeline-chapter-focus-color: #ffffff;
+
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.ngx-chapter-markers {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Кнопка — это увеличенная область попадания, а сама видимая метка рисуется
+ * псевдоэлементом. Так по главе удобно попадать на тач-экране.
+ */
+.ngx-chapter-markers__marker {
+  position: absolute;
+  top: 50%;
+  width: var(--ngx-timeline-chapter-hit-size);
+  height: var(--ngx-timeline-chapter-hit-size);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.ngx-chapter-markers__marker::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--ngx-timeline-chapter-size);
+  height: var(--ngx-timeline-chapter-height);
+  border-radius: var(--ngx-timeline-chapter-radius);
+  background: var(--ngx-timeline-chapter-color);
+  content: '';
+  transform: translate(-50%, -50%);
+  transition:
+    background var(--ngx-timeline-chapter-transition),
+    transform var(--ngx-timeline-chapter-transition);
+}
+
+.ngx-chapter-markers__marker:hover::before,
+.ngx-chapter-markers__marker:focus-visible::before {
+  background: var(--ngx-timeline-chapter-active-color);
+}
+
+.ngx-chapter-markers__marker--active::before {
+  background: var(--ngx-timeline-chapter-active-color);
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.ngx-chapter-markers__marker:focus-visible {
+  outline: 2px solid var(--ngx-timeline-chapter-focus-color);
+  outline-offset: 2px;
+}
+
+.ngx-chapter-markers__tooltip {
+  position: absolute;
+  bottom: calc(100% + 0.25rem);
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  background: var(--ngx-timeline-chapter-tooltip-bg);
+  color: var(--ngx-timeline-chapter-tooltip-color);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%);
+  transition: opacity var(--ngx-timeline-chapter-transition);
+}
+
+.ngx-chapter-markers__marker:hover .ngx-chapter-markers__tooltip,
+.ngx-chapter-markers__marker:focus-visible .ngx-chapter-markers__tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* У крайних глав подсказка не должна вылезать за пределы плеера. */
+.ngx-chapter-markers__marker:first-child .ngx-chapter-markers__tooltip {
+  left: 0;
+  transform: none;
+}
+
+.ngx-chapter-markers__marker:last-child .ngx-chapter-markers__tooltip {
+  right: 0;
+  left: auto;
+  transform: none;
+}
+
+.ngx-chapter-markers__title {
+  font-weight: 600;
+}
+
+.ngx-chapter-markers__time {
+  color: var(--ngx-timeline-chapter-color);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-chapter-markers__marker::before,
+  .ngx-chapter-markers__tooltip {
+    transition: none;
+  }
+}

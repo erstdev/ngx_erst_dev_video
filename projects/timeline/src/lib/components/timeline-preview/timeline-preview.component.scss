@@ -1,0 +1,55 @@
+:host {
+  --ngx-timeline-preview-width: 160px;
+  --ngx-timeline-preview-bg: #000000;
+  --ngx-timeline-preview-color: #ffffff;
+  --ngx-timeline-preview-muted-color: rgba(255, 255, 255, 0.7);
+  --ngx-timeline-preview-radius: 0.375rem;
+  --ngx-timeline-preview-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --ngx-timeline-preview-font-size: 0.75rem;
+  --ngx-timeline-preview-gap: 0.25rem;
+
+  display: block;
+  width: var(--ngx-timeline-preview-width);
+}
+
+.ngx-timeline-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ngx-timeline-preview-gap);
+  color: var(--ngx-timeline-preview-color);
+  font-size: var(--ngx-timeline-preview-font-size);
+}
+
+.ngx-timeline-preview__frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--ngx-timeline-preview-radius);
+  background: var(--ngx-timeline-preview-bg);
+  box-shadow: var(--ngx-timeline-preview-shadow);
+  aspect-ratio: 16 / 9;
+}
+
+.ngx-timeline-preview__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ngx-timeline-preview__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ngx-timeline-preview-muted-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.ngx-timeline-preview__time {
+  align-self: center;
+  padding: 0.125rem 0.375rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.7);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}

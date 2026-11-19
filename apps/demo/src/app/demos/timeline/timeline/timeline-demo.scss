@@ -1,0 +1,89 @@
+.examples__hint {
+  margin: 0 0 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.examples {
+  display: grid;
+  gap: 1rem;
+}
+
+.example {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #1f2937;
+  border-radius: 0.75rem;
+  background: #0f172a;
+}
+
+.example--wide {
+  grid-column: 1 / -1;
+}
+
+.example__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.example__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.example__state {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.example__note {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.example__note code {
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  background: #1f2937;
+  font-size: 0.875em;
+}
+
+.player {
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background: #000;
+}
+
+.player__video {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  background: #000;
+  cursor: pointer;
+}
+
+.player__timeline {
+  padding: 0.25rem 0.75rem 0.5rem;
+}
+
+/*
+ * customClass вешается на хост-элемент <ngx-timeline>, поэтому обычный
+ * scoped-стиль демо-компонента его видит — ::ng-deep не нужен.
+ */
+.demo-timeline {
+  --ngx-timeline-height: 6px;
+  --ngx-timeline-progress-color: #34d399;
+  --ngx-timeline-buffered-color: rgba(52, 211, 153, 0.4);
+  --ngx-timeline-thumb-color: #34d399;
+  --ngx-timeline-thumb-size: 18px;
+}

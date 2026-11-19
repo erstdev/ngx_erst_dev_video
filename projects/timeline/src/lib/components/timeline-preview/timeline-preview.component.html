@@ -1,0 +1,20 @@
+@if (enabled()) {
+  <div class="ngx-timeline-preview" aria-hidden="true">
+    <div class="ngx-timeline-preview__frame">
+      <canvas
+        #canvas
+        class="ngx-timeline-preview__canvas"
+        width="320"
+        height="180"
+      ></canvas>
+
+      @if (!hasFrame()) {
+        <span class="ngx-timeline-preview__placeholder">
+          {{ timeText() }}
+        </span>
+      }
+    </div>
+
+    <span class="ngx-timeline-preview__time">{{ timeText() }}</span>
+  </div>
+}

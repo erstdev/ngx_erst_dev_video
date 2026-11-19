@@ -1,0 +1,27 @@
+@if (markers().length) {
+  <div class="ngx-chapter-markers" role="group" [attr.aria-label]="label()">
+    @for (
+      marker of markers();
+      track marker.chapter.id ?? marker.chapter.time + '-' + $index
+    ) {
+      <button
+        type="button"
+        class="ngx-chapter-markers__marker"
+        [class.ngx-chapter-markers__marker--active]="isActive(marker.chapter)"
+        [style.left.%]="marker.percent"
+        [attr.aria-label]="chapterLabel(marker.chapter)"
+        [attr.aria-current]="isActive(marker.chapter) ? 'true' : null"
+        (click)="onSelect(marker.chapter, $event)"
+      >
+        <span class="ngx-chapter-markers__tooltip" aria-hidden="true">
+          <span class="ngx-chapter-markers__title">
+            {{ marker.chapter.title }}
+          </span>
+          <span class="ngx-chapter-markers__time">
+            {{ chapterTime(marker.chapter) }}
+          </span>
+        </span>
+      </button>
+    }
+  </div>
+}

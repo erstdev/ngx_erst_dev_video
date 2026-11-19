@@ -1,0 +1,44 @@
+<div
+  class="ngx-timeline"
+  role="slider"
+  aria-orientation="horizontal"
+  [attr.aria-label]="label()"
+  [attr.aria-valuemin]="0"
+  [attr.aria-valuemax]="maxValue()"
+  [attr.aria-valuenow]="displayTime()"
+  [attr.aria-valuetext]="valueText()"
+  [attr.aria-disabled]="disabled()"
+  [attr.tabindex]="disabled() ? -1 : 0"
+  (keydown)="onKeydown($event)"
+  (pointerleave)="onPointerLeave()"
+>
+  <div
+    #track
+    class="ngx-timeline__track"
+    (pointerdown)="onPointerDown($event)"
+    (pointermove)="onPointerMove($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointercancel)="onPointerCancel($event)"
+  >
+    <span
+      class="ngx-timeline__buffered"
+      [style.width.%]="bufferedPercent()"
+    ></span>
+    <span
+      class="ngx-timeline__progress"
+      [style.width.%]="progressPercent()"
+    ></span>
+    <span class="ngx-timeline__thumb" [style.left.%]="progressPercent()"></span>
+  </div>
+
+  @if (previewTemplate(); as preview) {
+    @if (hoverTime(); as time) {
+      <div class="ngx-timeline__preview" [style.left.%]="hoverPercent()">
+        <ng-container
+          [ngTemplateOutlet]="preview"
+          [ngTemplateOutletContext]="{ time }"
+        />
+      </div>
+    }
+  }
+</div>

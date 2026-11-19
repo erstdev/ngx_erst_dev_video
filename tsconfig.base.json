@@ -16,7 +16,8 @@
     "strict": false,
     "paths": {
       "@erst_dev/ngx-video-controls": ["./projects/controls/src/index.ts"],
-      "@erst_dev/ngx-video-core": ["./projects/core/src/index.ts"]
+      "@erst_dev/ngx-video-core": ["./projects/core/src/index.ts"],
+      "@erst_dev/ngx-video-timeline": ["./projects/timeline/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
