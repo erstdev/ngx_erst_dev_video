@@ -1,0 +1,9 @@
+@if (error()) {
+  <div class="ngx-error-display__card" role="alert">
+    <p class="ngx-error-display__message">{{ message() }}</p>
+
+    <button type="button" class="ngx-error-display__button" (click)="onRetry()">
+      Повторить
+    </button>
+  </div>
+}

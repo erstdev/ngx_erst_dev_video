@@ -20,7 +20,7 @@ Headless-библиотеки для видео-плеера в Angular. Не м
 | `@erst_dev/ngx-video-core`     | 0.0.1  | ✅ готов    | `VideoService`, `VideoDirective`, типы состояния, `formatTime`                                                                     |
 | `@erst_dev/ngx-video-controls` | 0.0.1  | ✅ готов    | `PlayButtonComponent`, `VolumeSliderComponent`, `TimeDisplayComponent`, `FullscreenButtonComponent`, `BufferingIndicatorComponent` |
 | `@erst_dev/ngx-video-timeline` | 0.0.1  | ✅ готов    | `TimelineComponent`, `TimelinePreviewComponent`, `ChapterMarkersComponent`                                                         |
-| `@erst_dev/ngx-video-extras`   | 0.0.1  | 🚧 в работе | `ClickToPlayOverlayComponent` (готов), ErrorDisplay, SpeedControl, KeyboardShortcuts, Gesture, SubtitleRenderer                    |
+| `@erst_dev/ngx-video-extras`   | 0.0.1  | 🚧 в работе | `ClickToPlayOverlayComponent`, `ErrorDisplayComponent` (готовы), SpeedControl, KeyboardShortcuts, Gesture, SubtitleRenderer        |
 | `@erst_dev/ngx-video-sources`  | —      | ⏳ план     | HlsSource, DashSource, QualitySwitcher                                                                                             |
 | `@erst_dev/ngx-video-capture`  | —      | 💰 PRO      | CaptureService, ScreenshotButton, ClipRecorder                                                                                     |
 

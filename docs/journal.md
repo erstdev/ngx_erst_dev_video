@@ -48,6 +48,7 @@
 | 2026-11-19 | Исправлен `package-lock.json`: добавлена отсутствующая запись `yaml@2.9.1`, из-за которой `npm ci` падал на Node 22 / npm 10 в GitLab CI.                                                                                                                                                                                                        |
 | 2026-11-19 | Добавлен GitHub Actions CI (`.github/workflows/ci.yml`): install, lint, build и artifacts на push в `master` и pull request.                                                                                                                                                                                                                     |
 | 2026-11-19 | В roadmap добавлена финальная фаза CI/CD: полный набор пайплайнов для GitHub Actions и GitLab CI (quality, security, release, deploy).                                                                                                                                                                                                           |
+| 2026-11-19 | Реализован `ErrorDisplayComponent` (`error`/`customClass`, выход `retry`, `@if` при `null`, fallback-сообщение, `role="alert"`, CSS-переменные `--ngx-error-*`, README); демо `/extras/error-display` — `ready`; вопрос i18n закрыт.                                                                                                             |
 
 > Обновляй таблицу при каждом существенном изменении. Мелочи (опечатки) — не считаются.
 

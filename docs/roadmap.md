@@ -49,11 +49,11 @@
 ### 🚧 Спринт 4: ngx-video-extras (2 недели) — в работе
 
 - [x] `ClickToPlayOverlayComponent`
-- [ ] `ErrorDisplayComponent`
+- [x] `ErrorDisplayComponent`
 - [ ] `SpeedControlComponent`
 - [ ] `KeyboardShortcutsDirective`
 
-Пакет `@erst_dev/ngx-video-extras` создан, первый кирпич готов; остальные
+Пакет `@erst_dev/ngx-video-extras` создан, два кирпича готовы; остальные
 кирпичи спринта — в работе.
 
 ### ⏳ Спринт 5: жесты и субтитры (3 недели)
@@ -76,9 +76,11 @@
 
 ### ❓ Открытые вопросы (решить до указанных шагов)
 
-- [ ] **i18n сообщений об ошибках.** Тексты сейчас в `VideoService` (русские),
-      контракт — `code`. Решить до `ErrorDisplayComponent` (Спринт 4): нужен ли
-      отдельный i18n-слой или достаточно текстов по умолчанию.
+- [x] **i18n сообщений об ошибках.** Решено в Спринте 4: отдельный i18n-слой не
+      вводим. `VideoError.message` уже содержит готовый русский текст из core;
+      потребитель может передать свой `VideoError` с локализованным `message`,
+      `code` остаётся машинным контрактом. Текст кнопки «Повторить» пока русский,
+      без отдельного токена.
 - [x] **`indicatorTemplate` у `BufferingIndicatorComponent`.** Решено в Спринте 2:
       добавлен вход `indicatorTemplate: TemplateRef<void> | null`. Шаблон заменяет
       визуальный спиннер, обёртка с `role="status"` и скрытым текстом остаётся за
@@ -171,7 +173,7 @@
 | 10  | `TimelinePreviewComponent`    | timeline | ★★★★      | ✅     |
 | 11  | `ChapterMarkersComponent`     | timeline | ★★★       | ✅     |
 | 12  | `ClickToPlayOverlayComponent` | extras   | ★★        | ✅     |
-| 13  | `ErrorDisplayComponent`       | extras   | ★         | ⏳     |
+| 13  | `ErrorDisplayComponent`       | extras   | ★         | ✅     |
 | 14  | `SpeedControlComponent`       | extras   | ★         | ⏳     |
 | 15  | `KeyboardShortcutsDirective`  | extras   | ★★        | ⏳     |
 | 16  | `GestureDirective`            | extras   | ★★★★      | ⏳     |
@@ -241,7 +243,8 @@
 
 **Открытые вопросы:**
 
-- [ ] Локализация сообщений об ошибках — к `ErrorDisplayComponent` (Спринт 4).
+- [x] Локализация сообщений об ошибках — решена в Спринте 4: отдельного
+      i18n-слоя нет, `message` из core или от потребителя, `code` — контракт.
 - [ ] Live-scrub (вариант B) — отдельным шагом позже; базовую версию не блокирует.
 
 **Решённые вопросы (Спринт 3):**

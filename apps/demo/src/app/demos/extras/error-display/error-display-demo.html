@@ -2,11 +2,84 @@
   title="ErrorDisplayComponent"
   pkg="@erst_dev/ngx-video-extras"
   selector="ngx-error-display"
-  status="planned"
+  status="ready"
   description="Показывает понятное сообщение об ошибке по объекту VideoError и предлагает кнопку «Повторить». Автоматически ничего не исправляет."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-hint">
+    Ошибка симулируется сигналом, реальный сетевой сбой не нужен. Нажмите
+    «Показать ошибку», чтобы увидеть карточку; «Повторить» скрывает её и
+    запускает видео. Переключатель включает <code>customClass</code> с
+    переменными <code>--ngx-error-*</code>.
   </p>
+
+  <div class="player">
+    <video
+      ngxVideo
+      class="player__video"
+      [src]="src"
+      preload="metadata"
+      playsinline
+    ></video>
+
+    <ngx-error-display
+      [error]="demoError()"
+      [customClass]="errorClass()"
+      (retry)="onRetry()"
+    />
+  </div>
+
+  <div class="demo-toolbar">
+    <button type="button" class="demo-button" (click)="showError()">
+      Показать ошибку
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="useCustomClass()"
+      [attr.aria-pressed]="useCustomClass()"
+      (click)="toggleCustomClass()"
+    >
+      customClass + CSS-переменные
+    </button>
+
+    <span class="demo-state"> state: <code>{{ video.state() }}</code> </span>
+  </div>
+
+  <p class="demo-note">
+    Пока <code>demoError</code> равен <code>null</code>, карточки нет в DOM.
+    Клик по «Повторить» только эмитит <code>retry</code>: сигнал очищается и
+    <code>video.play()</code> вызывает родитель.
+  </p>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Базовая разметка</h3>
+      <p class="example__text">
+        Контейнер плеера — <code>position: relative</code>, карточка растянута
+        по нему через <code>position: absolute; inset: 0</code>. Ошибка приходит
+        снаружи, чаще всего из <code>video.error()</code>.
+      </p>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Обработка retry</h3>
+      <p class="example__text">
+        Компонент не знает, как исправлять ошибку. Родитель очищает своё
+        состояние и решает, что запускать дальше.
+      </p>
+      <app-code-snippet [code]="code.retry" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">customClass и CSS-переменные</h3>
+      <p class="example__text">
+        Класс вешается на хост-элемент, поэтому переменные переопределяются
+        обычными scoped-стилями — без <code>::ng-deep</code>.
+      </p>
+      <app-code-snippet [code]="code.custom" />
+    </section>
+  </div>
 </app-demo-shell>

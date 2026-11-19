@@ -129,7 +129,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'error-display',
         path: 'extras/error-display',
         title: 'ErrorDisplayComponent',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'speed-control',
