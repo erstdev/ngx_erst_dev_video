@@ -2,11 +2,233 @@
   title="DashSourceDirective"
   pkg="@erst_dev/ngx-video-sources"
   selector="[ngxDashSource]"
-  status="planned"
-  description="Подключение DASH-потока через dash.js или Shaka Player. Работает так же, как HLS: только прокидывает поток в VideoService."
+  status="ready"
+  description="Подключает DASH-манифест к <video> через dash.js: MSE-only, без нативного фолбэка. Отдаёт уровни качества и ошибки, не управляет интерфейсом и не меняет API core."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-hint">
+    Поток играет через dash.js: плеер получает манифест, а селект показывает
+    уровни из <code>levelsChange</code>. Выбор уровня уходит во вход
+    <code>level</code>, «Auto» — это <code>null</code>. Кнопки «Поток» и
+    «autoplay» переключают входы директивы.
   </p>
+  <div class="player">
+    <video
+      ngxVideo
+      class="player__video"
+      [ngxDashSource]="src"
+      [autoplay]="autoplay()"
+      [enabled]="enabled()"
+      [level]="level()"
+      (levelsChange)="onLevelsChange($event)"
+      (levelChange)="onLevelChange($event)"
+      (error)="onError($event)"
+      playsinline
+    ></video>
+  </div>
+
+  <div class="demo-toolbar">
+    <button type="button" class="demo-toggle" (click)="togglePlay()">
+      {{ playLabel() }}
+    </button>
+
+    <label class="demo-field">
+      <span class="demo-field__label">Качество</span>
+
+      <select
+        class="demo-select"
+        [value]="level() ?? ''"
+        (change)="onLevelSelect($event)"
+      >
+        <option value="">Auto</option>
+
+        @for (item of levels(); track item.id) {
+        <option [value]="item.id">{{ item.label }}</option>
+        }
+      </select>
+    </label>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="enabled()"
+      [attr.aria-pressed]="enabled()"
+      (click)="toggleEnabled()"
+    >
+      Поток: {{ enabled() ? 'вкл' : 'выкл' }}
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="autoplay()"
+      [attr.aria-pressed]="autoplay()"
+      (click)="toggleAutoplay()"
+    >
+      autoplay: {{ autoplay() ? 'вкл' : 'выкл' }}
+    </button>
+  </div>
+
+  <dl class="demo-status">
+    <div class="demo-status__item">
+      <dt class="demo-status__label">state</dt>
+      <dd class="demo-status__value">
+        <code>{{ video.state() }}</code>
+      </dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">currentTime</dt>
+      <dd class="demo-status__value">{{ video.time().toFixed(1) }} с</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">levels</dt>
+      <dd class="demo-status__value">{{ levels().length }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">level</dt>
+      <dd class="demo-status__value">{{ currentLevelLabel() }}</dd>
+    </div>
+  </dl>
+
+  @if (error(); as error) {
+  <p class="demo-error" role="alert">
+    <strong>{{ error.message }}</strong>
+    <span class="demo-error__code">code: <code>{{ error.code }}</code></span>
+  </p>
+  }
+
+  <p class="demo-note">
+    Директива не управляет интерфейсом: селект, статус и обработку ошибок рисует
+    демо. <code>autoplay</code> применяется при следующей инициализации потока —
+    переключите «Поток» выкл/вкл, чтобы применить его к уже загруженному потоку.
+    <code>enabled = false</code> вызывает <code>player.reset()</code> и
+    <code>player.destroy()</code>, убирает <code>src</code> и вызывает
+    <code>video.load()</code>. <code>levelChange</code> сообщает уже
+    отрисованный уровень (<code>QUALITY_CHANGE_RENDERED</code>): пока
+    доигрывается буфер, фактический уровень отстаёт от выбранного в селекте.
+    DASH играется только через MSE: без <code>MediaSource</code> или при
+    <code>dashjs.supportsMediaSource() === false</code> директива эмитит
+    <code>source-not-supported</code>, нативного фолбэка нет. На
+    <code>&lt;video&gt;</code> имя выхода <code>error</code> совпадает с
+    нативным событием, поэтому демо отбрасывает события без <code>code</code> и
+    <code>message</code>.
+  </p>
+
+  <section class="brick">
+    <h3 class="brick__title">Что делает директива</h3>
+
+    <div class="brick__table-wrap">
+      <table class="brick__table">
+        <thead>
+          <tr>
+            <th scope="col">Что</th>
+            <th scope="col">Значение в демо</th>
+            <th scope="col">Поведение</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>[ngxDashSource]</code></td>
+            <td>
+              <code>dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd</code>
+            </td>
+            <td>
+              URL манифеста строкой; <code>null</code> и пустая строка выгружают
+              поток
+            </td>
+          </tr>
+          <tr>
+            <td><code>[autoplay]</code></td>
+            <td>выключен, переключатель</td>
+            <td>
+              запускает <code>video.play()</code> после
+              <code>STREAM_INITIALIZED</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>[enabled]</code></td>
+            <td>включено, переключатель</td>
+            <td>
+              <code>false</code> вызывает <code>player.reset()</code>,
+              <code>player.destroy()</code> и очищает источник
+            </td>
+          </tr>
+          <tr>
+            <td><code>[level]</code></td>
+            <td>Auto или <code>id</code> уровня</td>
+            <td>
+              <code>null</code> — auto (<code
+                >streaming.abr.autoSwitchBitrate.video = true</code
+              >), неизвестный <code>id</code> игнорируется
+            </td>
+          </tr>
+          <tr>
+            <td><code>(levelsChange)</code></td>
+            <td>{{ levels().length }} уровней</td>
+            <td>
+              уровни из <code>getRepresentationsByType('video')</code> после
+              <code>STREAM_INITIALIZED</code>, без «auto»
+            </td>
+          </tr>
+          <tr>
+            <td><code>(levelChange)</code></td>
+            <td>{{ currentLevelLabel() }}</td>
+            <td>
+              фактический уровень на <code>QUALITY_CHANGE_RENDERED</code>;
+              <code>null</code> — auto
+            </td>
+          </tr>
+          <tr>
+            <td><code>(error)</code></td>
+            <td>{{ error() ? error()?.code : 'нет' }}</td>
+            <td>
+              фатальные ошибки dash.js, неподдерживаемый браузер, блокировка
+              autoplay
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Базовая разметка</h3>
+      <p class="example__text">
+        Директива вешается на <code>&lt;video&gt;</code> и работает вместе с
+        <code>ngxVideo</code>, но не требует его. Манифест грузит dash.js;
+        <code>fetch</code> и <code>HttpClient</code> не используются.
+      </p>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Уровни и выбор качества</h3>
+      <p class="example__text">
+        <code>levelsChange</code> приносит уровни без «auto», а
+        <code>levelChange</code> сообщает фактический уровень. Значение селекта
+        — <code>id</code> уровня; «Auto» — это <code>null</code>. Ручной выбор
+        выключает ABR, «Auto» снова включает его.
+      </p>
+      <app-code-snippet [code]="code.levels" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Ошибки, autoplay и SSR</h3>
+      <p class="example__text">
+        Фатальные ошибки приходят в <code>error</code> с кодом
+        <code>network</code>, <code>decode</code>,
+        <code>source-not-supported</code>, <code>playback-blocked</code> или
+        <code>unknown</code>. Автоматического recover нет. На
+        <code>&lt;video&gt;</code> этот же обработчик получает нативное событие
+        <code>error</code>, поэтому <code>VideoError</code> отличают по полям
+        <code>code</code> и <code>message</code>. На сервере директива не
+        трогает DOM и не импортирует dash.js.
+      </p>
+      <app-code-snippet [code]="code.errors" />
+    </section>
+  </div>
 </app-demo-shell>

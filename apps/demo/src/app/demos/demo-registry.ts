@@ -172,7 +172,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'dash-source',
         path: 'sources/dash-source',
         title: 'DashSourceDirective',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'quality-switcher',

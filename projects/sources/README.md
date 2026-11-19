@@ -1,30 +1,31 @@
 # @erst_dev/ngx-video-sources
 
 Источники потокового видео для плеера `ngx-video`: HLS-манифест в `<video>`
-через `hls.js` или нативный HLS. Директива не управляет интерфейсом и не
-подменяет `VideoService`: она доставляет поток, отдаёт уровни качества и ошибки,
-а состояние плеера остаётся за сервисом.
+через `hls.js` или нативный HLS, DASH-манифест через `dash.js`. Директива не
+управляет интерфейсом и не подменяет `VideoService`: она доставляет поток,
+отдаёт уровни качества и ошибки, а состояние плеера остаётся за сервисом.
 
 ## Кирпичи
 
 Подробная документация каждого готового кирпича лежит рядом с исходниками. На npm
 показывается только README пакета, поэтому ссылки ведут на GitHub.
 
-| Кирпич                     | Селектор               | Статус   | Что решает                                | Документация                                                                                                                 |
-| -------------------------- | ---------------------- | -------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `HlsSourceDirective`       | `ngxHlsSource`         | ✅ готов | HLS-поток через hls.js или native HLS     | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/hls-source/README.md) |
-| `DashSourceDirective`      | `ngxDashSource`        | ⏳ план  | DASH-поток через Shaka Player или dash.js | —                                                                                                                            |
-| `QualitySwitcherComponent` | `ngx-quality-switcher` | ⏳ план  | Выбор качества видео                      | —                                                                                                                            |
+| Кирпич                     | Селектор               | Статус   | Что решает                            | Документация                                                                                                                  |
+| -------------------------- | ---------------------- | -------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `HlsSourceDirective`       | `ngxHlsSource`         | ✅ готов | HLS-поток через hls.js или native HLS | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/hls-source/README.md)  |
+| `DashSourceDirective`      | `ngxDashSource`        | ✅ готов | DASH-поток через dash.js (MSE-only)   | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/dash-source/README.md) |
+| `QualitySwitcherComponent` | `ngx-quality-switcher` | ⏳ план  | Выбор качества видео                  | —                                                                                                                             |
 
-`DashSourceDirective` и `QualitySwitcherComponent` появятся следующими шагами
-Спринта 6: публичный API `HlsSourceDirective` (`QualityInterface`, `id` уровня,
-`levelsChange`/`levelChange`) под них уже рассчитан.
+Следующим шагом Спринта 6 идёт `QualitySwitcherComponent`: публичный API
+`HlsSourceDirective` и `DashSourceDirective` (`QualityInterface`, `id` уровня,
+`levelsChange`/`levelChange`) под него уже рассчитан.
 
 ## Требования
 
 - Angular 22+
 - `@erst_dev/ngx-video-core` (peer-зависимость)
 - `hls.js` 1.x (peer-зависимость; нужен только для `HlsSourceDirective`)
+- `dashjs` 5.x (peer-зависимость; нужен только для `DashSourceDirective`)
 
 Пакет пока не опубликован в npm (рабочая версия `0.0.1`). Внутри монорепо
 подключается через `paths` в `tsconfig.base.json`.
@@ -32,7 +33,7 @@
 ## Установка
 
 ```sh
-npm install @erst_dev/ngx-video-sources hls.js
+npm install @erst_dev/ngx-video-sources hls.js dashjs
 ```
 
 ## Быстрый старт
@@ -71,6 +72,14 @@ export class PlayerComponent {
 Если в браузере есть MSE, поток ведёт `hls.js` — так доступны уровни качества.
 Без MSE (iOS Safari) или при `Hls.isSupported() === false` библиотека не
 загружается: URL выставляется в `video.src`, а уровни качества недоступны.
+
+Для DASH используется `DashSourceDirective` (`[ngxDashSource]`) и `dashjs`:
+манифест грузится только через MSE, нативного fallback нет. Уровни, вход `level`
+и ошибки устроены так же, как у HLS:
+
+```html
+<video ngxVideo [ngxDashSource]="dashSrc" [level]="level()" (levelsChange)="onLevelsChange($event)" (levelChange)="onLevelChange($event)" playsinline></video>
+```
 
 ## Совместимость
 
