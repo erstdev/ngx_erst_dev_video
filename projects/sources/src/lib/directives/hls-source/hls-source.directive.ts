@@ -24,28 +24,8 @@ import {
   HLS_EVENT_MANIFEST_PARSED,
   HLS_NATIVE_MIME_TYPE,
 } from './constants';
-import { mapHlsError, mapHlsLevels, type HlsLevelLike } from './utils';
-
-/** Обработчик события hls.js: состав `data` зависит от события. */
-type HlsHandler = (event: string, data: unknown) => void;
-
-/** Минимальная часть API экземпляра hls.js, которая нужна директиве. */
-interface HlsInstance {
-  readonly levels: readonly HlsLevelLike[];
-  readonly manualLevel: number;
-  currentLevel: number;
-  attachMedia(media: HTMLMediaElement): void;
-  loadSource(url: string): void;
-  on(event: string, handler: HlsHandler): void;
-  off(event: string, handler: HlsHandler): void;
-  destroy(): void;
-}
-
-/** Конструктор, который приходит из динамического импорта `hls.js`. */
-interface HlsConstructor {
-  new (): HlsInstance;
-  isSupported(): boolean;
-}
+import type { HlsConstructor, HlsHandler, HlsInstance } from './interfaces';
+import { mapHlsError, mapHlsLevels } from './utils';
 
 /**
  * Подключает HLS-манифест к `<video>`.

@@ -1,12 +1,6 @@
 import type { QualityInterface } from '@erst_dev/ngx-video-core';
 
-/** Минимальное описание уровня hls.js, которое использует маппинг. */
-export interface HlsLevelLike {
-  readonly width?: number;
-  readonly height?: number;
-  readonly bitrate?: number;
-  readonly name?: string;
-}
+import type { HlsLevelLike } from '../interfaces';
 
 /**
  * Переводит уровни hls.js в публичные `QualityInterface`.

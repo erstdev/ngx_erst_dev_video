@@ -6,13 +6,7 @@ import {
   HLS_ERROR_TYPE_MEDIA,
   HLS_ERROR_TYPE_NETWORK,
 } from '../constants';
-
-/** Поля ошибки hls.js, которые участвуют в маппинге. */
-export interface HlsErrorDataLike {
-  readonly type?: string;
-  readonly details?: string;
-  readonly fatal?: boolean;
-}
+import type { HlsErrorDataLike } from '../interfaces';
 
 /**
  * Переводит ошибку hls.js в публичный `VideoError`.
