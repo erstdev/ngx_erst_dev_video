@@ -106,7 +106,7 @@
 - [x] **GitLab:** репозиторий создан; GitHub — основной, GitLab — приватное зеркало и CI.
 - [x] **CI в GitLab:** `.gitlab-ci.yml` — установка зависимостей, `lint`, `build`, артефакты сборки.
 - [ ] Проверить первый зелёный пайплайн в GitLab.
-- [ ] **CI в GitHub:** `.github/workflows/ci.yml` — те же шаги через GitHub Actions.
+- [x] **CI в GitHub:** `.github/workflows/ci.yml` — те же шаги через GitHub Actions.
 - [ ] Бейджи статуса CI в корневом `README.md`.
 - [ ] **Публичная страница демо:** разместить `apps/demo` на GitHub Pages / GitLab Pages / статическом хостинге.
 - [ ] Сборка демо с корректным `baseHref` под выбранный хостинг.

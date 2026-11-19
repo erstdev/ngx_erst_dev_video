@@ -46,6 +46,7 @@
 | 2026-11-19 | Создан пакет `@erst_dev/ngx-video-extras` и первый кирпич `ClickToPlayOverlayComponent` (оверлей `idle`/`paused`, выход `play`, `iconTemplate`, CSS-переменные, README); демо `/extras/click-to-play-overlay` — `ready`.                                                                                                                         |
 | 2026-11-19 | GitHub закреплён как основной репозиторий; GitLab подключён как приватное зеркало, добавлен `.gitlab-ci.yml` (install, lint, build, artifacts), `git push` настроен на оба remote.                                                                                                                                                               |
 | 2026-11-19 | Исправлен `package-lock.json`: добавлена отсутствующая запись `yaml@2.9.1`, из-за которой `npm ci` падал на Node 22 / npm 10 в GitLab CI.                                                                                                                                                                                                        |
+| 2026-11-19 | Добавлен GitHub Actions CI (`.github/workflows/ci.yml`): install, lint, build и artifacts на push в `master` и pull request.                                                                                                                                                                                                                     |
 
 > Обновляй таблицу при каждом существенном изменении. Мелочи (опечатки) — не считаются.
 

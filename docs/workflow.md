@@ -30,9 +30,10 @@
 
 ## Репозитории
 
-- **GitHub — основной:** сюда идут коммиты и публичные ссылки.
-- **GitLab — приватное зеркало и CI:** `.gitlab-ci.yml` запускает install, lint
-  и build на каждый пуш.
+- **GitHub — основной:** сюда идут коммиты и публичные ссылки; CI — GitHub
+  Actions (`.github/workflows/ci.yml`).
+- **GitLab — приватное зеркало и дополнительный CI:** `.gitlab-ci.yml` запускает
+  те же install, lint и build на каждый пуш.
 - У `origin` два push URL, поэтому обычный `git push` обновляет и GitHub, и
   GitLab. Только зеркало: `git push gitlab`.
 - Если GitLab был недоступен во время пуша, повторите `git push gitlab` — GitHub
