@@ -46,12 +46,15 @@
 - [x] README пакета и каждого кирпича, демо-страницы `/timeline/*`
 - [ ] Позже, после базовой версии: live-scrub (вариант B) — `seek` во время drag с throttle, чтобы видео следовало за ползунком. Не блокирует завершение Спринта 3.
 
-### ⏳ Спринт 4: ngx-video-extras (2 недели)
+### 🚧 Спринт 4: ngx-video-extras (2 недели) — в работе
 
-- [ ] `ClickToPlayOverlayComponent`
+- [x] `ClickToPlayOverlayComponent`
 - [ ] `ErrorDisplayComponent`
 - [ ] `SpeedControlComponent`
 - [ ] `KeyboardShortcutsDirective`
+
+Пакет `@erst_dev/ngx-video-extras` создан, первый кирпич готов; остальные
+кирпичи спринта — в работе.
 
 ### ⏳ Спринт 5: жесты и субтитры (3 недели)
 
@@ -127,7 +130,7 @@
 | 9   | `TimelineComponent`           | timeline | ★★★       | ✅     |
 | 10  | `TimelinePreviewComponent`    | timeline | ★★★★      | ✅     |
 | 11  | `ChapterMarkersComponent`     | timeline | ★★★       | ✅     |
-| 12  | `ClickToPlayOverlayComponent` | extras   | ★★        | ⏳     |
+| 12  | `ClickToPlayOverlayComponent` | extras   | ★★        | ✅     |
 | 13  | `ErrorDisplayComponent`       | extras   | ★         | ⏳     |
 | 14  | `SpeedControlComponent`       | extras   | ★         | ⏳     |
 | 15  | `KeyboardShortcutsDirective`  | extras   | ★★        | ⏳     |

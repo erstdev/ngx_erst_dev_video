@@ -2,11 +2,99 @@
   title="ClickToPlayOverlayComponent"
   pkg="@erst_dev/ngx-video-extras"
   selector="ngx-click-to-play-overlay"
-  status="planned"
+  status="ready"
   description="Прозрачный слой поверх видео с большой кнопкой Play. Нужен, чтобы обойти ограничения автоплея на мобильных: первый запуск происходит по жесту пользователя."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-hint">
+    Оверлей существует только в состояниях <code>idle</code> и
+    <code>paused</code>. Нажмите на него, чтобы запустить видео, и на видео —
+    чтобы поставить паузу. Переключатели ниже включают свою иконку и
+    <code>customClass</code> на том же плеере.
   </p>
+
+  <div class="player">
+    <video
+      ngxVideo
+      class="player__video"
+      [src]="src"
+      preload="metadata"
+      playsinline
+      (click)="onVideoClick()"
+    ></video>
+
+    <ngx-click-to-play-overlay
+      [state]="video.state()"
+      [customClass]="overlayClass()"
+      [iconTemplate]="useCustomIcon() ? customIcon : null"
+      (play)="video.play()"
+    />
+  </div>
+
+  <div class="demo-toolbar">
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="useCustomIcon()"
+      [attr.aria-pressed]="useCustomIcon()"
+      (click)="toggleCustomIcon()"
+    >
+      Своя иконка
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="useCustomClass()"
+      [attr.aria-pressed]="useCustomClass()"
+      (click)="toggleCustomClass()"
+    >
+      customClass + CSS-переменные
+    </button>
+
+    <span class="demo-state">state: <code>{{ video.state() }}</code></span>
+  </div>
+
+  <p class="demo-note">
+    Чтобы увидеть изменения, поставьте видео на паузу — при
+    <code>playing</code>, <code>buffering</code>, <code>seeking</code>,
+    <code>ended</code> и <code>error</code> кнопки оверлея нет в DOM.
+  </p>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Базовая разметка</h3>
+      <p class="example__text">
+        Контейнер плеера — <code>position: relative</code>, оверлей растянут по
+        нему через <code>position: absolute; inset: 0</code>. Клик по оверлею
+        только эмитит <code>play</code>; запуск выполняет родитель.
+      </p>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Своя иконка через iconTemplate</h3>
+      <p class="example__text">
+        Шаблон заменяет только иконку и получает контекст
+        <code>&#123; state &#125;</code>. Размер контейнера задаёт переменная
+        <code>--ngx-overlay-icon-size</code>.
+      </p>
+      <app-code-snippet [code]="code.icon" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">customClass и CSS-переменные</h3>
+      <p class="example__text">
+        Класс вешается на хост-элемент, поэтому переменные переопределяются
+        обычными scoped-стилями — без <code>::ng-deep</code>.
+      </p>
+      <app-code-snippet [code]="code.custom" />
+    </section>
+  </div>
+
+  <ng-template #customIcon let-state="state">
+    <span class="demo-icon" [class.demo-icon--paused]="state === 'paused'"
+      >★</span
+    >
+  </ng-template>
 </app-demo-shell>

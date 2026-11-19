@@ -1,0 +1,28 @@
+{
+  "name": "extras",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "projects/extras/src",
+  "prefix": "ngx",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "project": "projects/extras/ng-package.json",
+        "tsConfig": "projects/extras/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "projects/extras/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

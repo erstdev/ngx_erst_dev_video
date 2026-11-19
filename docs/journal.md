@@ -43,6 +43,7 @@
 | 2026-11-19 | Создан пакет `@erst_dev/ngx-video-timeline`: `TimelineComponent` (вариант A, `seek` на отпускании, `scrubStart`/`scrubEnd`, клавиатура, `previewTemplate`), демо `/timeline/timeline`, README кирпича.                                                                                                                                           |
 | 2026-11-19 | Реализованы `TimelinePreviewComponent` (скрытое видео + canvas, отключаемый `enabled`, `previewSrc`, fallback) и `ChapterMarkersComponent` (`ChapterInterface`, `chapterSelect`, активная глава, tooltip); демо-страницы и README готовы.                                                                                                        |
 | 2026-11-19 | `CONTEXT.md` сокращён до точки входа; справочники вынесены в `docs/`, добавлены `AGENTS.md` и шаблон карточки задачи.                                                                                                                                                                                                                            |
+| 2026-11-19 | Создан пакет `@erst_dev/ngx-video-extras` и первый кирпич `ClickToPlayOverlayComponent` (оверлей `idle`/`paused`, выход `play`, `iconTemplate`, CSS-переменные, README); демо `/extras/click-to-play-overlay` — `ready`.                                                                                                                         |
 
 > Обновляй таблицу при каждом существенном изменении. Мелочи (опечатки) — не считаются.
 

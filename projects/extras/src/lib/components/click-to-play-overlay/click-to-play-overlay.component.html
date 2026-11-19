@@ -1,0 +1,33 @@
+@if (visible()) {
+  <button
+    type="button"
+    class="ngx-click-to-play-overlay__button"
+    [attr.aria-label]="label()"
+    (click)="onClick()"
+  >
+    <span class="ngx-click-to-play-overlay__circle">
+      @if (iconTemplate(); as icon) {
+        <span
+          class="ngx-click-to-play-overlay__icon ngx-click-to-play-overlay__icon--custom"
+          aria-hidden="true"
+        >
+          <ng-container
+            [ngTemplateOutlet]="icon"
+            [ngTemplateOutletContext]="iconContext()"
+          />
+        </span>
+      } @else {
+        <svg
+          class="ngx-click-to-play-overlay__icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M9 6.4v11.2a1 1 0 0 0 1.53.85l8.8-5.6a1 1 0 0 0 0-1.7l-8.8-5.6A1 1 0 0 0 9 6.4z"
+          />
+        </svg>
+      }
+    </span>
+  </button>
+}

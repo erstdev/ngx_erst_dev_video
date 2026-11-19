@@ -123,7 +123,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'click-to-play-overlay',
         path: 'extras/click-to-play-overlay',
         title: 'ClickToPlayOverlayComponent',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'error-display',

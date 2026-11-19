@@ -1,0 +1,73 @@
+:host {
+  --ngx-overlay-size: 72px;
+  --ngx-overlay-icon-size: 40%;
+  --ngx-overlay-color: #ffffff;
+  --ngx-overlay-bg: rgba(0, 0, 0, 0.55);
+  --ngx-overlay-hover-bg: rgba(0, 0, 0, 0.75);
+  --ngx-overlay-border-radius: 50%;
+  --ngx-overlay-transition: 0.15s ease;
+  --ngx-overlay-focus-color: #ffffff;
+
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.ngx-click-to-play-overlay__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--ngx-overlay-color);
+  cursor: pointer;
+  outline: none;
+  pointer-events: auto;
+}
+
+.ngx-click-to-play-overlay__circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ngx-overlay-size);
+  height: var(--ngx-overlay-size);
+  border-radius: var(--ngx-overlay-border-radius);
+  background: var(--ngx-overlay-bg);
+  color: var(--ngx-overlay-color);
+  transition:
+    background var(--ngx-overlay-transition),
+    color var(--ngx-overlay-transition);
+}
+
+.ngx-click-to-play-overlay__button:hover .ngx-click-to-play-overlay__circle {
+  background: var(--ngx-overlay-hover-bg);
+}
+
+.ngx-click-to-play-overlay__button:focus-visible
+  .ngx-click-to-play-overlay__circle {
+  outline: 2px solid var(--ngx-overlay-focus-color);
+  outline-offset: 2px;
+}
+
+.ngx-click-to-play-overlay__icon {
+  display: block;
+  width: var(--ngx-overlay-icon-size);
+  height: var(--ngx-overlay-icon-size);
+  fill: currentColor;
+}
+
+.ngx-click-to-play-overlay__icon--custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-click-to-play-overlay__circle {
+    transition: none;
+  }
+}

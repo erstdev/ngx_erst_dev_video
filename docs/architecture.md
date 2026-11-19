@@ -180,9 +180,10 @@ projects/controls/src/
             └── volume-slider.component.scss
 ```
 
-Пакет `timeline` устроен так же: `components/timeline`,
-`components/timeline-preview`, `components/chapter-markers`. У каждого кирпича
-свой `index.ts`, папка `interfaces/` при необходимости и README.
+Пакеты `timeline` и `extras` устроены так же: `components/timeline`,
+`components/timeline-preview`, `components/chapter-markers`; в `extras` первый
+кирпич — `components/click-to-play-overlay`. У каждого кирпича свой `index.ts`,
+папка `interfaces/` при необходимости и README.
 
 **Правило:** новый кирпич раскладывается по слоям, а не отдельной папкой в корне
 `lib`: компоненты — в `components/`, директивы — в `directives/`, сервисы — в
