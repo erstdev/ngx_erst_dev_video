@@ -11,12 +11,7 @@ import {
 import { formatTime } from '@erst_dev/ngx-video-core';
 
 import type { ChapterInterface } from './interfaces';
-
-/** Внутреннее представление маркера: глава и её позиция в процентах. */
-interface ChapterMarkerView {
-  readonly chapter: ChapterInterface;
-  readonly percent: number;
-}
+import type { ChapterMarkerView } from './interfaces/chapter-marker-view.interface';
 
 /**
  * Метки глав поверх таймлайна.
