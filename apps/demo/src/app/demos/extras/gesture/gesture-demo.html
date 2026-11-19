@@ -2,11 +2,153 @@
   title="GestureDirective"
   pkg="@erst_dev/ngx-video-extras"
   selector="[ngxGesture]"
-  status="planned"
-  description="Свайпы на мобильных: влево и вправо — перемотка, вверх и вниз — громкость или яркость. Только эмитит события."
+  status="ready"
+  description="Свайпы на Pointer Events: влево и вправо — перемотка, вверх и вниз — громкость или яркость. Один жест — один выход, логику плеера применяет родитель."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-hint">
+    Потяните по плееру мышью или пальцем: горизонтально — перемотка, а
+    вертикально в левой половине — яркость, в правой — громкость. Pointer Events
+    работают и на десктопе, поэтому демо можно проверить обычной мышью.
   </p>
+
+  <div
+    class="player"
+    ngxGesture
+    [enabled]="gesturesEnabled()"
+    (seek)="onSeek($event)"
+    (volumeChange)="onVolumeChange($event)"
+    (brightnessChange)="onBrightnessChange($event)"
+  >
+    <video
+      ngxVideo
+      class="player__video"
+      [src]="src"
+      [style.filter]="brightnessFilter()"
+      preload="metadata"
+      playsinline
+    ></video>
+
+    <span class="player__zone player__zone--left" aria-hidden="true">
+      яркость
+    </span>
+    <span class="player__zone player__zone--right" aria-hidden="true">
+      громкость
+    </span>
+  </div>
+
+  <div class="demo-toolbar">
+    <button type="button" class="demo-toggle" (click)="video.toggle()">
+      {{ playLabel() }}
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="gesturesEnabled()"
+      [attr.aria-pressed]="gesturesEnabled()"
+      (click)="toggleGestures()"
+    >
+      Жесты: {{ gesturesEnabled() ? 'вкл' : 'выкл' }}
+    </button>
+  </div>
+
+  <dl class="demo-status">
+    <div class="demo-status__item">
+      <dt class="demo-status__label">state</dt>
+      <dd class="demo-status__value">
+        <code>{{ video.state() }}</code>
+      </dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">currentTime</dt>
+      <dd class="demo-status__value">{{ video.time().toFixed(1) }} с</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">volume</dt>
+      <dd class="demo-status__value">{{ volumePercent() }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">brightness</dt>
+      <dd class="demo-status__value">{{ brightnessPercent() }}</dd>
+    </div>
+  </dl>
+
+  <p class="demo-note">
+    Жест начинается на контейнере, поэтому у него есть
+    <code>touch-action: none</code>. Директива не эмитит во время движения: один
+    жест — один выход на отпускании. Яркость — локальное состояние демо,
+    директива отдаёт только смещение. Интерактивные элементы внутри контейнера —
+    кнопки, ссылки, поля ввода — жест не перехватывают.
+  </p>
+
+  <section class="gestures">
+    <h3 class="gestures__title">Жесты и выходы</h3>
+
+    <div class="gestures__table-wrap">
+      <table class="gestures__table">
+        <thead>
+          <tr>
+            <th scope="col">Жест</th>
+            <th scope="col">Выход</th>
+            <th scope="col">Смещение</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>← / →</td>
+            <td><code>seek</code></td>
+            <td>до ±30 с, пропорционально ширине</td>
+          </tr>
+          <tr>
+            <td>↑ / ↓ в левой половине</td>
+            <td><code>brightnessChange</code></td>
+            <td>до ±0.5, пропорционально высоте</td>
+          </tr>
+          <tr>
+            <td>↑ / ↓ в правой половине</td>
+            <td><code>volumeChange</code></td>
+            <td>до ±0.5, пропорционально высоте</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Базовая разметка</h3>
+      <p class="example__text">
+        Директива ставится на контейнер плеера. Для touch контейнер получает
+        <code>touch-action: none</code>, иначе браузер заберёт вертикальный жест
+        под прокрутку страницы. Выходы применяет родитель.
+      </p>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Обработчики через VideoService</h3>
+      <p class="example__text">
+        Смещения передаются в <code>seekBy()</code> и <code>setVolume()</code>.
+        Яркость — состояние приложения: демо хранит её в сигнале и ограничивает
+        диапазоном <code>0.2…1</code>.
+      </p>
+      <app-code-snippet [code]="code.handlers" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Шаги, порог и enabled</h3>
+      <p class="example__text">
+        <code>seekStep</code>, <code>volumeStep</code> и
+        <code>brightnessStep</code> задают величину шага,
+        <code>threshold</code> — минимальную длину свайпа, а
+        <code>enabled</code> полностью выключает обработку. Некорректные шаги
+        заменяются значениями по умолчанию.
+      </p>
+      <app-code-snippet [code]="code.settings" />
+    </section>
+  </div>
 </app-demo-shell>

@@ -147,7 +147,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'gesture',
         path: 'extras/gesture',
         title: 'GestureDirective',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'subtitle-renderer',

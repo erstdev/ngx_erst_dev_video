@@ -16,7 +16,7 @@
 | `ErrorDisplayComponent`       | `ngx-error-display`         | ✅ готов   | Сообщение об ошибке и кнопка «Повторить»    | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/error-display/README.md)         |
 | `SpeedControlComponent`       | `ngx-speed-control`         | ✅ готов   | Выбор скорости воспроизведения              | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/speed-control/README.md)         |
 | `KeyboardShortcutsDirective`  | `ngxKeyboardShortcuts`      | ✅ готов   | Управление плеером с клавиатуры             | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/directives/keyboard-shortcuts/README.md)    |
-| `GestureDirective`            | `ngxGesture`                | ⏳ planned | Свайпы и тапы для мобильных                 | —                                                                                                                                      |
+| `GestureDirective`            | `ngxGesture`                | ✅ готов   | Свайпы: перемотка, громкость, яркость       | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/directives/gesture/README.md)               |
 | `SubtitleRendererComponent`   | `ngx-subtitle-renderer`     | ⏳ planned | Рендер WebVTT-субтитров                     | —                                                                                                                                      |
 
 ## Требования

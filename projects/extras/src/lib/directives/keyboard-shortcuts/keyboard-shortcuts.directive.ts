@@ -1,7 +1,7 @@
 import { Directive, computed, input, output } from '@angular/core';
 
 import { ARIA_KEYSHORTCUTS } from './constants';
-import { isInteractiveTarget } from './utils';
+import { isInteractiveTarget } from '../utils';
 
 /**
  * Горячие клавиши плеера.

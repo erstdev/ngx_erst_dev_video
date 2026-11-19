@@ -58,8 +58,11 @@
 
 ### ⏳ Спринт 5: жесты и субтитры (3 недели)
 
-- [ ] `GestureDirective` (свайпы для мобильных)
+- [x] `GestureDirective` (свайпы для мобильных)
 - [ ] `SubtitleRendererComponent` (WebVTT)
+
+`GestureDirective` готов, Спринт 5 продолжается: следующим кирпичом идёт
+`SubtitleRendererComponent`.
 
 ### ⏳ Спринт 6: ngx-video-sources (2 недели)
 
@@ -229,7 +232,7 @@
 | 13  | `ErrorDisplayComponent`       | extras   | ★         | ✅     |
 | 14  | `SpeedControlComponent`       | extras   | ★         | ✅     |
 | 15  | `KeyboardShortcutsDirective`  | extras   | ★★        | ✅     |
-| 16  | `GestureDirective`            | extras   | ★★★★      | ⏳     |
+| 16  | `GestureDirective`            | extras   | ★★★★      | ✅     |
 | 17  | `SubtitleRendererComponent`   | extras   | ★★★★      | ⏳     |
 | 18  | `HlsSourceDirective`          | sources  | ★★★       | ⏳     |
 | 19  | `DashSourceDirective`         | sources  | ★★★       | ⏳     |
@@ -240,7 +243,7 @@
 
 **Легенда:** ✅ готово · 🚧 в работе · ⏳ запланировано · 💰 PRO (платный)
 
-> Все кирпичи `core`, `controls`, `timeline` и первые четыре `extras` реализованы
+> Все кирпичи `core`, `controls`, `timeline` и первые пять `extras` реализованы
 > и проверены; публикация **всех** пакетов отложена до завершения всех спринтов
 > (см. раздел 7, «Финальная публикация»).
 
