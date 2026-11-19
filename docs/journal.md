@@ -55,6 +55,7 @@
 | 2026-11-19 | Реализован `KeyboardShortcutsDirective` (`seekStep`/`volumeStep`/`enabled`, выходы `togglePlay`/`seekBy`/`volumeChange`/`toggleMute`/`toggleFullscreen`, host-listener, `aria-keyshortcuts`); демо `/extras/keyboard-shortcuts` — `ready`. Спринт 4 завершён.                                                                                    |
 | 2026-11-19 | Константы и чистые функции вынесены из кирпичей в `constants/` и `utils/` (`core`, `extras`, `timeline`); внутренние помощники не попали в публичный API.                                                                                                                                                                                        |
 | 2026-11-19 | Реализован `GestureDirective` (Pointer Events, pointer capture, фиксация оси, clamp и округление; входы `enabled`/`seekStep`/`volumeStep`/`brightnessStep`/`threshold`, выходы `seek`/`volumeChange`/`brightnessChange`); общие helpers вынесены на уровень `directives/`; демо `/extras/gesture` — `ready`; Спринт 5 продолжается.              |
+| 2026-11-19 | Реализован `SubtitleRendererComponent` (`vtt` строкой, `currentTime`, `enabled`, `customClass`; парсер `parseVtt` и выбор `findActiveCues` в `utils/`, внутренний `SubtitleCueInterface`; CSS-переменные `--ngx-subtitle-*`, `pointer-events: none`, без `aria-live`); демо `/extras/subtitle-renderer` — `ready`; Спринт 5 завершён.            |
 
 > Обновляй таблицу при каждом существенном изменении. Мелочи (опечатки) — не считаются.
 

@@ -153,7 +153,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'subtitle-renderer',
         path: 'extras/subtitle-renderer',
         title: 'SubtitleRendererComponent',
-        status: 'planned',
+        status: 'ready',
       },
     ],
   },

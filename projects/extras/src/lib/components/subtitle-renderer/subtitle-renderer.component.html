@@ -1,0 +1,5 @@
+@if (activeCues().length > 0) {
+  @for (cue of activeCues(); track cue) {
+    <p class="ngx-subtitle-renderer__cue">{{ cue.text }}</p>
+  }
+}

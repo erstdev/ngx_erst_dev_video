@@ -1,0 +1,45 @@
+:host {
+  --ngx-subtitle-color: #ffffff;
+  --ngx-subtitle-bg: rgba(0, 0, 0, 0.65);
+  --ngx-subtitle-font-family: inherit;
+  --ngx-subtitle-font-size: 1rem;
+  --ngx-subtitle-font-weight: 500;
+  --ngx-subtitle-line-height: 1.35;
+  --ngx-subtitle-padding: 0.25rem 0.5rem;
+  --ngx-subtitle-border-radius: 0.25rem;
+  --ngx-subtitle-gap: 0.25rem;
+  --ngx-subtitle-bottom: 1rem;
+  --ngx-subtitle-max-width: 90%;
+  --ngx-subtitle-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+  --ngx-subtitle-z-index: 2;
+
+  position: absolute;
+  right: 0;
+  bottom: var(--ngx-subtitle-bottom);
+  left: 0;
+  z-index: var(--ngx-subtitle-z-index);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ngx-subtitle-gap);
+  box-sizing: border-box;
+  pointer-events: none;
+  text-align: center;
+}
+
+.ngx-subtitle-renderer__cue {
+  box-sizing: border-box;
+  max-width: var(--ngx-subtitle-max-width);
+  margin: 0;
+  padding: var(--ngx-subtitle-padding);
+  border-radius: var(--ngx-subtitle-border-radius);
+  background: var(--ngx-subtitle-bg);
+  color: var(--ngx-subtitle-color);
+  font-family: var(--ngx-subtitle-font-family);
+  font-size: var(--ngx-subtitle-font-size);
+  font-weight: var(--ngx-subtitle-font-weight);
+  line-height: var(--ngx-subtitle-line-height);
+  overflow-wrap: anywhere;
+  text-shadow: var(--ngx-subtitle-text-shadow);
+  white-space: pre-line;
+}

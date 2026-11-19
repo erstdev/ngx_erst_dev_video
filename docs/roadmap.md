@@ -56,15 +56,15 @@
 Четыре кирпича готовы, Спринт 4 завершён. Публикация пакета — в финальной фазе
 после всех спринтов.
 
-### ⏳ Спринт 5: жесты и субтитры (3 недели)
+### ✅ Спринт 5: жесты и субтитры (3 недели) — завершён
 
 - [x] `GestureDirective` (свайпы для мобильных)
-- [ ] `SubtitleRendererComponent` (WebVTT)
+- [x] `SubtitleRendererComponent` (WebVTT)
 
-`GestureDirective` готов, Спринт 5 продолжается: следующим кирпичом идёт
-`SubtitleRendererComponent`.
+Оба кирпича готовы, Спринт 5 завершён. Следующим идёт Спринт 6
+(`ngx-video-sources`). Публикация — в финальной фазе после всех спринтов.
 
-### ⏳ Спринт 6: ngx-video-sources (2 недели)
+### ⏳ Спринт 6: ngx-video-sources (2 недели) — следующий
 
 - [ ] `HlsSourceDirective` (hls.js)
 - [ ] `DashSourceDirective` (Shaka Player / dash.js)
@@ -233,7 +233,7 @@
 | 14  | `SpeedControlComponent`       | extras   | ★         | ✅     |
 | 15  | `KeyboardShortcutsDirective`  | extras   | ★★        | ✅     |
 | 16  | `GestureDirective`            | extras   | ★★★★      | ✅     |
-| 17  | `SubtitleRendererComponent`   | extras   | ★★★★      | ⏳     |
+| 17  | `SubtitleRendererComponent`   | extras   | ★★★★      | ✅     |
 | 18  | `HlsSourceDirective`          | sources  | ★★★       | ⏳     |
 | 19  | `DashSourceDirective`         | sources  | ★★★       | ⏳     |
 | 20  | `QualitySwitcherComponent`    | sources  | ★★★★      | ⏳     |
@@ -243,9 +243,9 @@
 
 **Легенда:** ✅ готово · 🚧 в работе · ⏳ запланировано · 💰 PRO (платный)
 
-> Все кирпичи `core`, `controls`, `timeline` и первые пять `extras` реализованы
-> и проверены; публикация **всех** пакетов отложена до завершения всех спринтов
-> (см. раздел 7, «Финальная публикация»).
+> Все кирпичи `core`, `controls`, `timeline` и `extras` реализованы и проверены;
+> публикация **всех** пакетов отложена до завершения всех спринтов (см. раздел 7,
+> «Финальная публикация»).
 
 ---
 

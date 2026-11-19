@@ -2,11 +2,150 @@
   title="SubtitleRendererComponent"
   pkg="@erst_dev/ngx-video-extras"
   selector="ngx-subtitle-renderer"
-  status="planned"
-  description="Рендеринг субтитров WebVTT поверх видео: парсит дорожку, синхронизирует с текущим временем и рисует текст."
+  status="ready"
+  description="Слой субтитров WebVTT поверх видео: компонент получает уже загруженную строку и текущее время, выбирает активные cues и рисует их plain text."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-hint">
+    Дорожка статическая: 6 cues на первые 30 секунд, среди них есть
+    <code>NOTE</code>, многострочная реплика, HTML-тег и сущность
+    <code>&amp;amp;</code>. Переключатели управляют <code>enabled</code> и
+    <code>customClass</code>: «Крупный текст» меняет размер, «Кастомный стиль» —
+    шрифт, цвет, фон и скругление через <code>--ngx-subtitle-*</code>; классы
+    можно включать вместе.
   </p>
+
+  <div class="player">
+    <video
+      ngxVideo
+      class="player__video"
+      [src]="src"
+      preload="metadata"
+      playsinline
+      (click)="togglePlay()"
+    ></video>
+
+    <ngx-subtitle-renderer
+      [vtt]="vtt"
+      [currentTime]="video.time()"
+      [enabled]="subtitlesEnabled()"
+      [customClass]="subtitleClass()"
+    />
+  </div>
+
+  <div class="controls">
+    <button type="button" class="controls__play" (click)="togglePlay()">
+      {{ isPlaying() ? 'Пауза' : 'Смотреть' }}
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="subtitlesEnabled()"
+      [attr.aria-pressed]="subtitlesEnabled()"
+      (click)="toggleSubtitles()"
+    >
+      Субтитры: {{ subtitlesEnabled() ? 'вкл' : 'выкл' }}
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="largeText()"
+      [attr.aria-pressed]="largeText()"
+      (click)="toggleLargeText()"
+    >
+      Крупный текст: {{ largeText() ? 'вкл' : 'выкл' }}
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="customStyle()"
+      [attr.aria-pressed]="customStyle()"
+      (click)="toggleCustomStyle()"
+    >
+      Кастомный стиль: {{ customStyle() ? 'вкл' : 'выкл' }}
+    </button>
+
+    <span class="controls__status">
+      state: <code>{{ video.state() }}</code> · currentTime:
+      <code>{{ video.time().toFixed(1) }} с</code>
+    </span>
+  </div>
+
+  <table class="demo-table">
+    <caption class="demo-table__caption">
+      Что показывает компонент
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Вход</th>
+        <th scope="col">Значение в демо</th>
+        <th scope="col">Что делает компонент</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>vtt</code></td>
+        <td>6 cues на первые 30 секунд</td>
+        <td>Разбирает строку только при её изменении</td>
+      </tr>
+      <tr>
+        <td><code>currentTime</code></td>
+        <td><code>{{ video.time().toFixed(1) }}</code> с</td>
+        <td>Берёт cues из полуинтервала <code>[start, end)</code></td>
+      </tr>
+      <tr>
+        <td><code>enabled</code></td>
+        <td>{{ subtitlesEnabled() ? 'вкл' : 'выкл' }}</td>
+        <td>
+          {{ subtitlesEnabled() ? 'Активные cues есть в DOM' : 'Cues удалены из
+          DOM' }}
+        </td>
+      </tr>
+      <tr>
+        <td><code>customClass</code></td>
+        <td><code>{{ subtitleClass() || '—' }}</code></td>
+        <td>Классы на хосте: размер, шрифт, цвет, фон</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="demo-note">
+    Компонент не скачивает VTT и не управляет дорожками: в демо строка задана
+    константой, а в реальном приложении её загрузит родитель. Парсинг зависит
+    только от <code>vtt</code>; <code>currentTime</code> лишь выбирает активные
+    cues.
+  </p>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Базовая разметка</h3>
+      <p class="example__text">
+        Контейнер плеера — <code>position: relative</code>, компонент лежит
+        поверх видео и получает строку VTT и текущее время.
+      </p>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Передача VTT и синхронизация</h3>
+      <p class="example__text">
+        Скачивание и CORS — на стороне родителя. Компонент получает уже готовый
+        текст, а <code>video.time()</code> обновляет активную реплику.
+      </p>
+      <app-code-snippet [code]="code.sync" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">customClass и CSS-переменные</h3>
+      <p class="example__text">
+        Класс вешается на хост-элемент, поэтому переменные переопределяются
+        обычными scoped-стилями — без <code>::ng-deep</code>. Кнопка «Кастомный
+        стиль» в демо включает класс <code>demo-subtitle--custom</code>.
+      </p>
+      <app-code-snippet [code]="code.custom" />
+    </section>
+  </div>
 </app-demo-shell>
