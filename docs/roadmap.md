@@ -99,20 +99,59 @@
 - [ ] `@erst_dev/ngx-video-sources@0.1.0`
 - [ ] `@erst_dev/ngx-video-capture` (PRO)
 
-### ⏳ Инфраструктура, CI/CD и публичное демо (параллельно спринтам)
-
-Не привязано к конкретному кирпичу — выход проекта в интернет и автоматизация.
+### 🚧 Инфраструктура: базовый CI (сделано; полный набор — в финальной фазе)
 
 - [x] **GitLab:** репозиторий создан; GitHub — основной, GitLab — приватное зеркало и CI.
 - [x] **CI в GitLab:** `.gitlab-ci.yml` — установка зависимостей, `lint`, `build`, артефакты сборки.
 - [ ] Проверить первый зелёный пайплайн в GitLab.
 - [x] **CI в GitHub:** `.github/workflows/ci.yml` — те же шаги через GitHub Actions.
-- [ ] Бейджи статуса CI в корневом `README.md`.
-- [ ] **Публичная страница демо:** разместить `apps/demo` на GitHub Pages / GitLab Pages / статическом хостинге.
-- [ ] Сборка демо с корректным `baseHref` под выбранный хостинг.
-- [ ] Автодеплой демо при пуше в `master`.
-- [ ] SPA-роутинг на хостинге: для GitHub Pages нужен fallback `404.html` или hash-стратегия, иначе прямые ссылки вида `/controls/play-button` дадут 404.
-- [ ] (опционально) автопубликация пакетов из CI по тегу — после финальной публикации.
+- [ ] Проверить первый зелёный пайплайн в GitHub.
+- [ ] **Финальные пайплайны:** полный набор для обеих площадок — в разделе
+      «Финальные CI/CD-пайплайны в GitLab и GitHub» ниже.
+
+### ⏳ Финальные CI/CD-пайплайны в GitLab и GitHub (в самом конце)
+
+Делаем после всех спринтов, вместе с финальной публикацией. Базовый `verify`
+уже есть в обоих репозиториях; здесь — полный набор: качество, безопасность,
+релиз и деплой демо.
+
+**Общее для обеих площадок**
+
+- [ ] Выровнять пайплайны: `npm ci` → `nx format:check` → `nx run-many -t lint`
+      → `nx run-many -t build` → artifacts.
+- [ ] Добавить проверку lockfile под npm 10: `npx npm@10 ci --dry-run`.
+- [ ] Кеш npm и `.nx/cache`, `concurrency` / cancel-in-progress.
+- [ ] Когда появятся тесты — добавить `nx run-many -t test` и coverage.
+- [ ] Защитить `master`: обязательный зелёный pipeline, запрет force push.
+- [ ] Решить, какой CI основной; второй — ручной/по расписанию, чтобы не
+      дублировать минуты.
+- [ ] Бейджи CI — когда репозитории станут публичными.
+
+**GitHub Actions**
+
+- [ ] `verify` на push в `master` и pull request (дополнить format/lockfile).
+- [ ] `security` по расписанию: `npm audit --audit-level=high`, `npm outdated`,
+      SBOM через `npm sbom`.
+- [ ] Dependabot/Renovate, secret scanning, CodeQL — по доступному тарифу.
+- [ ] `release` по тегу: build → `npm pack --dry-run` → `npm publish --provenance`
+      → GitHub Release.
+- [ ] `deploy` демо на GitHub Pages: `baseHref`, `404.html`/SPA fallback, артефакт.
+- [ ] npm trusted publishing через OIDC (`id-token: write`) без долгоживущего токена.
+
+**GitLab CI**
+
+- [ ] `verify` на push и merge request — паритет с GitHub.
+- [ ] `security` по расписанию: `npm audit`, dependency/secret scanning по тарифу.
+- [ ] `release` по тегу: `npm publish` или GitLab Release.
+- [ ] `deploy` демо на GitLab Pages, если выбран этот хостинг.
+- [ ] MR-пайплайны и protected branches.
+
+**Перед включением**
+
+- [ ] Обновить Angular до 22.3, чтобы `npm audit --omit=dev` не был красным.
+- [ ] Добавить `repository`, `homepage`, `bugs` во все `package.json`.
+- [ ] Выбрать хостинг демо: GitHub Pages или GitLab Pages.
+- [ ] Проверить первый зелёный pipeline в обоих CI.
 
 ---
 
