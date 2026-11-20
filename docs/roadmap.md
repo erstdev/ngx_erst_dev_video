@@ -237,7 +237,7 @@
 | 22  | `ScreenshotButtonComponent`   | capture  | ★★        | ✅     |
 | 23  | `ClipRecorderComponent`       | capture  | ★★★★      | ✅     |
 
-**Легенда:** ✅ готово · 🚧 в работе · ⏳ запланировано · 💰 PRO (платный)
+**Легенда:** ✅ готово · 🚧 в работе · ⏳ запланировано
 
 > Все кирпичи `core`, `controls`, `timeline`, `extras` и `sources` реализованы и
 > проверены; в `capture` готовы `CaptureService`, `ScreenshotButtonComponent` и

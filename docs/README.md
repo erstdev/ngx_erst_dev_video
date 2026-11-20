@@ -8,7 +8,7 @@
 | [architecture.md](architecture.md)   | Структура репозитория, пакетов, демо; ответственность кирпичей |
 | [conventions.md](conventions.md)     | Соглашения по коду, стилям, breaking changes                   |
 | [roadmap.md](roadmap.md)             | Спринты, матрица кирпичей, публикация, инфраструктура          |
-| [journal.md](journal.md)             | Полная история изменений CONTEXT                               |
+| [journal.md](journal.md)             | Полная история изменений проекта                               |
 | [workflow.md](workflow.md)           | Процесс работы, новый чат, завершение задачи                   |
 | [references.md](references.md)       | Референсы, полезные ссылки, авторство                          |
 | [task-template.md](task-template.md) | Шаблон карточки задачи для нового чата                         |
