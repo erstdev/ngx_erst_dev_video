@@ -254,7 +254,7 @@ export class CaptureService {
     canvas.width = width;
     canvas.height = height;
 
-    let context: CanvasRenderingContext2D | null = null;
+    let context: CanvasRenderingContext2D | null;
 
     try {
       context = canvas.getContext('2d');

@@ -33,10 +33,10 @@
 
 ## 2. Стек и инструменты
 
-- **Angular 22.1+** (standalone components, signals, `input()`/`output()`)
+- **Angular 22.3+** (standalone components, signals, `input()`/`output()`)
 - **TypeScript 6+** (в репозитории `~6.0.3`)
 - **RxJS 7+** (для потоков событий и операторов)
-- **Nx 23+** монорепозиторий
+- **Nx 24+** монорепозиторий
 - **SCSS** для стилей
 - **npm** для публикации (scope: `@erst_dev`)
 - **ESLint** для линтинга (уже настроен Nx)

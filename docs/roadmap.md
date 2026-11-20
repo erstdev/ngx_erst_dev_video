@@ -163,6 +163,28 @@
 - [ ] **Финальные пайплайны:** полный набор для обеих площадок — в разделе
       «Финальные CI/CD-пайплайны в GitLab и GitHub» ниже.
 
+### ⚠️ Временный костыль: патч Nx под Angular 22.3 (убрать после фикса в Nx)
+
+Angular 22.3 добавил поле `exports` в `@angular-devkit/architect` (в 22.1 и 22.2 его
+не было), поэтому подпуть `@angular-devkit/architect/node/index.js` больше не резолвится
+(`ERR_PACKAGE_PATH_NOT_EXPORTED`). Nx — включая `24.1.0-beta.2` — импортирует именно
+этот подпуть, и падают все targets на Angular-CLI-билдерах: `demo:build`, `demo:serve`.
+Апстрим: [nrwl/nx#37955](https://github.com/nrwl/nx/issues/37955).
+
+Сейчас закрыто патчем `patches/nx+24.1.0-beta.2.patch` (одна строка:
+`@angular-devkit/architect/node/index.js` → `@angular-devkit/architect/node`),
+который накатывается автоматически через `patch-package` в `postinstall`.
+Подробности и порядок снятия — `patches/README.md`.
+
+Это **костыль**, а не штатное решение:
+
+- [ ] Убрать патч, когда Nx исправит импорт и выйдет релиз с исправлением: удалить
+      `patches/nx+*.patch`, devDependency `patch-package` и скрипт `postinstall`,
+      затем проверить, что `npx nx build demo` зелёный без патча.
+- [ ] Перейти с `nx`/`@nx/*` `24.1.0-beta.2` на stable-релиз Nx 24.1.x, когда он выйдет
+      (на beta пришлось уйти ради чистого `npm audit`: в `24.0.6` жёстко запинен
+      `minimatch@10.2.5` с уязвимостями).
+
 ### ⏳ Финальные CI/CD-пайплайны в GitLab и GitHub (в самом конце)
 
 Делаем после всех спринтов, вместе с финальной публикацией. Базовый `verify`
@@ -202,7 +224,7 @@
 
 **Перед включением**
 
-- [ ] Обновить Angular до 22.3, чтобы `npm audit --omit=dev` не был красным.
+- [x] Angular 22.3 + Nx 24.1: `npm audit` (полный, без `--omit=dev`) — 0 уязвимостей.
 - [ ] Добавить `repository`, `homepage`, `bugs` во все `package.json`.
 - [ ] Выбрать хостинг демо: GitHub Pages или GitLab Pages.
 - [ ] Проверить первый зелёный pipeline в обоих CI.
