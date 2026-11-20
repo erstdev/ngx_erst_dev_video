@@ -76,12 +76,16 @@
 Спринт 7 — `ngx-video-capture` (PRO); публикация — в финальной фазе после всех
 спринтов.
 
-### ⏳ Спринт 7: ngx-video-capture — PRO (4 недели)
+### 🚧 Спринт 7: ngx-video-capture — PRO (4 недели)
 
-- [ ] `CaptureService` (captureFrame, recordClip, captureGif)
+- [x] `CaptureService` (captureFrame, recordClip, captureGif)
 - [ ] `ScreenshotButtonComponent`
 - [ ] `ClipRecorderComponent`
 - [ ] Лендинг
+
+`CaptureService` готов: кадр, клип и GIF без UI, собственный GIF89a-энкодер без
+зависимостей. Демо `/capture/capture-service` — `ready`. Следующим идёт
+`ScreenshotButtonComponent`; публикация — в финальной фазе после всех спринтов.
 
 ### ❓ Открытые вопросы (решить до указанных шагов)
 
@@ -243,15 +247,15 @@
 | 18  | `HlsSourceDirective`          | sources  | ★★★       | ✅     |
 | 19  | `DashSourceDirective`         | sources  | ★★★       | ✅     |
 | 20  | `QualitySwitcherComponent`    | sources  | ★★★★      | ✅     |
-| 21  | `CaptureService`              | capture  | ★★★       | 💰     |
+| 21  | `CaptureService`              | capture  | ★★★       | ✅     |
 | 22  | `ScreenshotButtonComponent`   | capture  | ★★        | 💰     |
 | 23  | `ClipRecorderComponent`       | capture  | ★★★★      | 💰     |
 
 **Легенда:** ✅ готово · 🚧 в работе · ⏳ запланировано · 💰 PRO (платный)
 
 > Все кирпичи `core`, `controls`, `timeline`, `extras` и `sources` реализованы и
-> проверены; публикация **всех** пакетов отложена до завершения всех спринтов
-> (см. раздел 7, «Финальная публикация»).
+> проверены; в `capture` готов `CaptureService`. Публикация **всех** пакетов
+> отложена до завершения всех спринтов (см. раздел 7, «Финальная публикация»).
 
 ---
 

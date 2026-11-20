@@ -1,12 +1,270 @@
 <app-demo-shell
   title="CaptureService"
   pkg="@erst_dev/ngx-video-capture"
-  status="planned"
+  status="ready"
   [pro]="true"
-  description="Захват кадров и запись фрагментов: captureFrame, recordClip и captureGif через Canvas и MediaRecorder. Интерфейсом не управляет и файлы сам не скачивает."
+  description="Захват кадров и запись фрагментов: captureFrame, recordClip и captureGif через Canvas и MediaRecorder. Сервис получает HTMLVideoElement и возвращает Blob или объект записи, но не управляет плеером и не скачивает файлы."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-hint">
+    Сервис получает нативный <code>HTMLVideoElement</code> и возвращает
+    <code>Blob</code> или объект записи. Воспроизведением управляет
+    <code>VideoService</code>: кнопка Play/Pause вызывает <code>toggle()</code>,
+    а <code>CaptureService</code> только снимает кадры с текущего состояния.
+    Файлы не скачиваются автоматически — ссылки «Скачать» появляются после
+    захвата, и скачивание инициирует демо.
   </p>
+
+  <div class="player">
+    <video
+      #videoEl
+      ngxVideo
+      class="player__video"
+      [src]="src"
+      crossorigin="anonymous"
+      playsinline
+    ></video>
+  </div>
+
+  <div class="demo-toolbar">
+    <button type="button" class="demo-toggle" (click)="togglePlay()">
+      {{ playLabel() }}
+    </button>
+
+    <button type="button" class="demo-toggle" (click)="capturePng()">
+      Кадр PNG
+    </button>
+
+    <button type="button" class="demo-toggle" (click)="captureJpeg()">
+      Кадр JPEG
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [disabled]="recordingState() === 'recording'"
+      (click)="startRecording()"
+    >
+      Начать запись
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [disabled]="recordingState() !== 'recording'"
+      (click)="stopRecording()"
+    >
+      Остановить
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [disabled]="busy()"
+      (click)="captureGif()"
+    >
+      {{ busy() ? 'GIF…' : 'GIF 2 с' }}
+    </button>
+  </div>
+
+  <dl class="demo-status">
+    <div class="demo-status__item">
+      <dt class="demo-status__label">запись</dt>
+      <dd class="demo-status__value">
+        <code>{{ recordingState() ?? '—' }}</code>
+      </dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">кадр</dt>
+      <dd class="demo-status__value">{{ frameInfo() ?? '—' }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">GIF</dt>
+      <dd class="demo-status__value">{{ gifInfo() ?? '—' }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">клип</dt>
+      <dd class="demo-status__value">{{ clipInfo() ?? '—' }}</dd>
+    </div>
+  </dl>
+
+  @if (error(); as error) {
+  <p class="demo-error" role="alert">
+    <strong>{{ error.message }}</strong>
+    <span class="demo-error__code">code: <code>{{ error.code }}</code></span>
+  </p>
+  }
+
+  <p class="demo-note">
+    Кадр и GIF снимаются через Canvas: без CORS-заголовков у видео canvas
+    становится «грязным» и отдаёт ошибку <code>canvas-failed</code>, поэтому у
+    элемента стоит <code>crossorigin="anonymous"</code>. Запись идёт через
+    <code>MediaRecorder</code> из <code>video.captureStream()</code>; если видео
+    на паузе, кадры в клипе могут повторяться — это ответственность родителя.
+    GIF — настоящий <code>image/gif</code> с палитрой 3-3-2 и задержкой
+    <code>max(2, round(100 / fps))</code> сотых секунды: 2 секунды при 10 к/с.
+    На сервере методы отклоняются с кодом <code>unsupported</code>.
+  </p>
+
+  <section class="previews">
+    <figure class="preview">
+      <figcaption class="preview__title">Кадр</figcaption>
+
+      @if (frameUrl(); as url) {
+      <img class="preview__image" [src]="url" [alt]="frameInfo() ?? 'Кадр'" />
+      <a class="preview__link" [href]="url" [download]="frameName()">
+        Скачать {{ frameName() }}
+      </a>
+      } @else {
+      <p class="preview__empty">Нажмите «Кадр PNG» или «Кадр JPEG».</p>
+      }
+    </figure>
+
+    <figure class="preview">
+      <figcaption class="preview__title">GIF</figcaption>
+
+      @if (gifUrl(); as url) {
+      <img class="preview__image" [src]="url" [alt]="gifInfo() ?? 'GIF'" />
+      <a class="preview__link" [href]="url" download="capture.gif">
+        Скачать capture.gif
+      </a>
+      } @else {
+      <p class="preview__empty">
+        Нажмите «GIF 2 с» — запись займёт ~2 секунды.
+      </p>
+      }
+    </figure>
+
+    <figure class="preview">
+      <figcaption class="preview__title">Клип</figcaption>
+
+      @if (clipUrl(); as url) {
+      <video class="preview__video" [src]="url" controls playsinline></video>
+      <a class="preview__link" [href]="url" [download]="clipName()">
+        Скачать {{ clipName() }}
+      </a>
+      } @else {
+      <p class="preview__empty">
+        «Начать запись», затем «Остановить» — клип появится здесь.
+      </p>
+      }
+    </figure>
+  </section>
+
+  <section class="brick">
+    <h3 class="brick__title">Что делает сервис</h3>
+
+    <div class="brick__table-wrap">
+      <table class="brick__table">
+        <thead>
+          <tr>
+            <th scope="col">Метод</th>
+            <th scope="col">Опции</th>
+            <th scope="col">Поведение</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>captureFrame(video, options)</code></td>
+            <td>
+              <code>type</code> (PNG), <code>quality</code> (0.92),
+              <code>maxWidth</code>, <code>maxHeight</code>
+            </td>
+            <td>
+              Canvas → <code>Blob</code>; пропорции сохраняются, кадр не
+              увеличивается; без кадра — <code>no-video</code>; элемент не
+              меняется
+            </td>
+          </tr>
+          <tr>
+            <td><code>recordClip(video, options)</code></td>
+            <td>
+              <code>mimeType</code>, <code>videoBitsPerSecond</code>,
+              <code>audioBitsPerSecond</code>, <code>timeslice</code>
+            </td>
+            <td>
+              <code>MediaRecorder</code> из <code>captureStream()</code>;
+              возвращает <code>ClipRecording</code> со <code>state</code>,
+              <code>stop()</code> и <code>cancel()</code>; API проверяется
+              синхронно
+            </td>
+          </tr>
+          <tr>
+            <td><code>captureGif(video, options)</code></td>
+            <td>
+              <code>fps</code> (10), <code>duration</code> (3000),
+              <code>width</code> (320), <code>loop</code> (true)
+            </td>
+            <td>
+              Собственный GIF89a: палитра 3-3-2, LZW и Netscape loop; кадры
+              снимаются 2–15 секунд
+            </td>
+          </tr>
+          <tr>
+            <td>Ошибки</td>
+            <td><code>code</code>, <code>message</code>, <code>cause</code></td>
+            <td>
+              Обычный объект <code>CaptureError</code>, как
+              <code>VideoError</code> в <code>core</code>; <code>code</code> —
+              контракт, текст русский
+            </td>
+          </tr>
+          <tr>
+            <td>SSR и CORS</td>
+            <td>—</td>
+            <td>
+              На сервере — <code>unsupported</code>; без CORS-заголовков canvas
+              «грязный» и отдаёт <code>canvas-failed</code>
+            </td>
+          </tr>
+          <tr>
+            <td>Границы</td>
+            <td>—</td>
+            <td>
+              Без UI и селектора, без <code>VideoService</code>, без
+              auto-download и без хранения результатов
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Кадр</h3>
+      <p class="example__text">
+        <code>captureFrame</code> получает нативный элемент и возвращает
+        <code>Blob</code>. Кадр снимается с текущего состояния: сервис не
+        вызывает <code>play()</code>, <code>pause()</code> и
+        <code>seek()</code>, а скачивание остаётся за демо.
+      </p>
+      <app-code-snippet [code]="code.frame" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Запись клипа</h3>
+      <p class="example__text">
+        <code>recordClip</code> сразу начинает запись и возвращает
+        <code>ClipRecording</code>. <code>stop()</code> идемпотентен и отдаёт
+        <code>Blob</code> с фактическим MIME, <code>cancel()</code> выбрасывает
+        данные и отклоняет ожидающий <code>stop()</code> с кодом
+        <code>aborted</code>.
+      </p>
+      <app-code-snippet [code]="code.record" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">GIF</h3>
+      <p class="example__text">
+        <code>captureGif</code> снимает кадры с заданным <code>fps</code> в
+        течение <code>duration</code> и кодирует настоящий GIF89a без
+        зависимостей: глобальная палитра 256 цветов 3-3-2, LZW и Netscape loop.
+      </p>
+      <app-code-snippet [code]="code.gif" />
+    </section>
+  </div>
 </app-demo-shell>

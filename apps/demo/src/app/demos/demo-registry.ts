@@ -192,7 +192,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'capture-service',
         path: 'capture/capture-service',
         title: 'CaptureService',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'screenshot-button',
