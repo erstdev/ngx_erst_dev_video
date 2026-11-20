@@ -7,7 +7,7 @@
   description="Кнопка скриншота: вызывает CaptureService.captureFrame() для уже играющего видео, отдаёт Blob через capture и по умолчанию скачивает файл. Захват остаётся в сервисе, плеером кнопка не управляет."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-hint">
+  <p class="demo-note">
     Захват выполняет <code>CaptureService</code>: кнопка передаёт ему нативный
     <code>HTMLVideoElement</code> и настройки кадра, а получает готовый
     <code>Blob</code>. Воспроизведением управляет <code>VideoService</code> —
@@ -28,7 +28,7 @@
     ></video>
 
     <ngx-screenshot-button
-      customClass="player__shot"
+      [customClass]="shotCustomClass()"
       [video]="videoElement()"
       [type]="frameType()"
       [fileName]="fileName()"
@@ -126,6 +126,30 @@
     «грязным» и отдаёт <code>canvas-failed</code>, поэтому у элемента стоит
     <code>crossorigin="anonymous"</code>.
   </p>
+
+  <section class="brick">
+    <h3 class="brick__title">Стилизация кнопки</h3>
+    <p class="demo-note">
+      Вид задают CSS-переменные <code>--ngx-screenshot-*</code> с дефолтами в
+      <code>:host</code>, а <code>customClass</code> вешает класс на хост
+      <code>&lt;ngx-screenshot-button&gt;</code> — без <code>::ng-deep</code>.
+      Переключите пресет: кнопка на видео изменится сразу.
+    </p>
+
+    <div class="demo-toolbar" role="group" aria-label="Пресет стилей кнопки">
+      @for (theme of shotThemes; track theme.id) {
+      <button
+        type="button"
+        class="demo-toggle"
+        [class.demo-toggle--active]="shotTheme() === theme.id"
+        [attr.aria-pressed]="shotTheme() === theme.id"
+        (click)="setShotTheme(theme.id)"
+      >
+        {{ theme.label }}
+      </button>
+      }
+    </div>
+  </section>
 
   <section>
     <figure class="preview">
@@ -259,6 +283,18 @@
         <code>document</code> появляется только в обработчике клика.
       </p>
       <app-code-snippet [code]="code.errors" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Стилизация через customClass</h3>
+      <p class="example__text">
+        <code>customClass</code> вешает классы на хост
+        <code>&lt;ngx-screenshot-button&gt;</code>, поэтому обычные scoped-стили
+        потребителя переопределяют <code>--ngx-screenshot-*</code> и задают
+        собственные хост-стили вроде <code>box-shadow</code>. Классы из
+        <code>class="..."</code> при этом сохраняются.
+      </p>
+      <app-code-snippet [code]="code.styling" />
     </section>
   </div>
 </app-demo-shell>

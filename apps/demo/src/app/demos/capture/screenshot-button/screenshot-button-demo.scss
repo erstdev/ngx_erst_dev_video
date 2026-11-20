@@ -2,13 +2,6 @@
   display: block;
 }
 
-.demo-hint {
-  margin: 0 0 1rem;
-  color: #6b7280;
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
 .player {
   position: relative;
   max-width: 720px;
@@ -34,6 +27,24 @@
   --ngx-screenshot-focus-color: #fbbf24;
 }
 
+.player__shot--emerald {
+  --ngx-screenshot-bg: #065f46;
+  --ngx-screenshot-hover-bg: #047857;
+  --ngx-screenshot-color: #ecfdf5;
+  --ngx-screenshot-border-radius: 12px;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.65);
+}
+
+.player__shot--compact {
+  --ngx-screenshot-size: 32px;
+  --ngx-screenshot-icon-size: 60%;
+  --ngx-screenshot-bg: #f59e0b;
+  --ngx-screenshot-hover-bg: #d97706;
+  --ngx-screenshot-color: #1f2937;
+  --ngx-screenshot-focus-color: #111827;
+  --ngx-screenshot-border-radius: 8px;
+}
+
 .demo-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -47,14 +58,18 @@
   gap: 0.25rem;
 }
 
-.demo-toggle {
-  padding: 0.4rem 0.75rem;
+.demo-toggle,
+.demo-field__input {
   border: 1px solid #374151;
-  border-radius: 999px;
   background: #111827;
   color: #d1d5db;
   font: inherit;
   font-size: 0.8125rem;
+}
+
+.demo-toggle {
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
   cursor: pointer;
   transition:
     border-color 0.15s ease,
@@ -79,19 +94,17 @@
   outline-offset: 2px;
 }
 
-.demo-check {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: #d1d5db;
-  font-size: 0.8125rem;
-  cursor: pointer;
-}
-
+.demo-check,
 .demo-field {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+.demo-check {
+  color: #d1d5db;
+  font-size: 0.8125rem;
+  cursor: pointer;
 }
 
 .demo-status__label,
@@ -105,12 +118,7 @@
 .demo-field__input {
   width: 10rem;
   padding: 0.35rem 0.6rem;
-  border: 1px solid #374151;
   border-radius: 0.5rem;
-  background: #111827;
-  color: #e5e7eb;
-  font: inherit;
-  font-size: 0.8125rem;
 }
 
 .demo-field__input:focus-visible {
@@ -170,15 +178,19 @@
   margin: 0.75rem 0 0;
 }
 
-.preview {
+.preview,
+.example {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin: 1.25rem 0 0;
   padding: 0.75rem;
   border: 1px solid #1f2937;
   border-radius: 0.75rem;
   background: #0f172a;
+}
+
+.preview {
+  margin: 1.25rem 0 0;
 }
 
 .preview__title {
@@ -207,7 +219,6 @@
   font-size: 0.8125rem;
 }
 
-.demo-hint code,
 .demo-note code,
 .demo-status__value code,
 .demo-error code,
@@ -272,13 +283,8 @@
 }
 
 .example {
-  display: flex;
-  flex-direction: column;
   gap: 0.75rem;
   padding: 1rem;
-  border: 1px solid #1f2937;
-  border-radius: 0.75rem;
-  background: #0f172a;
 }
 
 .example__title {

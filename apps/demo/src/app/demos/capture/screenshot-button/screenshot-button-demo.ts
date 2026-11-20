@@ -26,6 +26,16 @@ interface CapturedFrameInfo {
   readonly fileName: string;
 }
 
+/** Пресет оформления кнопки скриншота. */
+interface ShotTheme {
+  readonly id: ShotThemeId;
+  readonly label: string;
+  readonly className: string;
+}
+
+/** Идентификатор пресета оформления кнопки. */
+type ShotThemeId = 'default' | 'emerald' | 'compact';
+
 /** Расширения для подписи имени файла в демо. */
 const FRAME_EXTENSIONS: Readonly<Record<CaptureFrameType, string>> = {
   'image/png': '.png',
@@ -74,6 +84,21 @@ export class ScreenshotButtonDemo {
   protected readonly frameType = signal<CaptureFrameType>('image/png');
   protected readonly autoDownload = signal(true);
   protected readonly fileName = signal('screenshot');
+  protected readonly shotTheme = signal<ShotThemeId>('default');
+
+  /** Пресеты оформления: класс вешается на хост через `customClass`. */
+  protected readonly shotThemes: readonly ShotTheme[] = [
+    { id: 'default', label: 'По умолчанию', className: '' },
+    { id: 'emerald', label: 'Изумрудная', className: 'player__shot--emerald' },
+    { id: 'compact', label: 'Компактная', className: 'player__shot--compact' },
+  ];
+
+  /** Базовый класс позиции и класс выбранного пресета — оба на хосте. */
+  protected readonly shotCustomClass = computed(() => {
+    const theme = this.shotThemes.find((item) => item.id === this.shotTheme());
+
+    return ['player__shot', theme?.className].filter(Boolean).join(' ');
+  });
 
   protected readonly previewUrl = signal<string | null>(null);
   protected readonly frameInfo = signal<CapturedFrameInfo | null>(null);
@@ -179,6 +204,30 @@ protected onError(error: CaptureError): void {
 // SSR: на верхнем уровне модуля нет window, document и MediaRecorder.
 // document используется только в обработчике клика — при создании
 // временной ссылки <a download>, поэтому серверный рендер безопасен.`,
+
+    styling: `<!-- player.component.html -->
+<ngx-screenshot-button
+  customClass="shot shot--emerald"
+  [video]="videoElement()"
+/>
+
+/* player.component.scss — scoped-стили без ::ng-deep */
+.shot {
+  --ngx-screenshot-size: 48px;
+  --ngx-screenshot-focus-color: #fbbf24;
+}
+
+.shot--emerald {
+  --ngx-screenshot-bg: #065f46;
+  --ngx-screenshot-hover-bg: #047857;
+  --ngx-screenshot-color: #ecfdf5;
+  --ngx-screenshot-border-radius: 12px;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.65);
+}
+
+// customClass вешает классы на хост <ngx-screenshot-button>,
+// CSS-переменные наследуются внутренней кнопке.
+// Классы из class="..." customClass не затирает.`,
   } as const;
 
   constructor() {
@@ -197,6 +246,10 @@ protected onError(error: CaptureError): void {
 
   protected setFrameType(type: CaptureFrameType): void {
     this.frameType.set(type);
+  }
+
+  protected setShotTheme(id: ShotThemeId): void {
+    this.shotTheme.set(id);
   }
 
   protected onAutoDownloadChange(event: Event): void {
