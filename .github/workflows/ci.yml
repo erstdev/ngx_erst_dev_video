@@ -31,11 +31,12 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
-      - name: Lint
-        run: npx nx run-many -t lint
+      # Проверки те же, что в GitLab CI: скрипты лежат в package.json.
+      - name: Audit (любая severity)
+        run: npm run ci:audit
 
-      - name: Build
-        run: npx nx run-many -t build
+      - name: Verify (format + lint + build)
+        run: npm run ci:verify
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

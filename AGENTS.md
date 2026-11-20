@@ -11,7 +11,7 @@
 - `docs/` — только по ссылке из задачи и только нужный файл:
   - `docs/architecture.md` — структура и ответственность кирпичей;
   - `docs/conventions.md` — код, стили, breaking changes;
-  - `docs/roadmap.md` — спринты и матрица;
+  - `docs/roadmap.md` — план работ по пунктам: задачи, статусы, справочник;
   - `docs/journal.md` — история;
   - `docs/workflow.md` — процесс;
   - `docs/references.md` — ссылки и авторство.

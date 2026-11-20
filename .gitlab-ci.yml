@@ -16,8 +16,9 @@ verify:
   stage: check
   script:
     - npm ci --cache .npm --prefer-offline --no-audit --no-fund
-    - npx nx run-many -t lint
-    - npx nx run-many -t build
+    # Проверки те же, что в GitHub Actions: скрипты лежат в package.json.
+    - npm run ci:audit
+    - npm run ci:verify
   artifacts:
     paths:
       - dist/

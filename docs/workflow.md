@@ -49,8 +49,9 @@
 4. Обновить:
    - `CONTEXT.md` — текущий статус, решения, следующий шаг;
    - `docs/journal.md` — одна-две строки;
-   - `docs/roadmap.md` / `docs/architecture.md` / `docs/conventions.md` — только
-     если менялись структура, API или правила;
+   - `docs/roadmap.md` — отметить выполненные пункты плана;
+   - `docs/architecture.md` / `docs/conventions.md` — только если менялись
+     структура, API или правила;
    - README пакета и README кирпича.
 5. Закоммитить и запушить после зелёных проверок.
    `CONTEXT.md` в `.gitignore`, `docs/` версионируется.
