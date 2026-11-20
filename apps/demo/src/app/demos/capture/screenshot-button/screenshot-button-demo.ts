@@ -215,6 +215,8 @@ protected onError(error: CaptureError): void {
 .shot {
   --ngx-screenshot-size: 48px;
   --ngx-screenshot-focus-color: #fbbf24;
+  /* Хост повторяет скругление кнопки — иначе box-shadow рисует квадрат. */
+  border-radius: var(--ngx-screenshot-border-radius);
 }
 
 .shot--emerald {
@@ -222,7 +224,7 @@ protected onError(error: CaptureError): void {
   --ngx-screenshot-hover-bg: #047857;
   --ngx-screenshot-color: #ecfdf5;
   --ngx-screenshot-border-radius: 12px;
-  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.65);
+  box-shadow: 0 6px 16px rgba(4, 120, 87, 0.4);
 }
 
 // customClass вешает классы на хост <ngx-screenshot-button>,

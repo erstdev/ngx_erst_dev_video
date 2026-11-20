@@ -25,6 +25,7 @@
   z-index: 1;
   --ngx-screenshot-size: 44px;
   --ngx-screenshot-focus-color: #fbbf24;
+  border-radius: var(--ngx-screenshot-border-radius);
 }
 
 .player__shot--emerald {
@@ -32,12 +33,11 @@
   --ngx-screenshot-hover-bg: #047857;
   --ngx-screenshot-color: #ecfdf5;
   --ngx-screenshot-border-radius: 12px;
-  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.65);
+  box-shadow: 0 6px 16px rgba(4, 120, 87, 0.4);
 }
 
 .player__shot--compact {
   --ngx-screenshot-size: 32px;
-  --ngx-screenshot-icon-size: 60%;
   --ngx-screenshot-bg: #f59e0b;
   --ngx-screenshot-hover-bg: #d97706;
   --ngx-screenshot-color: #1f2937;
