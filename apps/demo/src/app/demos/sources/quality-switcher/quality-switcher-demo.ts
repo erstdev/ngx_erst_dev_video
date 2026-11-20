@@ -16,6 +16,9 @@ import {
 import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
 import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
 
+/** Идентификатор темы оформления селекта в демо. */
+type QualityThemeId = 'default' | 'emerald' | 'compact' | 'light';
+
 /**
  * Демо для QualitySwitcherComponent.
  *
@@ -68,6 +71,55 @@ export class QualitySwitcherDemo {
   protected readonly currentLevelLabel = computed(
     () => this.currentLevel()?.label ?? 'auto',
   );
+
+  /** Выбранная тема оформления: меняет только CSS-переменные через класс. */
+  protected readonly theme = signal<QualityThemeId>('emerald');
+
+  /** Готовые темы: подпись и классы, которые уходят в `customClass`. */
+  protected readonly themes = [
+    { id: 'default', label: 'По умолчанию', className: '' },
+    { id: 'emerald', label: 'Изумруд', className: 'demo-quality' },
+    {
+      id: 'compact',
+      label: 'Компактный',
+      className: 'demo-quality demo-quality--compact',
+    },
+    {
+      id: 'light',
+      label: 'Светлый',
+      className: 'demo-quality demo-quality--light',
+    },
+  ] as const;
+
+  /** Классы для живого селекта и предпросмотра. */
+  protected readonly qualityClass = computed(
+    () => this.themes.find((item) => item.id === this.theme())?.className ?? '',
+  );
+
+  /** Уровни для предпросмотра темы — не связаны с потоком. */
+  protected readonly previewLevels: readonly QualityInterface[] = [
+    { id: '360', label: '360p' },
+    { id: '720', label: '720p' },
+    { id: '1080', label: '1080p' },
+  ];
+
+  /** Выбранный уровень в предпросмотре. */
+  protected readonly previewLevel = signal<string | null>('720');
+
+  /** Дефолты CSS-переменных компонента — публичный контракт. */
+  protected readonly cssVariables = [
+    { name: '--ngx-quality-bg', defaultValue: 'rgba(0, 0, 0, 0.6)' },
+    { name: '--ngx-quality-color', defaultValue: '#ffffff' },
+    {
+      name: '--ngx-quality-border-color',
+      defaultValue: 'rgba(255, 255, 255, 0.3)',
+    },
+    { name: '--ngx-quality-border-radius', defaultValue: '0.375rem' },
+    { name: '--ngx-quality-padding', defaultValue: '0.25rem 0.5rem' },
+    { name: '--ngx-quality-font-size', defaultValue: '0.8125rem' },
+    { name: '--ngx-quality-focus-color', defaultValue: '#60a5fa' },
+    { name: '--ngx-quality-transition', defaultValue: '0.15s ease' },
+  ] as const;
 
   protected readonly responsibilities = [
     'Компонент показывает Auto и levels в заданном порядке и эмитит id выбора или null.',
@@ -193,6 +245,10 @@ export class DashPlayerComponent {
 // customClass вешается на <ngx-quality-switcher>, не на внутренний <select>.
 // ariaLabel уходит в aria-label нативного селекта.`,
   } as const;
+
+  protected selectTheme(id: QualityThemeId): void {
+    this.theme.set(id);
+  }
 
   protected onLevelsChange(levels: readonly QualityInterface[]): void {
     this.levels.set(levels);

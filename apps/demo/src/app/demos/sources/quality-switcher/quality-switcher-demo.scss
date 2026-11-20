@@ -86,6 +86,20 @@
   --ngx-quality-focus-color: #34d399;
 }
 
+.demo-quality--compact {
+  --ngx-quality-padding: 0.2rem 0.5rem;
+  --ngx-quality-border-radius: 0.25rem;
+  --ngx-quality-font-size: 0.75rem;
+}
+
+.demo-quality--light {
+  --ngx-quality-bg: #f8fafc;
+  --ngx-quality-color: #0f172a;
+  --ngx-quality-border-color: #cbd5e1;
+  --ngx-quality-border-radius: 0.5rem;
+  --ngx-quality-focus-color: #2563eb;
+}
+
 .demo-status {
   display: flex;
   flex-wrap: wrap;
@@ -145,7 +159,8 @@
 .demo-status__value code,
 .demo-error code,
 .brick__table code,
-.example__text code {
+.example__text code,
+.style-lab__class {
   padding: 0.1rem 0.3rem;
   border-radius: 0.25rem;
   background: #1f2937;
@@ -196,6 +211,37 @@
 .brick__table td {
   color: #d1d5db;
   line-height: 1.5;
+}
+
+.style-lab {
+  margin-top: 1.25rem;
+}
+
+.style-lab__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.style-lab__body {
+  margin-top: 0;
+}
+
+.style-lab__preview {
+  align-items: flex-start;
+}
+
+.style-lab__label {
+  color: #6b7280;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.style-lab__class {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .examples {

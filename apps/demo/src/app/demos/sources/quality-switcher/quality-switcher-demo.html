@@ -37,7 +37,7 @@
       <span class="demo-field__label">Качество</span>
 
       <ngx-quality-switcher
-        customClass="demo-quality"
+        [customClass]="qualityClass()"
         [levels]="levels()"
         [level]="level()"
         (levelChange)="level.set($event)"
@@ -153,10 +153,11 @@
           </tr>
           <tr>
             <td><code>customClass</code></td>
-            <td><code>demo-quality</code></td>
+            <td><code>{{ qualityClass() || '—' }}</code></td>
             <td>
               класс на хосте через <code>classList</code> +
-              <code>effect()</code>, ручные классы не затираются
+              <code>effect()</code>, ручные классы не затираются; темы ниже
+              меняют CSS-переменные
             </td>
           </tr>
           <tr>
@@ -190,6 +191,77 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <section class="example style-lab">
+    <h3 class="brick__title">Кастомизация стилей</h3>
+
+    <p class="example__text">
+      CSS-переменные — публичный контракт с дефолтами в <code>:host</code>.
+      Переключатель меняет класс в <code>customClass</code> и у живого селекта,
+      и у предпросмотра: класс вешается на хост
+      <code>&lt;ngx-quality-switcher&gt;</code>, а внутри остаётся тот же
+      нативный <code>&lt;select&gt;</code>. Классы, заданные вручную, не
+      затираются.
+    </p>
+
+    <div
+      class="style-lab__controls"
+      role="group"
+      aria-label="Тема оформления селекта качества"
+    >
+      @for (item of themes; track item.id) {
+      <button
+        type="button"
+        class="demo-toggle"
+        [class.demo-toggle--active]="item.id === theme()"
+        [attr.aria-pressed]="item.id === theme()"
+        (click)="selectTheme(item.id)"
+      >
+        {{ item.label }}
+      </button>
+      }
+    </div>
+
+    <div class="examples style-lab__body">
+      <div class="example style-lab__preview">
+        <span class="style-lab__label">Предпросмотр</span>
+
+        <ngx-quality-switcher
+          [customClass]="qualityClass()"
+          [levels]="previewLevels"
+          [level]="previewLevel()"
+          (levelChange)="previewLevel.set($event)"
+        />
+
+        <code class="style-lab__class"
+          >{{ qualityClass() || 'customClass не задан' }}</code
+        >
+      </div>
+
+      <div class="example style-lab__vars">
+        <span class="style-lab__label">Дефолты в <code>:host</code></span>
+
+        <div class="brick__table-wrap">
+          <table class="brick__table">
+            <thead>
+              <tr>
+                <th scope="col">Переменная</th>
+                <th scope="col">По умолчанию</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (variable of cssVariables; track variable.name) {
+              <tr>
+                <td><code>{{ variable.name }}</code></td>
+                <td><code>{{ variable.defaultValue }}</code></td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </section>
 
