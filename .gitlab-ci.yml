@@ -1,5 +1,11 @@
+# Одна джоба — одна команда. Порядок задан стадиями:
+#   quick  (параллельно): audit, format — дешёвые, падают первыми
+#   verify (параллельно): lint, build  — дорогие, идут после quick
+# Команды — npm-скрипты из package.json, те же, что в GitHub Actions.
+
 stages:
-  - check
+  - quick
+  - verify
 
 default:
   image: node:22
@@ -11,14 +17,28 @@ default:
     paths:
       - .npm/
       - .nx/cache/
-
-verify:
-  stage: check
-  script:
+  before_script:
     - npm ci --cache .npm --prefer-offline --no-audit --no-fund
-    # Проверки те же, что в GitHub Actions: скрипты лежат в package.json.
+
+audit:
+  stage: quick
+  script:
     - npm run ci:audit
-    - npm run ci:verify
+
+format:
+  stage: quick
+  script:
+    - npm run ci:format
+
+lint:
+  stage: verify
+  script:
+    - npm run ci:lint
+
+build:
+  stage: verify
+  script:
+    - npm run ci:build
   artifacts:
     paths:
       - dist/

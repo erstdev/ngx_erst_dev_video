@@ -16,8 +16,11 @@
     "format:write": "nx format:write",
     "verify": "nx run-many --target=lint,build --all",
     "verify:affected": "nx affected --target=lint,build",
-    "ci:verify": "nx format:check --all && nx run-many --target=lint,build --all",
+    "ci:format": "nx format:check --all",
+    "ci:lint": "nx run-many --target=lint --all",
+    "ci:build": "nx run-many --target=build --all",
     "ci:audit": "npm audit --audit-level=low",
+    "ci:verify": "npm run ci:format && npm run ci:lint && npm run ci:build",
     "prepare": "husky",
     "postinstall": "patch-package"
   },

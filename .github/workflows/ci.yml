@@ -14,8 +14,56 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Одна джоба — одна команда. Порядок задан `needs`:
+#   audit ─┐
+#          ├─→ lint
+#   format ┘   → build
+# audit и format дешёвые (~2 c) и падают первыми; lint и build дорогие и идут
+# параллельно. Команды — npm-скрипты из package.json, те же, что в GitLab CI.
 jobs:
-  verify:
+  audit:
+    name: audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: npm audit (любая severity)
+        run: npm run ci:audit
+
+  format:
+    name: format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: nx format:check --all
+        run: npm run ci:format
+
+  lint:
+    name: lint
+    needs: [audit, format]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -31,12 +79,29 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
-      # Проверки те же, что в GitLab CI: скрипты лежат в package.json.
-      - name: Audit (любая severity)
-        run: npm run ci:audit
+      - name: nx run-many -t lint
+        run: npm run ci:lint
 
-      - name: Verify (format + lint + build)
-        run: npm run ci:verify
+  build:
+    name: build
+    needs: [audit, format]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: nx run-many -t build
+        run: npm run ci:build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
