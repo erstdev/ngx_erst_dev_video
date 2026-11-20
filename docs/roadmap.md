@@ -64,15 +64,17 @@
 Оба кирпича готовы, Спринт 5 завершён. Следующим идёт Спринт 6
 (`ngx-video-sources`). Публикация — в финальной фазе после всех спринтов.
 
-### 🚧 Спринт 6: ngx-video-sources (2 недели) — в работе
+### ✅ Спринт 6: ngx-video-sources (2 недели) — завершён
 
 - [x] `HlsSourceDirective` (hls.js)
 - [x] `DashSourceDirective` (dash.js)
-- [ ] `QualitySwitcherComponent`
+- [x] `QualitySwitcherComponent`
 
-Пакет `sources` создан, `HlsSourceDirective` и `DashSourceDirective` готовы,
-демо `/sources/hls-source` и `/sources/dash-source` — `ready`. Следующим идёт
-`QualitySwitcherComponent`. Публикация — в финальной фазе после всех спринтов.
+Все три кирпича готовы, пакет `sources` собран полностью: директивы доставляют
+поток и отдают уровни, компонент выбирает качество. Демо `/sources/hls-source`,
+`/sources/dash-source` и `/sources/quality-switcher` — `ready`. Следующим идёт
+Спринт 7 — `ngx-video-capture` (PRO); публикация — в финальной фазе после всех
+спринтов.
 
 ### ⏳ Спринт 7: ngx-video-capture — PRO (4 недели)
 
@@ -240,16 +242,16 @@
 | 17  | `SubtitleRendererComponent`   | extras   | ★★★★      | ✅     |
 | 18  | `HlsSourceDirective`          | sources  | ★★★       | ✅     |
 | 19  | `DashSourceDirective`         | sources  | ★★★       | ✅     |
-| 20  | `QualitySwitcherComponent`    | sources  | ★★★★      | ⏳     |
+| 20  | `QualitySwitcherComponent`    | sources  | ★★★★      | ✅     |
 | 21  | `CaptureService`              | capture  | ★★★       | 💰     |
 | 22  | `ScreenshotButtonComponent`   | capture  | ★★        | 💰     |
 | 23  | `ClipRecorderComponent`       | capture  | ★★★★      | 💰     |
 
 **Легенда:** ✅ готово · 🚧 в работе · ⏳ запланировано · 💰 PRO (платный)
 
-> Все кирпичи `core`, `controls`, `timeline` и `extras` реализованы и проверены;
-> публикация **всех** пакетов отложена до завершения всех спринтов (см. раздел 7,
-> «Финальная публикация»).
+> Все кирпичи `core`, `controls`, `timeline`, `extras` и `sources` реализованы и
+> проверены; публикация **всех** пакетов отложена до завершения всех спринтов
+> (см. раздел 7, «Финальная публикация»).
 
 ---
 

@@ -1,0 +1,43 @@
+:host {
+  --ngx-quality-bg: rgba(0, 0, 0, 0.6);
+  --ngx-quality-color: #ffffff;
+  --ngx-quality-border-color: rgba(255, 255, 255, 0.3);
+  --ngx-quality-border-radius: 0.375rem;
+  --ngx-quality-padding: 0.25rem 0.5rem;
+  --ngx-quality-font-size: 0.8125rem;
+  --ngx-quality-focus-color: #60a5fa;
+  --ngx-quality-transition: 0.15s ease;
+
+  display: inline-flex;
+  align-items: center;
+}
+
+.ngx-quality-switcher__select {
+  max-width: 100%;
+  padding: var(--ngx-quality-padding);
+  border: 1px solid var(--ngx-quality-border-color);
+  border-radius: var(--ngx-quality-border-radius);
+  background: var(--ngx-quality-bg);
+  color: var(--ngx-quality-color);
+  font: inherit;
+  font-size: var(--ngx-quality-font-size);
+  cursor: pointer;
+  transition:
+    border-color var(--ngx-quality-transition),
+    background var(--ngx-quality-transition);
+}
+
+.ngx-quality-switcher__select:hover {
+  border-color: var(--ngx-quality-color);
+}
+
+.ngx-quality-switcher__select:focus-visible {
+  outline: 2px solid var(--ngx-quality-focus-color);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-quality-switcher__select {
+    transition: none;
+  }
+}

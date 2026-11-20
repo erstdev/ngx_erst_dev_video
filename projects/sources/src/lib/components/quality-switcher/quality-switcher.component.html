@@ -1,0 +1,15 @@
+<select
+  class="ngx-quality-switcher__select"
+  [attr.aria-label]="ariaLabel()"
+  (change)="onChange($event)"
+>
+  <option [value]="autoValue" [selected]="selectedLevel() === autoValue">
+    {{ autoLabel }}
+  </option>
+
+  @for (item of levels(); track $index) {
+    <option [value]="item.id" [selected]="item.id === selectedLevel()">
+      {{ item.label }}
+    </option>
+  }
+</select>

@@ -178,7 +178,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'quality-switcher',
         path: 'sources/quality-switcher',
         title: 'QualitySwitcherComponent',
-        status: 'planned',
+        status: 'ready',
       },
     ],
   },

@@ -1,21 +1,246 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 
+import type { QualityInterface, VideoError } from '@erst_dev/ngx-video-core';
+import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
+import {
+  HlsSourceDirective,
+  QualitySwitcherComponent,
+} from '@erst_dev/ngx-video-sources';
+
+import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
 import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
 
 /**
  * Демо для QualitySwitcherComponent.
  *
- * Живой пример появится, когда кирпич будет реализован в @erst_dev/ngx-video-sources.
+ * Живой HLS-плеер: директива доставляет поток и отдаёт уровни, компонент
+ * показывает селект и эмитит `id` выбора. Применяет качество директива через
+ * вход `level`, а фактический уровень приходит из её `levelChange`.
  */
 @Component({
   selector: 'app-quality-switcher-demo',
-  imports: [DemoShellComponent],
+  imports: [
+    CodeSnippetComponent,
+    DemoShellComponent,
+    HlsSourceDirective,
+    QualitySwitcherComponent,
+    VideoDirective,
+  ],
+  providers: [VideoService],
   templateUrl: './quality-switcher-demo.html',
+  styleUrl: './quality-switcher-demo.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QualitySwitcherDemo {
+  protected readonly video = inject(VideoService);
+
+  /** Публичный HLS-манифест с несколькими уровнями качества. */
+  protected readonly src = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
+
+  /** Уровни, которые директива отдала после `MANIFEST_PARSED`. */
+  protected readonly levels = signal<readonly QualityInterface[]>([]);
+
+  /** `id` для компонента и входа `level` директивы; `null` — Auto. */
+  protected readonly level = signal<string | null>(null);
+
+  /** Фактический уровень из `levelChange` директивы — для подписи. */
+  protected readonly currentLevel = signal<QualityInterface | null>(null);
+
+  /** Последняя ошибка директивы. */
+  protected readonly error = signal<VideoError | null>(null);
+
+  protected readonly enabled = signal(true);
+
+  protected readonly autoplay = signal(false);
+
+  protected readonly playLabel = computed(() =>
+    this.video.state() === 'playing' || this.video.state() === 'buffering'
+      ? 'Пауза'
+      : 'Play',
+  );
+
+  protected readonly currentLevelLabel = computed(
+    () => this.currentLevel()?.label ?? 'auto',
+  );
+
   protected readonly responsibilities = [
-    'Входы: qualities, activeId, customClass; выход: qualityChange.',
-    'Тип QualityInterface объявлен в core.',
-    'Не парсит манифесты и не хранит состояние.',
+    'Компонент показывает Auto и levels в заданном порядке и эмитит id выбора или null.',
+    'Он не парсит манифесты, не хранит состояние и не применяет качество.',
+    'Качество применяет директива через [level], фактический уровень отдаёт её (levelChange).',
   ];
+
+  /** Рецепты для блоков «Код примера». */
+  protected readonly code = {
+    basic: `// player.component.ts
+import { signal } from '@angular/core';
+import type { QualityInterface } from '@erst_dev/ngx-video-core';
+import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
+import {
+  HlsSourceDirective,
+  QualitySwitcherComponent,
+} from '@erst_dev/ngx-video-sources';
+
+@Component({
+  imports: [VideoDirective, HlsSourceDirective, QualitySwitcherComponent],
+  providers: [VideoService],
+  template: \`
+    <video
+      ngxVideo
+      [ngxHlsSource]="src"
+      [level]="level()"
+      (levelsChange)="onLevelsChange($event)"
+      (levelChange)="onLevelChange($event)"
+      playsinline
+    ></video>
+
+    <ngx-quality-switcher
+      [levels]="levels()"
+      [level]="level()"
+      (levelChange)="level.set($event)"
+    />
+  \`,
+})
+export class PlayerComponent {
+  readonly src = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
+
+  // id для компонента и входа level директивы; null — Auto.
+  readonly level = signal<string | null>(null);
+
+  // Уровни приходят из levelsChange директивы.
+  readonly levels = signal<readonly QualityInterface[]>([]);
+
+  // Фактический уровень из levelChange директивы — для подписи.
+  readonly currentLevel = signal<QualityInterface | null>(null);
+
+  protected onLevelsChange(levels: readonly QualityInterface[]): void {
+    this.levels.set(levels);
+
+    // Выбранный id исчез из списка — возвращаемся к Auto.
+    if (this.level() !== null && !levels.some((item) => item.id === this.level())) {
+      this.level.set(null);
+    }
+  }
+
+  protected onLevelChange(level: QualityInterface | null): void {
+    this.currentLevel.set(level);
+  }
+}`,
+
+    dash: `// player.component.ts
+import {
+  DashSourceDirective,
+  QualitySwitcherComponent,
+} from '@erst_dev/ngx-video-sources';
+
+@Component({
+  imports: [VideoDirective, DashSourceDirective, QualitySwitcherComponent],
+  // ...
+})
+export class DashPlayerComponent {
+  readonly dashSrc = 'https://example.com/stream.mpd';
+  // levels, level и currentLevel — как в HLS-примере.
+}
+
+<!-- player.component.html -->
+<video
+  ngxVideo
+  [ngxDashSource]="dashSrc"
+  [level]="level()"
+  (levelsChange)="onLevelsChange($event)"
+  (levelChange)="onLevelChange($event)"
+  playsinline
+></video>
+
+<ngx-quality-switcher
+  [levels]="levels()"
+  [level]="level()"
+  (levelChange)="level.set($event)"
+/>
+
+// Контракт компонента не зависит от источника:
+//   levelChange компонента — string | null (id уровня);
+//   levelChange директивы  — QualityInterface | null (фактический уровень).
+// DASH без MSE не играется: levelsChange не эмитится, список остаётся пустым.`,
+
+    styling: `<!-- player.component.html -->
+<ngx-quality-switcher
+  customClass="player-quality"
+  ariaLabel="Выберите качество видео"
+  [levels]="levels()"
+  [level]="level()"
+  (levelChange)="level.set($event)"
+/>
+
+/* player.component.scss — scoped-стили, без ::ng-deep */
+.player-quality {
+  --ngx-quality-bg: #111827;
+  --ngx-quality-color: #e5e7eb;
+  --ngx-quality-border-color: #374151;
+  --ngx-quality-border-radius: 999px;
+  --ngx-quality-padding: 0.375rem 0.75rem;
+  --ngx-quality-font-size: 0.875rem;
+  --ngx-quality-focus-color: #34d399;
+  --ngx-quality-transition: 0.2s ease;
+}
+
+// CSS-переменные — публичный контракт с дефолтами в :host.
+// customClass вешается на <ngx-quality-switcher>, не на внутренний <select>.
+// ariaLabel уходит в aria-label нативного селекта.`,
+  } as const;
+
+  protected onLevelsChange(levels: readonly QualityInterface[]): void {
+    this.levels.set(levels);
+
+    const selected = this.level();
+
+    if (selected !== null && !levels.some((item) => item.id === selected)) {
+      this.level.set(null);
+    }
+  }
+
+  protected onLevelChange(level: QualityInterface | null): void {
+    this.currentLevel.set(level);
+  }
+
+  protected onError(error: VideoError | Event): void {
+    // На `<video>` имя выхода `error` совпадает с нативным событием:
+    // Angular позовёт обработчик и для него. Отличаем по полям code/message.
+    if (!isVideoError(error)) {
+      return;
+    }
+
+    this.error.set(error);
+  }
+
+  protected togglePlay(): void {
+    this.video.toggle();
+  }
+
+  protected toggleEnabled(): void {
+    this.error.set(null);
+    this.enabled.update((value) => !value);
+  }
+
+  protected toggleAutoplay(): void {
+    this.autoplay.update((value) => !value);
+  }
+}
+
+/** Отличает `VideoError` директивы от нативного события `error` на `<video>`. */
+function isVideoError(value: unknown): value is VideoError {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+
+  const candidate = value as { code?: unknown; message?: unknown };
+
+  return (
+    typeof candidate.code === 'string' && typeof candidate.message === 'string'
+  );
 }

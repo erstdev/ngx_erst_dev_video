@@ -2,11 +2,229 @@
   title="QualitySwitcherComponent"
   pkg="@erst_dev/ngx-video-sources"
   selector="ngx-quality-switcher"
-  status="planned"
-  description="Выбор качества видео из списка QualityInterface: показывает доступные уровни и генерирует событие выбора. Манифесты не парсит и текущее качество не хранит."
+  status="ready"
+  description="Presentational-селект качества на нативном <select>: показывает Auto и уровни из levels в заданном порядке, эмитит id выбора или null для Auto. Манифесты не парсит, состояние не хранит и качество не применяет."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-hint">
+    Компонент только выбирает <code>id</code>: применение качества делает
+    директива через <code>[level]</code>, а фактический уровень приходит из её
+    <code>(levelChange)</code>. Пока идёт переключение, подпись может отставать
+    от селекта — это поведение источника, а не компонента.
   </p>
+
+  <div class="player">
+    <video
+      ngxVideo
+      class="player__video"
+      [ngxHlsSource]="src"
+      [autoplay]="autoplay()"
+      [enabled]="enabled()"
+      [level]="level()"
+      (levelsChange)="onLevelsChange($event)"
+      (levelChange)="onLevelChange($event)"
+      (error)="onError($event)"
+      playsinline
+    ></video>
+  </div>
+
+  <div class="demo-toolbar">
+    <button type="button" class="demo-toggle" (click)="togglePlay()">
+      {{ playLabel() }}
+    </button>
+
+    <div class="demo-field">
+      <span class="demo-field__label">Качество</span>
+
+      <ngx-quality-switcher
+        customClass="demo-quality"
+        [levels]="levels()"
+        [level]="level()"
+        (levelChange)="level.set($event)"
+      />
+    </div>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="enabled()"
+      [attr.aria-pressed]="enabled()"
+      (click)="toggleEnabled()"
+    >
+      Поток: {{ enabled() ? 'вкл' : 'выкл' }}
+    </button>
+
+    <button
+      type="button"
+      class="demo-toggle"
+      [class.demo-toggle--active]="autoplay()"
+      [attr.aria-pressed]="autoplay()"
+      (click)="toggleAutoplay()"
+    >
+      autoplay: {{ autoplay() ? 'вкл' : 'выкл' }}
+    </button>
+  </div>
+
+  <dl class="demo-status">
+    <div class="demo-status__item">
+      <dt class="demo-status__label">state</dt>
+      <dd class="demo-status__value">
+        <code>{{ video.state() }}</code>
+      </dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">currentTime</dt>
+      <dd class="demo-status__value">{{ video.time().toFixed(1) }} с</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">levels</dt>
+      <dd class="demo-status__value">{{ levels().length }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">currentLevel</dt>
+      <dd class="demo-status__value">{{ currentLevelLabel() }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">selected id</dt>
+      <dd class="demo-status__value">
+        <code>{{ level() ?? 'auto' }}</code>
+      </dd>
+    </div>
+  </dl>
+
+  @if (error(); as error) {
+  <p class="demo-error" role="alert">
+    <strong>{{ error.message }}</strong>
+    <span class="demo-error__code">code: <code>{{ error.code }}</code></span>
+  </p>
+  }
+
+  <p class="demo-note">
+    <code>levelsChange</code> приносит уровни без «auto»,
+    <code>[level]</code> применяет выбранный <code>id</code>, а
+    <code>levelChange</code> директивы сообщает фактический уровень. Если
+    выбранный <code>id</code> исчез из нового списка, демо сбрасывает
+    <code>level</code> в <code>null</code>. Пустой <code>levels</code> оставляет
+    в селекте один пункт Auto. Компонент не грузит манифесты и не вызывает
+    медиа-API: <code>autoplay</code>, <code>enabled</code> и ошибки — это входы
+    и выходы директивы.
+  </p>
+
+  <section class="brick">
+    <h3 class="brick__title">Что делает компонент</h3>
+
+    <div class="brick__table-wrap">
+      <table class="brick__table">
+        <thead>
+          <tr>
+            <th scope="col">Что</th>
+            <th scope="col">Значение в демо</th>
+            <th scope="col">Поведение</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>[levels]</code></td>
+            <td>{{ levels().length }} уровней из директивы</td>
+            <td>
+              порядок сохраняется; нет сортировки, дедупликации, фильтрации и
+              добавления отсутствующего уровня
+            </td>
+          </tr>
+          <tr>
+            <td><code>[level]</code></td>
+            <td><code>{{ level() ?? 'auto' }}</code></td>
+            <td>
+              <code>id</code> выбранного уровня; <code>null</code> — Auto;
+              неизвестный <code>id</code> показывает Auto и ничего не эмитит
+            </td>
+          </tr>
+          <tr>
+            <td><code>(levelChange)</code></td>
+            <td>эмитит <code>string | null</code></td>
+            <td>
+              <code>''</code> → <code>null</code>, иначе
+              <code>id</code> строкой; только на нативное <code>change</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>customClass</code></td>
+            <td><code>demo-quality</code></td>
+            <td>
+              класс на хосте через <code>classList</code> +
+              <code>effect()</code>, ручные классы не затираются
+            </td>
+          </tr>
+          <tr>
+            <td><code>ariaLabel</code></td>
+            <td>по умолчанию «Качество видео»</td>
+            <td>уходит в <code>aria-label</code> нативного селекта</td>
+          </tr>
+          <tr>
+            <td>CSS-переменные</td>
+            <td>8 токенов <code>--ngx-quality-*</code></td>
+            <td>
+              дефолты в <code>:host</code>; переопределяются на элементе или
+              через <code>customClass</code>
+            </td>
+          </tr>
+          <tr>
+            <td>Auto</td>
+            <td>первый пункт, значение <code>''</code></td>
+            <td>
+              <code>null</code> во входе и выходе; в списке уровней «auto» нет
+            </td>
+          </tr>
+          <tr>
+            <td>Состояние и манифесты</td>
+            <td>нет</td>
+            <td>
+              компонент не хранит выбранное значение, не парсит манифесты, не
+              использует <code>fetch</code>/<code>HttpClient</code>,
+              <code>VideoService</code> и медиа-API
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Базовая разметка с HLS</h3>
+      <p class="example__text">
+        Уровни приходят из <code>levelsChange</code> директивы, выбор уходит в
+        <code>[level]</code>, а <code>levelChange</code> компонента отдаёт
+        <code>id</code> или <code>null</code>. «Auto» — это <code>null</code>.
+      </p>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Интеграция с DASH</h3>
+      <p class="example__text">
+        Контракт компонента не зависит от источника: с
+        <code>DashSourceDirective</code> меняется только директива. Помните о
+        разных типах: у компонента <code>levelChange</code> —
+        <code>string | null</code>, у директивы —
+        <code>QualityInterface | null</code>.
+      </p>
+      <app-code-snippet [code]="code.dash" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Стилизация и доступность</h3>
+      <p class="example__text">
+        Вся кастомизация — CSS-переменные <code>--ngx-quality-*</code> и
+        <code>customClass</code> на хосте; <code>ng-template</code> не нужен,
+        внутренность — нативный <code>&lt;select&gt;</code>.
+        <code>ariaLabel</code> задаёт доступное имя.
+      </p>
+      <app-code-snippet [code]="code.styling" />
+    </section>
+  </div>
 </app-demo-shell>

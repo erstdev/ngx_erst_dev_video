@@ -10,15 +10,14 @@
 Подробная документация каждого готового кирпича лежит рядом с исходниками. На npm
 показывается только README пакета, поэтому ссылки ведут на GitHub.
 
-| Кирпич                     | Селектор               | Статус   | Что решает                            | Документация                                                                                                                  |
-| -------------------------- | ---------------------- | -------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `HlsSourceDirective`       | `ngxHlsSource`         | ✅ готов | HLS-поток через hls.js или native HLS | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/hls-source/README.md)  |
-| `DashSourceDirective`      | `ngxDashSource`        | ✅ готов | DASH-поток через dash.js (MSE-only)   | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/dash-source/README.md) |
-| `QualitySwitcherComponent` | `ngx-quality-switcher` | ⏳ план  | Выбор качества видео                  | —                                                                                                                             |
+| Кирпич                     | Селектор               | Статус   | Что решает                            | Документация                                                                                                                       |
+| -------------------------- | ---------------------- | -------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `HlsSourceDirective`       | `ngxHlsSource`         | ✅ готов | HLS-поток через hls.js или native HLS | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/hls-source/README.md)       |
+| `DashSourceDirective`      | `ngxDashSource`        | ✅ готов | DASH-поток через dash.js (MSE-only)   | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/dash-source/README.md)      |
+| `QualitySwitcherComponent` | `ngx-quality-switcher` | ✅ готов | Выбор качества видео                  | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/components/quality-switcher/README.md) |
 
-Следующим шагом Спринта 6 идёт `QualitySwitcherComponent`: публичный API
-`HlsSourceDirective` и `DashSourceDirective` (`QualityInterface`, `id` уровня,
-`levelsChange`/`levelChange`) под него уже рассчитан.
+Пакет `sources` собран полностью: директивы доставляют поток и отдают уровни,
+компонент выбирает качество, а применение выбора остаётся за родителем.
 
 ## Требования
 
@@ -80,6 +79,41 @@ export class PlayerComponent {
 ```html
 <video ngxVideo [ngxDashSource]="dashSrc" [level]="level()" (levelsChange)="onLevelsChange($event)" (levelChange)="onLevelChange($event)" playsinline></video>
 ```
+
+## Выбор качества
+
+`QualitySwitcherComponent` — presentational-селект на нативном `<select>`: он
+показывает «Auto» и уровни из `levels`, а на выбор эмитит `id` уровня или `null`
+для Auto. Манифесты он не парсит, состояние не хранит и качество не применяет.
+
+```html
+<video ngxVideo [ngxHlsSource]="src" [level]="level()" (levelsChange)="onLevelsChange($event)" (levelChange)="onLevelChange($event)" playsinline></video>
+
+<ngx-quality-switcher [levels]="levels()" [level]="level()" (levelChange)="level.set($event)" />
+```
+
+```typescript
+readonly levels = signal<readonly QualityInterface[]>([]);
+readonly level = signal<string | null>(null);
+readonly currentLevel = signal<QualityInterface | null>(null);
+
+protected onLevelsChange(levels: readonly QualityInterface[]): void {
+  this.levels.set(levels);
+
+  if (this.level() !== null && !levels.some((item) => item.id === this.level())) {
+    this.level.set(null);
+  }
+}
+
+protected onLevelChange(level: QualityInterface | null): void {
+  // `levelChange` директивы отдаёт QualityInterface | null,
+  // а `levelChange` компонента — string | null: это разные контракты.
+  this.currentLevel.set(level);
+}
+```
+
+Полная документация — в
+[README кирпича](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/components/quality-switcher/README.md).
 
 ## Совместимость
 
