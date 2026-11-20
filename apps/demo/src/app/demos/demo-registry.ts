@@ -204,7 +204,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'clip-recorder',
         path: 'capture/clip-recorder',
         title: 'ClipRecorderComponent',
-        status: 'planned',
+        status: 'ready',
       },
     ],
   },

@@ -3,21 +3,23 @@
 Захват кадров, запись фрагментов и GIF из уже играющего `<video>` для плеера
 `ngx-video`. `CaptureService` получает нативный `HTMLVideoElement`, снимает данные
 через Canvas и `MediaRecorder` и возвращает `Blob` или объект записи, а
-`ScreenshotButtonComponent` — готовая кнопка скриншота со скачиванием файла.
+`ScreenshotButtonComponent` и `ClipRecorderComponent` — готовые кирпичи поверх
+него: кнопка скриншота со скачиванием файла и UI записи клипа с таймером.
 
 Пакет **PRO**: распространяется отдельно от бесплатных пакетов экосистемы.
 
 ## Кирпичи
 
-| Кирпич                      | Что решает                              | Статус   |
-| --------------------------- | --------------------------------------- | -------- |
-| `CaptureService`            | Кадр, клип и GIF без UI                 | ✅ готов |
-| `ScreenshotButtonComponent` | Кнопка скриншота и скачивание файла     | ✅ готов |
-| `ClipRecorderComponent`     | Интерфейс записи клипа: кнопки и таймер | ⏳ план  |
+| Кирпич                      | Что решает                          | Статус   |
+| --------------------------- | ----------------------------------- | -------- |
+| `CaptureService`            | Кадр, клип и GIF без UI             | ✅ готов |
+| `ScreenshotButtonComponent` | Кнопка скриншота и скачивание файла | ✅ готов |
+| `ClipRecorderComponent`     | UI записи клипа: кнопки и таймер    | ✅ готов |
 
-`CaptureService` и `ScreenshotButtonComponent` готовы: сервис снимает кадр и
-отдаёт `Blob`, кнопка вызывает его по клику и скачивает файл. Следующим шагом
-идёт `ClipRecorderComponent` — интерфейс записи клипа поверх того же сервиса.
+Все три кирпича пакета готовы: сервис снимает кадр, пишет клип и GIF, кнопка
+скриншота вызывает его по клику и скачивает файл, а `ClipRecorderComponent`
+управляет UI записи клипа и отдаёт готовый `Blob`. Следующим шагом идёт лендинг
+пакета; публикация — в финальной фазе после всех спринтов.
 
 ## Требования
 
@@ -133,6 +135,26 @@ recording.cancel(); // отмена: ожидающий stop() отклонит�
 
 Подробно — в
 [README кирпича](src/lib/components/screenshot-button/README.md).
+
+## ClipRecorderComponent
+
+UI записи клипа: кнопки «Начать запись» и «Остановить», таймер, индикатор и
+автоматическая остановка по `maxDuration`. Компонент вызывает
+`CaptureService.recordClip()`, владеет полученным `ClipRecording` и отдаёт
+готовый `Blob` через `recordStop`; плеером он не управляет и файлы не скачивает.
+
+```html
+<video #video ngxVideo [src]="src" crossorigin="anonymous" playsinline></video>
+
+<ngx-clip-recorder [video]="videoElement()" [maxDuration]="30" (recordStart)="onRecordStart()" (recordStop)="onRecordStop($event)" (recordError)="onError($event)" />
+```
+
+`maxDuration` — секунды (`0` — без ограничения); ошибки приходят в `recordError`,
+а `maxDuration`, `indicatorTemplate`, CSS-переменные и `customClass` настраивают
+поведение и вид. SSR безопасен: на верхнем уровне модуля нет DOM и
+`MediaRecorder`.
+
+Подробно — в [README кирпича](src/lib/components/clip-recorder/README.md).
 
 ## Методы
 

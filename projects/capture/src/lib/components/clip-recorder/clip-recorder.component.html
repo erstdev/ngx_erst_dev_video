@@ -1,0 +1,43 @@
+<div class="ngx-clip-recorder" role="group" [attr.aria-label]="groupLabel()">
+  <div class="ngx-clip-recorder__actions">
+    <button
+      type="button"
+      class="ngx-clip-recorder__button ngx-clip-recorder__button--start"
+      [disabled]="isStartDisabled()"
+      [attr.aria-label]="labels.startAria"
+      (click)="onStart()"
+    >
+      {{ labels.start }}
+    </button>
+
+    <button
+      type="button"
+      class="ngx-clip-recorder__button ngx-clip-recorder__button--stop"
+      [disabled]="isStopDisabled()"
+      [attr.aria-label]="labels.stopAria"
+      (click)="onStop()"
+    >
+      {{ labels.stop }}
+    </button>
+  </div>
+
+  <span class="ngx-clip-recorder__indicator">
+    @if (indicatorTemplate(); as indicator) {
+      <ng-container
+        [ngTemplateOutlet]="indicator"
+        [ngTemplateOutletContext]="indicatorContext()"
+      />
+    } @else {
+      <span
+        class="ngx-clip-recorder__dot"
+        [class.ngx-clip-recorder__dot--recording]="indicatorContext().recording"
+        [class.ngx-clip-recorder__dot--stopping]="indicatorContext().stopping"
+        aria-hidden="true"
+      ></span>
+    }
+  </span>
+
+  <span class="ngx-clip-recorder__timer" role="timer" aria-live="off">
+    {{ timerLabel() }}
+  </span>
+</div>

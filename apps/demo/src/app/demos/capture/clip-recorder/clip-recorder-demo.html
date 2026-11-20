@@ -2,12 +2,237 @@
   title="ClipRecorderComponent"
   pkg="@erst_dev/ngx-video-capture"
   selector="ngx-clip-recorder"
-  status="planned"
+  status="ready"
   [pro]="true"
-  description="Интерфейс записи клипа: кнопки «Начать» и «Остановить», таймер и индикация процесса. Кодирование делегирует CaptureService."
+  description="UI записи клипа: кнопки «Начать запись» и «Остановить», таймер, индикатор и лимит maxDuration. Запись выполняет CaptureService.recordClip(), компонент владеет ClipRecording и отдаёт готовый Blob; плеером он не управляет и файл не скачивает."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-note">
+    Запись выполняет <code>CaptureService.recordClip()</code>: компонент
+    передаёт ему нативный <code>HTMLVideoElement</code> и настройки, получает
+    <code>ClipRecording</code>, владеет им и отдаёт готовый
+    <code>Blob</code> через <code>recordStop</code>. Воспроизведением управляет
+    <code>VideoService</code> — кнопка Play/Pause вызывает
+    <code>toggle()</code>, а компонент не трогает <code>play()</code>,
+    <code>pause()</code> и <code>seek()</code>. Файл скачивает демо, а не
+    компонент.
   </p>
+
+  <div class="player">
+    <video
+      #videoEl
+      ngxVideo
+      class="player__video"
+      [src]="src"
+      crossorigin="anonymous"
+      playsinline
+      loop
+    ></video>
+  </div>
+
+  <div class="demo-toolbar">
+    <button type="button" class="demo-toggle" (click)="togglePlay()">
+      {{ playLabel() }}
+    </button>
+
+    <ngx-clip-recorder
+      [video]="videoElement()"
+      [maxDuration]="maxDuration()"
+      (recordStart)="onRecordStart()"
+      (recordStop)="onRecordStop($event)"
+      (recordError)="onError($event)"
+    />
+
+    <div class="demo-group" role="group" aria-label="Лимит записи">
+      @for (duration of maxDurations; track duration) {
+      <button
+        type="button"
+        class="demo-toggle"
+        [class.demo-toggle--active]="maxDuration() === duration"
+        [attr.aria-pressed]="maxDuration() === duration"
+        (click)="setMaxDuration(duration)"
+      >
+        {{ duration }} с
+      </button>
+      }
+    </div>
+  </div>
+
+  <dl class="demo-status">
+    <div class="demo-status__item">
+      <dt class="demo-status__label">состояние</dt>
+      <dd class="demo-status__value">{{ stateLabel() }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">MIME</dt>
+      <dd class="demo-status__value">
+        <code>{{ mimeLabel() }}</code>
+      </dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">размер</dt>
+      <dd class="demo-status__value">{{ sizeLabel() }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">длительность</dt>
+      <dd class="demo-status__value">{{ durationLabel() }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">файл</dt>
+      <dd class="demo-status__value">{{ fileNameLabel() }}</dd>
+    </div>
+  </dl>
+
+  @if (error(); as error) {
+  <p class="demo-error" role="alert">
+    <strong>{{ error.message }}</strong>
+    <span class="demo-error__code"> code: <code>{{ error.code }}</code> </span>
+  </p>
+  }
+
+  <p class="demo-note">
+    При загрузке страницы запись не начинается и скачиваний нет — только по
+    клику. Выберите лимит, нажмите «Начать запись» и проверьте таймер: по
+    достижении <code>maxDuration</code> компонент остановится сам. «Остановить»
+    доступна, пока идёт запись, даже если включён <code>disabled</code>; после
+    стопа или ошибки старт снова доступен. Видео зациклено, чтобы запись не
+    обрывалась на конце короткого ролика. Предпросмотр и ручная ссылка ниже
+    используют один и тот же <code>Blob</code>: object URL создаёт демо и
+    освобождает его в <code>DestroyRef</code>.
+  </p>
+
+  <section>
+    <figure class="preview">
+      <figcaption class="preview__title">Последний клип</figcaption>
+
+      @if (clipUrl(); as url) {
+      <video class="preview__video" [src]="url" controls playsinline></video>
+      <a class="preview__link" [href]="url" [download]="fileNameLabel()">
+        Скачать {{ fileNameLabel() }}
+      </a>
+      } @else {
+      <p class="preview__empty">
+        Нажмите «Начать запись», затем «Остановить» — клип появится здесь.
+      </p>
+      }
+    </figure>
+  </section>
+
+  <section class="brick">
+    <h3 class="brick__title">Что делает компонент</h3>
+
+    <div class="brick__table-wrap">
+      <table class="brick__table">
+        <thead>
+          <tr>
+            <th scope="col">Что</th>
+            <th scope="col">Как</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Входы</td>
+            <td>
+              <code>video</code>, <code>maxDuration</code>,
+              <code>mimeType</code>, <code>videoBitsPerSecond</code>,
+              <code>audioBitsPerSecond</code>, <code>timeslice</code>,
+              <code>disabled</code>, <code>customClass</code>,
+              <code>ariaLabel</code>, <code>indicatorTemplate</code>
+            </td>
+          </tr>
+          <tr>
+            <td>Выходы</td>
+            <td>
+              <code>recordStart</code> (запись началась),
+              <code>recordStop</code> (<code>Blob</code> с фактическим MIME),
+              <code>recordError</code> (<code>CaptureError</code>)
+            </td>
+          </tr>
+          <tr>
+            <td>Старт и стоп</td>
+            <td>
+              <code>CaptureService.recordClip(video, options)</code>; пока идёт
+              запись, старт <code>disabled</code>, повторные клики игнорируются.
+              «Остановить» вызывает <code>ClipRecording.stop()</code> и доступна
+              даже при <code>disabled = true</code>
+            </td>
+          </tr>
+          <tr>
+            <td>Таймер и лимит</td>
+            <td>
+              <code>00:00</code> в ожидании, обновление каждые 250 мс, после
+              стопа — фактическая длительность. По
+              <code>maxDuration</code> авто-стоп; лимит фиксируется на момент
+              старта, <code>0</code> — без ограничения
+            </td>
+          </tr>
+          <tr>
+            <td>Ошибки</td>
+            <td>
+              <code>recordError</code> с <code>CaptureError</code>; чужое
+              исключение → <code>recording-failed</code> с <code>cause</code>;
+              состояние <code>error</code> обрабатывается без ожидания клика,
+              исключение наружу не пробрасывается
+            </td>
+          </tr>
+          <tr>
+            <td>Плеер и файлы</td>
+            <td>
+              Не управляет: <code>play()</code>, <code>pause()</code>,
+              <code>seek()</code> и <code>VideoService</code> — не его зона; не
+              скачивает файлы и не хранит историю — скачивание делает демо
+            </td>
+          </tr>
+          <tr>
+            <td>SSR</td>
+            <td>
+              Нет <code>window</code>, <code>document</code> и
+              <code>MediaRecorder</code> на верхнем уровне;
+              <code>setInterval</code> создаётся только в обработчике клика
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Базовое использование</h3>
+      <p class="example__text">
+        Компонент получает нативный элемент через <code>viewChild</code>, сам
+        вызывает <code>CaptureService.recordClip()</code> по клику и отдаёт
+        готовый <code>Blob</code> в <code>recordStop</code>. Плеером управляет
+        <code>VideoService</code> — компонент лишь передаёт текущее состояние
+        видео в сервис захвата.
+      </p>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">maxDuration и таймер</h3>
+      <p class="example__text">
+        <code>maxDuration</code> задаёт лимит в секундах: по его достижении
+        компонент останавливает запись сам, а <code>recordStop</code> приходит
+        один раз. Лимит фиксируется на момент старта; <code>0</code> отключает
+        ограничение.
+      </p>
+      <app-code-snippet [code]="code.maxDuration" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Ошибки и SSR</h3>
+      <p class="example__text">
+        Ошибки приходят в <code>recordError</code> обычным
+        <code>CaptureError</code>; чужое исключение оборачивается в
+        <code>recording-failed</code>. На сервере компонент рендерится без DOM:
+        <code>setInterval</code> появляется только в обработчике клика.
+      </p>
+      <app-code-snippet [code]="code.errors" />
+    </section>
+  </div>
 </app-demo-shell>

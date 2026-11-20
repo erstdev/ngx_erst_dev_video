@@ -22,7 +22,7 @@ Headless-библиотеки для видео-плеера в Angular. Не м
 | `@erst_dev/ngx-video-timeline` | 0.0.1  | ✅ готов    | `TimelineComponent`, `TimelinePreviewComponent`, `ChapterMarkersComponent`                                                                        |
 | `@erst_dev/ngx-video-extras`   | 0.0.1  | 🚧 в работе | `ClickToPlayOverlayComponent`, `ErrorDisplayComponent`, `SpeedControlComponent`, `KeyboardShortcutsDirective` (готовы), Gesture, SubtitleRenderer |
 | `@erst_dev/ngx-video-sources`  | 0.0.1  | ✅ готов    | `HlsSourceDirective`, `DashSourceDirective`, `QualitySwitcherComponent`                                                                           |
-| `@erst_dev/ngx-video-capture`  | 0.0.1  | 💰 PRO      | `CaptureService` (готов), `ScreenshotButtonComponent` (готов), `ClipRecorderComponent`                                                            |
+| `@erst_dev/ngx-video-capture`  | 0.0.1  | 💰 PRO      | `CaptureService` (готов), `ScreenshotButtonComponent` (готов), `ClipRecorderComponent` (готов)                                                    |
 
 Пакеты пока не опубликованы в npm: версия `0.0.1` — рабочая. Внутри монорепо они
 подключаются через `paths` в `tsconfig.base.json`.

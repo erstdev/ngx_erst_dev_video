@@ -80,13 +80,15 @@
 
 - [x] `CaptureService` (captureFrame, recordClip, captureGif)
 - [x] `ScreenshotButtonComponent`
-- [ ] `ClipRecorderComponent`
+- [x] `ClipRecorderComponent`
 - [ ] Лендинг
 
-`CaptureService` и `ScreenshotButtonComponent` готовы: кадр, клип и GIF без UI,
-кнопка скриншота со скачиванием и именем файла по MIME. Демо
-`/capture/capture-service` и `/capture/screenshot-button` — `ready`. Следующим
-идёт `ClipRecorderComponent`; публикация — в финальной фазе после всех спринтов.
+`CaptureService`, `ScreenshotButtonComponent` и `ClipRecorderComponent` готовы:
+кадр, клип и GIF без UI, кнопка скриншота со скачиванием и UI записи клипа с
+таймером и лимитом. Демо `/capture/capture-service`,
+`/capture/screenshot-button` и `/capture/clip-recorder` — `ready`. Спринт 7
+остаётся `🚧` из-за лендинга: следующим шагом идёт лендинг, публикация — в
+финальной фазе после всех спринтов.
 
 ### ❓ Открытые вопросы (решить до указанных шагов)
 
@@ -250,13 +252,13 @@
 | 20  | `QualitySwitcherComponent`    | sources  | ★★★★      | ✅     |
 | 21  | `CaptureService`              | capture  | ★★★       | ✅     |
 | 22  | `ScreenshotButtonComponent`   | capture  | ★★        | ✅     |
-| 23  | `ClipRecorderComponent`       | capture  | ★★★★      | 💰     |
+| 23  | `ClipRecorderComponent`       | capture  | ★★★★      | ✅     |
 
 **Легенда:** ✅ готово · 🚧 в работе · ⏳ запланировано · 💰 PRO (платный)
 
 > Все кирпичи `core`, `controls`, `timeline`, `extras` и `sources` реализованы и
-> проверены; в `capture` готовы `CaptureService` и
-> `ScreenshotButtonComponent`. Публикация **всех** пакетов отложена до завершения
+> проверены; в `capture` готовы `CaptureService`, `ScreenshotButtonComponent` и
+> `ClipRecorderComponent`. Публикация **всех** пакетов отложена до завершения
 > всех спринтов (см. раздел 7, «Финальная публикация»).
 
 ---

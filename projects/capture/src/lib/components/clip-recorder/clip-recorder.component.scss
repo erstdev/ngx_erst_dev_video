@@ -1,0 +1,141 @@
+:host {
+  --ngx-recorder-gap: 0.5rem;
+  --ngx-recorder-radius: 999px;
+  --ngx-recorder-font-size: 0.8125rem;
+  --ngx-recorder-color: #e5e7eb;
+  --ngx-recorder-bg: #111827;
+  --ngx-recorder-hover-bg: #1f2937;
+  --ngx-recorder-border-color: #374151;
+  --ngx-recorder-record-color: #ef4444;
+  --ngx-recorder-stop-color: #f59e0b;
+  --ngx-recorder-timer-color: #9ca3af;
+  --ngx-recorder-focus-color: #34d399;
+  --ngx-recorder-disabled-opacity: 0.5;
+  --ngx-recorder-transition: 0.15s ease;
+
+  display: inline-flex;
+  max-width: 100%;
+}
+
+.ngx-clip-recorder {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ngx-recorder-gap);
+  color: var(--ngx-recorder-color);
+  font-size: var(--ngx-recorder-font-size);
+}
+
+.ngx-clip-recorder__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: calc(var(--ngx-recorder-gap) / 2);
+}
+
+.ngx-clip-recorder__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-height: 2rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--ngx-recorder-border-color);
+  border-radius: var(--ngx-recorder-radius);
+  background: var(--ngx-recorder-bg);
+  color: var(--ngx-recorder-color);
+  font: inherit;
+  font-size: var(--ngx-recorder-font-size);
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--ngx-recorder-transition),
+    border-color var(--ngx-recorder-transition),
+    color var(--ngx-recorder-transition),
+    opacity var(--ngx-recorder-transition);
+}
+
+.ngx-clip-recorder__button:hover:not(:disabled) {
+  background: var(--ngx-recorder-hover-bg);
+}
+
+.ngx-clip-recorder__button:focus-visible {
+  outline: 2px solid var(--ngx-recorder-focus-color);
+  outline-offset: 2px;
+}
+
+.ngx-clip-recorder__button:disabled {
+  cursor: not-allowed;
+  opacity: var(--ngx-recorder-disabled-opacity);
+}
+
+.ngx-clip-recorder__button--start::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--ngx-recorder-record-color);
+}
+
+.ngx-clip-recorder__button--stop:not(:disabled):hover {
+  border-color: var(--ngx-recorder-stop-color);
+}
+
+.ngx-clip-recorder__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.ngx-clip-recorder__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--ngx-recorder-record-color);
+  opacity: 0.35;
+  transition:
+    background var(--ngx-recorder-transition),
+    opacity var(--ngx-recorder-transition);
+}
+
+.ngx-clip-recorder__dot--recording {
+  opacity: 1;
+  animation: ngx-clip-recorder-pulse 1.2s ease-in-out infinite;
+}
+
+.ngx-clip-recorder__dot--stopping {
+  background: var(--ngx-recorder-stop-color);
+  animation: none;
+}
+
+.ngx-clip-recorder__timer {
+  color: var(--ngx-recorder-timer-color);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+@keyframes ngx-clip-recorder-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-clip-recorder__button,
+  .ngx-clip-recorder__dot {
+    transition: none;
+  }
+
+  .ngx-clip-recorder__dot--recording {
+    animation: none;
+  }
+}
