@@ -79,13 +79,14 @@
 ### 🚧 Спринт 7: ngx-video-capture — PRO (4 недели)
 
 - [x] `CaptureService` (captureFrame, recordClip, captureGif)
-- [ ] `ScreenshotButtonComponent`
+- [x] `ScreenshotButtonComponent`
 - [ ] `ClipRecorderComponent`
 - [ ] Лендинг
 
-`CaptureService` готов: кадр, клип и GIF без UI, собственный GIF89a-энкодер без
-зависимостей. Демо `/capture/capture-service` — `ready`. Следующим идёт
-`ScreenshotButtonComponent`; публикация — в финальной фазе после всех спринтов.
+`CaptureService` и `ScreenshotButtonComponent` готовы: кадр, клип и GIF без UI,
+кнопка скриншота со скачиванием и именем файла по MIME. Демо
+`/capture/capture-service` и `/capture/screenshot-button` — `ready`. Следующим
+идёт `ClipRecorderComponent`; публикация — в финальной фазе после всех спринтов.
 
 ### ❓ Открытые вопросы (решить до указанных шагов)
 
@@ -248,14 +249,15 @@
 | 19  | `DashSourceDirective`         | sources  | ★★★       | ✅     |
 | 20  | `QualitySwitcherComponent`    | sources  | ★★★★      | ✅     |
 | 21  | `CaptureService`              | capture  | ★★★       | ✅     |
-| 22  | `ScreenshotButtonComponent`   | capture  | ★★        | 💰     |
+| 22  | `ScreenshotButtonComponent`   | capture  | ★★        | ✅     |
 | 23  | `ClipRecorderComponent`       | capture  | ★★★★      | 💰     |
 
 **Легенда:** ✅ готово · 🚧 в работе · ⏳ запланировано · 💰 PRO (платный)
 
 > Все кирпичи `core`, `controls`, `timeline`, `extras` и `sources` реализованы и
-> проверены; в `capture` готов `CaptureService`. Публикация **всех** пакетов
-> отложена до завершения всех спринтов (см. раздел 7, «Финальная публикация»).
+> проверены; в `capture` готовы `CaptureService` и
+> `ScreenshotButtonComponent`. Публикация **всех** пакетов отложена до завершения
+> всех спринтов (см. раздел 7, «Финальная публикация»).
 
 ---
 

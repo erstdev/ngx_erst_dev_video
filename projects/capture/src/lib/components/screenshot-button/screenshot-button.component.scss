@@ -1,0 +1,62 @@
+:host {
+  --ngx-screenshot-size: 40px;
+  --ngx-screenshot-icon-size: 55%;
+  --ngx-screenshot-color: #ffffff;
+  --ngx-screenshot-bg: rgba(0, 0, 0, 0.7);
+  --ngx-screenshot-hover-bg: rgba(0, 0, 0, 0.9);
+  --ngx-screenshot-border-radius: 50%;
+  --ngx-screenshot-transition: 0.15s ease;
+  --ngx-screenshot-focus-color: #34d399;
+  --ngx-screenshot-disabled-opacity: 0.5;
+
+  display: inline-flex;
+}
+
+.ngx-screenshot-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ngx-screenshot-size);
+  height: var(--ngx-screenshot-size);
+  padding: 0;
+  border: none;
+  border-radius: var(--ngx-screenshot-border-radius);
+  background: var(--ngx-screenshot-bg);
+  color: var(--ngx-screenshot-color);
+  cursor: pointer;
+  transition:
+    background var(--ngx-screenshot-transition),
+    color var(--ngx-screenshot-transition),
+    opacity var(--ngx-screenshot-transition);
+}
+
+.ngx-screenshot-button:hover:not(:disabled) {
+  background: var(--ngx-screenshot-hover-bg);
+}
+
+.ngx-screenshot-button:focus-visible {
+  outline: 2px solid var(--ngx-screenshot-focus-color);
+  outline-offset: 2px;
+}
+
+.ngx-screenshot-button:disabled {
+  cursor: not-allowed;
+  opacity: var(--ngx-screenshot-disabled-opacity);
+}
+
+.ngx-screenshot-button__icon {
+  display: block;
+  width: var(--ngx-screenshot-icon-size);
+  height: var(--ngx-screenshot-icon-size);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ngx-screenshot-button {
+    transition: none;
+  }
+}

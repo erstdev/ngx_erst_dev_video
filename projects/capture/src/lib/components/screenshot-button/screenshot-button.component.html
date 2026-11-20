@@ -1,0 +1,27 @@
+<button
+  type="button"
+  class="ngx-screenshot-button"
+  [disabled]="isDisabled()"
+  [attr.aria-label]="label()"
+  [attr.aria-busy]="capturing()"
+  (click)="onClick()"
+>
+  @if (iconTemplate(); as icon) {
+    <ng-container
+      [ngTemplateOutlet]="icon"
+      [ngTemplateOutletContext]="iconContext()"
+    />
+  } @else {
+    <svg
+      class="ngx-screenshot-button__icon"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M4 8a2 2 0 0 1 2-2h1.6l1.1-1.6a1 1 0 0 1 .8-.4h5a1 1 0 0 1 .8.4L16.4 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"
+      />
+      <circle cx="12" cy="12.5" r="3.5" />
+    </svg>
+  }
+</button>

@@ -2,12 +2,263 @@
   title="ScreenshotButtonComponent"
   pkg="@erst_dev/ngx-video-capture"
   selector="ngx-screenshot-button"
-  status="planned"
+  status="ready"
   [pro]="true"
-  description="Кнопка скриншота: вызывает CaptureService и инициирует скачивание файла. Самим захватом кадра не занимается."
+  description="Кнопка скриншота: вызывает CaptureService.captureFrame() для уже играющего видео, отдаёт Blob через capture и по умолчанию скачивает файл. Захват остаётся в сервисе, плеером кнопка не управляет."
   [responsibilities]="responsibilities"
 >
-  <p class="demo-placeholder">
-    Кирпич ещё не реализован — здесь появится живой пример.
+  <p class="demo-hint">
+    Захват выполняет <code>CaptureService</code>: кнопка передаёт ему нативный
+    <code>HTMLVideoElement</code> и настройки кадра, а получает готовый
+    <code>Blob</code>. Воспроизведением управляет <code>VideoService</code> —
+    кнопка не вызывает <code>play()</code>, <code>pause()</code> и
+    <code>seek()</code>. Скачивание инициируется только кликом: при включённом
+    <code>download</code> файл сохраняется сразу, при выключенном остаётся
+    ручная ссылка ниже.
   </p>
+
+  <div class="player">
+    <video
+      #videoEl
+      ngxVideo
+      class="player__video"
+      [src]="src"
+      crossorigin="anonymous"
+      playsinline
+    ></video>
+
+    <ngx-screenshot-button
+      customClass="player__shot"
+      [video]="videoElement()"
+      [type]="frameType()"
+      [fileName]="fileName()"
+      [download]="autoDownload()"
+      (capture)="onCapture($event)"
+      (captureError)="onError($event)"
+    />
+  </div>
+
+  <div class="demo-toolbar">
+    <button type="button" class="demo-toggle" (click)="togglePlay()">
+      {{ playLabel() }}
+    </button>
+
+    <div class="demo-group" role="group" aria-label="Тип кадра">
+      <button
+        type="button"
+        class="demo-toggle"
+        [class.demo-toggle--active]="frameType() === 'image/png'"
+        [attr.aria-pressed]="frameType() === 'image/png'"
+        (click)="setFrameType('image/png')"
+      >
+        PNG
+      </button>
+
+      <button
+        type="button"
+        class="demo-toggle"
+        [class.demo-toggle--active]="frameType() === 'image/jpeg'"
+        [attr.aria-pressed]="frameType() === 'image/jpeg'"
+        (click)="setFrameType('image/jpeg')"
+      >
+        JPEG
+      </button>
+    </div>
+
+    <label class="demo-check">
+      <input
+        type="checkbox"
+        [checked]="autoDownload()"
+        (change)="onAutoDownloadChange($event)"
+      />
+      Скачивать автоматически
+    </label>
+
+    <label class="demo-field">
+      <span class="demo-field__label">Имя файла</span>
+      <input
+        class="demo-field__input"
+        type="text"
+        placeholder="screenshot"
+        [value]="fileName()"
+        (input)="onFileNameInput($event)"
+      />
+    </label>
+  </div>
+
+  <dl class="demo-status">
+    <div class="demo-status__item">
+      <dt class="demo-status__label">состояние</dt>
+      <dd class="demo-status__value">{{ stateLabel() }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">MIME</dt>
+      <dd class="demo-status__value">
+        <code>{{ mimeLabel() }}</code>
+      </dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">размер</dt>
+      <dd class="demo-status__value">{{ sizeLabel() }}</dd>
+    </div>
+
+    <div class="demo-status__item">
+      <dt class="demo-status__label">файл</dt>
+      <dd class="demo-status__value">{{ fileNameLabel() }}</dd>
+    </div>
+  </dl>
+
+  @if (error(); as error) {
+  <p class="demo-error" role="alert">
+    <strong>{{ error.message }}</strong>
+    <span class="demo-error__code">code: <code>{{ error.code }}</code></span>
+  </p>
+  }
+
+  <p class="demo-note">
+    При загрузке страницы скачиваний нет — только по клику по кнопке камеры.
+    Предпросмотр и ручная ссылка используют один и тот же <code>Blob</code>:
+    object URL создаётся в демо и освобождается в <code>DestroyRef</code>.
+    Кнопка блокируется на время захвата (<code>aria-busy="true"</code>), а после
+    ошибки снова активна. Без CORS-заголовков у видео Canvas становится
+    «грязным» и отдаёт <code>canvas-failed</code>, поэтому у элемента стоит
+    <code>crossorigin="anonymous"</code>.
+  </p>
+
+  <section>
+    <figure class="preview">
+      <figcaption class="preview__title">Последний кадр</figcaption>
+
+      @if (previewUrl(); as url) {
+      <img
+        class="preview__image"
+        [src]="url"
+        [alt]="'Последний кадр ' + fileNameLabel()"
+      />
+      <a class="preview__link" [href]="url" [download]="fileNameLabel()">
+        Скачать {{ fileNameLabel() }}
+      </a>
+      } @else {
+      <p class="preview__empty">
+        Нажмите кнопку камеры на видео — кадр появится здесь.
+      </p>
+      }
+    </figure>
+  </section>
+
+  <section class="brick">
+    <h3 class="brick__title">Что делает кнопка</h3>
+
+    <div class="brick__table-wrap">
+      <table class="brick__table">
+        <thead>
+          <tr>
+            <th scope="col">Что</th>
+            <th scope="col">Как</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Входы</td>
+            <td>
+              <code>video</code>, <code>type</code>, <code>quality</code>,
+              <code>maxWidth</code>, <code>maxHeight</code>,
+              <code>fileName</code>, <code>download</code>,
+              <code>disabled</code>, <code>customClass</code>,
+              <code>ariaLabel</code>, <code>iconTemplate</code>
+            </td>
+          </tr>
+          <tr>
+            <td>Захват</td>
+            <td>
+              <code>CaptureService.captureFrame(video, options)</code>; кнопка
+              не рисует Canvas и не читает пиксели
+            </td>
+          </tr>
+          <tr>
+            <td>Выход <code>capture</code></td>
+            <td>
+              Готовый <code>Blob</code>; скачивание при
+              <code>download = true</code> уже запущено
+            </td>
+          </tr>
+          <tr>
+            <td>Скачивание</td>
+            <td>
+              Временная ссылка <code>&lt;a download&gt;</code>, object URL
+              освобождается после клика; только по клику, не при инициализации
+            </td>
+          </tr>
+          <tr>
+            <td>Имя файла</td>
+            <td>
+              <code>buildFileName(fileName, type)</code>: trim, fallback
+              <code>screenshot</code>, срезание старого расширения и
+              <code>.png</code>/<code>.jpg</code>/<code>.webp</code> по MIME
+            </td>
+          </tr>
+          <tr>
+            <td>Ошибки</td>
+            <td>
+              Выход <code>captureError</code> с <code>CaptureError</code>; чужое
+              исключение → <code>canvas-failed</code> с <code>cause</code>;
+              кнопка снова активна, исключение не пробрасывается
+            </td>
+          </tr>
+          <tr>
+            <td>Плеер</td>
+            <td>
+              Не управляет: <code>play()</code>, <code>pause()</code>,
+              <code>seek()</code> и <code>VideoService</code> — не его зона
+            </td>
+          </tr>
+          <tr>
+            <td>SSR</td>
+            <td>
+              Нет <code>window</code>, <code>document</code> и
+              <code>MediaRecorder</code> на верхнем уровне;
+              <code>document</code> — только в обработчике клика
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="examples">
+    <section class="example">
+      <h3 class="example__title">Базовое использование</h3>
+      <p class="example__text">
+        Компонент получает нативный элемент через <code>viewChild</code>, сам
+        вызывает <code>CaptureService</code> по клику и по умолчанию скачивает
+        готовый <code>Blob</code>. Плеером управляет <code>VideoService</code> —
+        кнопка лишь передаёт текущее состояние видео в сервис захвата.
+      </p>
+      <app-code-snippet [code]="code.basic" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Опции, имя файла и скачивание</h3>
+      <p class="example__text">
+        <code>type</code>, <code>quality</code> и лимиты размеров уходят в
+        <code>captureFrame()</code>. Расширение файла компонент добавляет сам по
+        MIME; при <code>download = false</code> он ничего не скачивает и
+        оставляет <code>Blob</code> потребителю.
+      </p>
+      <app-code-snippet [code]="code.options" />
+    </section>
+
+    <section class="example">
+      <h3 class="example__title">Ошибки и SSR</h3>
+      <p class="example__text">
+        Ошибки приходят в <code>captureError</code> обычным
+        <code>CaptureError</code>; чужое исключение оборачивается в
+        <code>canvas-failed</code>. На сервере компонент рендерится без DOM:
+        <code>document</code> появляется только в обработчике клика.
+      </p>
+      <app-code-snippet [code]="code.errors" />
+    </section>
+  </div>
 </app-demo-shell>

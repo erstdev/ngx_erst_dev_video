@@ -198,7 +198,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         id: 'screenshot-button',
         path: 'capture/screenshot-button',
         title: 'ScreenshotButtonComponent',
-        status: 'planned',
+        status: 'ready',
       },
       {
         id: 'clip-recorder',

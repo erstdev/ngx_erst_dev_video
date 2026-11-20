@@ -1,8 +1,9 @@
 # @erst_dev/ngx-video-capture
 
 Захват кадров, запись фрагментов и GIF из уже играющего `<video>` для плеера
-`ngx-video`. Сервис без интерфейса: получает нативный `HTMLVideoElement`, снимает
-данные через Canvas и `MediaRecorder` и возвращает `Blob` или объект записи.
+`ngx-video`. `CaptureService` получает нативный `HTMLVideoElement`, снимает данные
+через Canvas и `MediaRecorder` и возвращает `Blob` или объект записи, а
+`ScreenshotButtonComponent` — готовая кнопка скриншота со скачиванием файла.
 
 Пакет **PRO**: распространяется отдельно от бесплатных пакетов экосистемы.
 
@@ -11,11 +12,12 @@
 | Кирпич                      | Что решает                              | Статус   |
 | --------------------------- | --------------------------------------- | -------- |
 | `CaptureService`            | Кадр, клип и GIF без UI                 | ✅ готов |
-| `ScreenshotButtonComponent` | Кнопка скриншота и скачивание файла     | ⏳ план  |
+| `ScreenshotButtonComponent` | Кнопка скриншота и скачивание файла     | ✅ готов |
 | `ClipRecorderComponent`     | Интерфейс записи клипа: кнопки и таймер | ⏳ план  |
 
-`CaptureService` — первый кирпич пакета. Кнопки и интерфейс записи появятся
-следующими шагами и будут использовать его методы.
+`CaptureService` и `ScreenshotButtonComponent` готовы: сервис снимает кадр и
+отдаёт `Blob`, кнопка вызывает его по клику и скачивает файл. Следующим шагом
+идёт `ClipRecorderComponent` — интерфейс записи клипа поверх того же сервиса.
 
 ## Требования
 
@@ -111,6 +113,26 @@ recording.state(); // 'recording' | 'stopped' | 'cancelled' | 'error'
 const blob = await recording.stop(); // фактический MIME — в blob.type
 recording.cancel(); // отмена: ожидающий stop() отклонится с кодом 'aborted'
 ```
+
+## ScreenshotButtonComponent
+
+Готовая кнопка скриншота: по клику вызывает `CaptureService.captureFrame()`,
+эмитит `capture` с готовым `Blob` и по умолчанию скачивает файл. Захват остаётся
+в сервисе, а `play()`, `pause()` и `seek()` — за `VideoService`.
+
+```html
+<video #video ngxVideo [src]="src" crossorigin="anonymous" playsinline></video>
+
+<ngx-screenshot-button [video]="videoElement()" (capture)="onCapture($event)" (captureError)="onError($event)" />
+```
+
+Имя файла собирается с расширением по MIME-типу, ошибки приходят в
+`captureError`, а `download = false` оставляет потребителю только `Blob`.
+Поддерживаются CSS-переменные `--ngx-screenshot-*`, `customClass`,
+`iconTemplate` и SSR.
+
+Подробно — в
+[README кирпича](src/lib/components/screenshot-button/README.md).
 
 ## Методы
 

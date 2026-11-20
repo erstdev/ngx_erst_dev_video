@@ -1,3 +1,4 @@
+export * from './components';
 export * from './services';
 export type {
   CaptureError,

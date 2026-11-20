@@ -352,9 +352,9 @@ projects/controls/src/
 
 ### 21. ScreenshotButtonComponent
 
-**Что делает:** Кнопка для создания скриншота.
-**За что отвечает:** Вызов метода CaptureService, инициация скачивания файла.
-**Чего НЕ делает:** Не занимается самим захватом кадра.
+**Что делает:** Кнопка скриншота для уже играющего `<video>`: делегирует захват кадра `CaptureService`, отдаёт готовый `Blob` и скачивает файл.
+**За что отвечает:** `ScreenshotButtonComponent` (`ngx-screenshot-button`, standalone, OnPush, signals) по клику вызывает `CaptureService.captureFrame(video, { type, quality, maxWidth, maxHeight })` и получает готовый `Blob` — сам кадр не снимает, Canvas и `MediaRecorder` не трогает. Пока кадр снимается, внутренний сигнал `capturing` блокирует кнопку и выставляет `aria-busy="true"`, повторные клики игнорируются. При успехе эмитится `capture(blob)`, затем при `download = true` файл скачивается временной ссылкой `<a download>` через `URL.createObjectURL`, а object URL освобождается после клика; имя собирает `buildFileName(fileName, type)` — trim, fallback `screenshot`, срезание существующего расширения и `.png`/`.jpg`/`.webp` по MIME. Ошибка эмитится в `captureError` как `CaptureError` из сервиса, чужое исключение оборачивается в `canvas-failed` с `cause`, кнопка снова активна, исключение не пробрасывается. `disabled` учитывает вход, отсутствие видео и захват; `aria-label` меняется на время захвата и переопределяется `ariaLabel`. Настройка — CSS-переменные `--ngx-screenshot-*` с дефолтами в `:host`, `customClass` на хост через `classList` + `effect()` и `iconTemplate` с контекстом `{ capturing }`. SSR: `document` используется только в обработчике клика, на верхнем уровне модуля нет `window`, `document` и `MediaRecorder`.
+**Чего НЕ делает:** Не управляет плеером: `play()`, `pause()`, `seek()` и `VideoService` — не его зона; не снимает кадр сам и не работает с Canvas и `MediaRecorder` напрямую; не хранит историю кадров, не скачивает ничего при инициализации и не хранит глобальное состояние; не использует `fetch`/`HttpClient`; не меняет публичный API `core` и `CaptureService`.
 
 ### 22. ClipRecorderComponent
 
