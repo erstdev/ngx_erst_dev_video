@@ -10,10 +10,4 @@
  * - `error` — произошла ошибка (детали в `VideoError`).
  */
 export type VideoState =
-  | 'idle'
-  | 'playing'
-  | 'paused'
-  | 'buffering'
-  | 'seeking'
-  | 'ended'
-  | 'error';
+  'idle' | 'playing' | 'paused' | 'buffering' | 'seeking' | 'ended' | 'error';

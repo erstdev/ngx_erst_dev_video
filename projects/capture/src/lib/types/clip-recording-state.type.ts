@@ -6,7 +6,4 @@
  * или вернул пустые данные.
  */
 export type ClipRecordingState =
-  | 'recording'
-  | 'stopped'
-  | 'cancelled'
-  | 'error';
+  'recording' | 'stopped' | 'cancelled' | 'error';

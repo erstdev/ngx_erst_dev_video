@@ -73,8 +73,8 @@ export class PlayerComponent {
 `playing = state === 'playing' || state === 'buffering'` — во время буферизации
 кнопка показывает паузу, потому что воспроизведение уже запущено.
 
-| `state`     | Иконка   | `aria-pressed` | `aria-label` по умолчанию |
-| ----------- | -------- | -------------- | ------------------------- |
+| `state`     | Иконка  | `aria-pressed` | `aria-label` по умолчанию |
+| ----------- | ------- | -------------- | ------------------------- |
 | `idle`      | ▶ play  | `false`        | Воспроизвести             |
 | `playing`   | ⏸ pause | `true`         | Пауза                     |
 | `buffering` | ⏸ pause | `true`         | Пауза                     |

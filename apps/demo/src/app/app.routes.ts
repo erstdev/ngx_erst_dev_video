@@ -43,9 +43,9 @@ export const appRoutes: Routes = [
   {
     path: 'controls/buffering-indicator',
     loadComponent: () =>
-      import(
-        './demos/controls/buffering-indicator/buffering-indicator-demo'
-      ).then((m) => m.BufferingIndicatorDemo),
+      import('./demos/controls/buffering-indicator/buffering-indicator-demo').then(
+        (m) => m.BufferingIndicatorDemo,
+      ),
   },
   {
     path: 'controls/player',
@@ -76,9 +76,9 @@ export const appRoutes: Routes = [
   {
     path: 'extras/click-to-play-overlay',
     loadComponent: () =>
-      import(
-        './demos/extras/click-to-play-overlay/click-to-play-overlay-demo'
-      ).then((m) => m.ClickToPlayOverlayDemo),
+      import('./demos/extras/click-to-play-overlay/click-to-play-overlay-demo').then(
+        (m) => m.ClickToPlayOverlayDemo,
+      ),
   },
   {
     path: 'extras/error-display',
