@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { findDemoById } from '../../demos/demo-registry';
+import { findDemoById } from '../demos/demo-registry';
 import { LocaleService } from '../../i18n/locale.service';
 import { isLocale } from '../../i18n/locale';
-import { DocsService } from './docs.service';
+import { DocsService } from '../../services/docs.service';
 import type { DocsIndex } from './docs.types';
 
 /**

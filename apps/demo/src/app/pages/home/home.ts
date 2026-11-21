@@ -13,10 +13,10 @@ import {
   type DemoGroup,
   type DemoGroupId,
   type DemoStatus,
-} from '../../demos/demo-registry';
+} from '../demos/demo-registry';
 import { LocaleService } from '../../i18n/locale.service';
-import { CodeSnippetComponent } from '../../demos/shared/code-snippet/code-snippet';
-import { DEMO_STATUS_KEYS } from '../../demos/constants/demo-status.constants';
+import { CodeSnippetComponent } from '../demos/shared/code-snippet/code-snippet';
+import { DEMO_STATUS_KEYS } from '../demos/constants/demo-status.constants';
 import { LANDING_CONTENT } from './home-content';
 
 /**

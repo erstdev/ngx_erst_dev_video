@@ -8,11 +8,11 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { findDemoById } from '../../demos/demo-registry';
+import { findDemoById } from '../demos/demo-registry';
 import { isLocale } from '../../i18n/locale';
 import { LocaleService } from '../../i18n/locale.service';
 import { DocsNavComponent } from './docs-nav';
-import { DocsService } from './docs.service';
+import { DocsService } from '../../services/docs.service';
 import type { DocsIndex } from './docs.types';
 
 /** Список документации `/<локаль>/docs`: пакеты, кирпичи, ссылки на примеры. */

@@ -1,5 +1,5 @@
 import type { Locale } from '../../i18n/locale';
-import type { DemoGroupId } from '../../demos/demo-registry';
+import type { DemoGroupId } from '../demos/demo-registry';
 
 export interface LandingFeature {
   readonly tag: string;
