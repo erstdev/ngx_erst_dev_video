@@ -9,13 +9,13 @@ stays with the service.
 ## Building blocks
 
 Detailed documentation for each finished building block lives next to its
-sources. On npm only the package README is shown, so the links point to GitHub.
+sources. On the site it opens in the `/docs` section.
 
-| Building block             | Selector               | Status   | What it solves                          | Documentation                                                                                                                      |
-| -------------------------- | ---------------------- | -------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `HlsSourceDirective`       | `ngxHlsSource`         | ✅ ready | HLS stream through hls.js or native HLS | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/hls-source/README.md)       |
-| `DashSourceDirective`      | `ngxDashSource`        | ✅ ready | DASH stream through dash.js (MSE only)  | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/dash-source/README.md)      |
-| `QualitySwitcherComponent` | `ngx-quality-switcher` | ✅ ready | Video quality selection                 | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/components/quality-switcher/README.md) |
+| Building block             | Selector               | Status   | What it solves                          | Documentation                                           |
+| -------------------------- | ---------------------- | -------- | --------------------------------------- | ------------------------------------------------------- |
+| `HlsSourceDirective`       | `ngxHlsSource`         | ✅ ready | HLS stream through hls.js or native HLS | [README](src/lib/directives/hls-source/README.md)       |
+| `DashSourceDirective`      | `ngxDashSource`        | ✅ ready | DASH stream through dash.js (MSE only)  | [README](src/lib/directives/dash-source/README.md)      |
+| `QualitySwitcherComponent` | `ngx-quality-switcher` | ✅ ready | Video quality selection                 | [README](src/lib/components/quality-switcher/README.md) |
 
 The `sources` package is complete: the directives deliver the stream and report
 levels, the component selects the quality, and applying the choice stays with the
@@ -117,7 +117,7 @@ protected onLevelChange(level: QualityInterface | null): void {
 ```
 
 Full documentation is in the
-[building block README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/components/quality-switcher/README.md).
+[building block README](src/lib/components/quality-switcher/README.md).
 
 ## Compatibility
 
@@ -132,4 +132,4 @@ MIT
 
 ---
 
-Core documentation: [@erst_dev/ngx-video-core](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/core/README.md).
+Core documentation: [@erst_dev/ngx-video-core](../core/README.md).

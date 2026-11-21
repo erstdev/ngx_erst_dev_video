@@ -7,14 +7,14 @@ actions go out through outputs.
 
 ## Building blocks
 
-Detailed documentation for each building block lives next to its component. npm
-shows only the package README, so the links point to GitHub.
+Detailed documentation for each building block lives next to its component. On
+the site it opens in the `/docs` section.
 
-| Component                  | Selector               | What it solves                                       | Documentation                                                                                                                       |
-| -------------------------- | ---------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `TimelineComponent`        | `ngx-timeline`         | Progress, buffer, click/drag/keyboard, `seek`        | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/timeline/src/lib/components/timeline/README.md)         |
-| `TimelinePreviewComponent` | `ngx-timeline-preview` | Frame under the cursor via a hidden video and canvas | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/timeline/src/lib/components/timeline-preview/README.md) |
-| `ChapterMarkersComponent`  | `ngx-chapter-markers`  | Chapter markers, active chapter, `chapterSelect`     | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/timeline/src/lib/components/chapter-markers/README.md)  |
+| Component                  | Selector               | What it solves                                       | Documentation                                           |
+| -------------------------- | ---------------------- | ---------------------------------------------------- | ------------------------------------------------------- |
+| `TimelineComponent`        | `ngx-timeline`         | Progress, buffer, click/drag/keyboard, `seek`        | [README](src/lib/components/timeline/README.md)         |
+| `TimelinePreviewComponent` | `ngx-timeline-preview` | Frame under the cursor via a hidden video and canvas | [README](src/lib/components/timeline-preview/README.md) |
+| `ChapterMarkersComponent`  | `ngx-chapter-markers`  | Chapter markers, active chapter, `chapterSelect`     | [README](src/lib/components/chapter-markers/README.md)  |
 
 ## Requirements
 
@@ -114,8 +114,7 @@ export class PlayerComponent {
 ```
 
 A live example is the `/timeline/timeline`, `/timeline/timeline-preview`, and
-`/timeline/chapter-markers` pages in the demo app. Sources:
-[timeline-demo.ts](https://github.com/erstdev/ngx_erst_dev_video/blob/master/apps/demo/src/app/demos/timeline/timeline/timeline-demo.ts).
+`/timeline/chapter-markers` pages in the demo app.
 
 ## Timeline behavior
 
@@ -189,4 +188,4 @@ MIT
 
 ---
 
-Core documentation: [@erst_dev/ngx-video-core](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/core/README.md).
+Core documentation: [@erst_dev/ngx-video-core](../core/README.md).

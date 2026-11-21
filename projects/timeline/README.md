@@ -7,14 +7,14 @@
 
 ## Кирпичи
 
-Подробная документация каждого кирпича лежит рядом с компонентом. На npm
-показывается только README пакета, поэтому ссылки ведут на GitHub.
+Подробная документация каждого кирпича лежит рядом с компонентом. На сайте она
+открывается в разделе `/docs`.
 
-| Компонент                  | Селектор               | Что решает                                     | Документация                                                                                                                        |
-| -------------------------- | ---------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `TimelineComponent`        | `ngx-timeline`         | Прогресс, буфер, клик/drag/клавиатура, `seek`  | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/timeline/src/lib/components/timeline/README.md)         |
-| `TimelinePreviewComponent` | `ngx-timeline-preview` | Кадр под курсором через скрытое видео и canvas | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/timeline/src/lib/components/timeline-preview/README.md) |
-| `ChapterMarkersComponent`  | `ngx-chapter-markers`  | Метки глав, активная глава, `chapterSelect`    | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/timeline/src/lib/components/chapter-markers/README.md)  |
+| Компонент                  | Селектор               | Что решает                                     | Документация                                            |
+| -------------------------- | ---------------------- | ---------------------------------------------- | ------------------------------------------------------- |
+| `TimelineComponent`        | `ngx-timeline`         | Прогресс, буфер, клик/drag/клавиатура, `seek`  | [README](src/lib/components/timeline/README.md)         |
+| `TimelinePreviewComponent` | `ngx-timeline-preview` | Кадр под курсором через скрытое видео и canvas | [README](src/lib/components/timeline-preview/README.md) |
+| `ChapterMarkersComponent`  | `ngx-chapter-markers`  | Метки глав, активная глава, `chapterSelect`    | [README](src/lib/components/chapter-markers/README.md)  |
 
 ## Требования
 
@@ -114,8 +114,7 @@ export class PlayerComponent {
 ```
 
 Живой пример — страницы `/timeline/timeline`, `/timeline/timeline-preview` и
-`/timeline/chapter-markers` в демо-приложении. Исходники:
-[timeline-demo.ts](https://github.com/erstdev/ngx_erst_dev_video/blob/master/apps/demo/src/app/demos/timeline/timeline/timeline-demo.ts).
+`/timeline/chapter-markers` в демо-приложении.
 
 ## Поведение таймлайна
 
@@ -189,4 +188,4 @@ MIT
 
 ---
 
-Документация ядра: [@erst_dev/ngx-video-core](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/core/README.md).
+Документация ядра: [@erst_dev/ngx-video-core](../core/README.md).

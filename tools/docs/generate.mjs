@@ -8,13 +8,16 @@
  * попадает — приложение читает уже готовый HTML.
  *
  * Что делает генератор:
- *   - переписывает относительные и GitHub-ссылки на `/<локаль>/docs/...`;
+ *   - переписывает относительные ссылки на README в `/<локаль>/docs/...`;
+ *   - ссылки на приватный репозиторий (GitHub/GitLab) не выводит: известные
+ *     README-ссылки ведут на внутренние страницы, остальные остаются текстом;
  *   - проставляет заголовкам якоря (id) и проверяет, что ссылки на якоря живут;
  *   - экранирует сырой HTML из Markdown (контент доверенный, но innerHTML в
  *     приложении осознанный — лишняя страховка не мешает);
  *   - при отсутствии `README.en.md` отдаёт русскую страницу с пометкой
  *     `fallback: true` (ссылки внутри ведут на английскую локаль);
- *   - валидирует все внутренние ссылки и якоря и падает, если что-то сломано.
+ *   - валидирует внутренние ссылки, якоря и отсутствие ссылок на приватный
+ *     репозиторий; падает, если что-то сломано.
  *
  * Запуск: `node tools/docs/generate.mjs` (или `npm run docs:generate`).
  */
@@ -47,9 +50,16 @@ const PACKAGE_ORDER = [
   'capture',
 ];
 
-/** Репозиторий, на который ведут ссылки из README. */
-const GITHUB_REPO = 'erstdev/ngx_erst_dev_video';
-const GITHUB_BRANCH = 'master';
+/**
+ * Приватный репозиторий проекта. Ссылки на него не должны попадать в
+ * пользовательскую документацию: README используют относительные пути, а
+ * генератор переписывает их на внутренние маршруты `/docs/...`.
+ */
+const PRIVATE_REPO = 'erstdev/ngx_erst_dev_video';
+const PRIVATE_REPO_URL_PATTERNS = [
+  new RegExp(`https?://github\\.com/${PRIVATE_REPO}(?:[/?#]|$)`, 'i'),
+  /https?:\/\/gitlab\.com\/erst_dev\/ngx_erst_dev_video(?:[/?#]|$)/i,
+];
 
 /** Карта «путь README в репозитории → маршрут документации». */
 const docsMap = new Map();
@@ -287,6 +297,8 @@ function createRenderer(context) {
 
     link({ href, title, text }) {
       const target = rewriteHref(href, context);
+      if (target.drop) return text;
+
       const attributes = [
         `href="${escapeAttribute(target.href)}"`,
         title ? `title="${escapeAttribute(title)}"` : '',
@@ -335,6 +347,12 @@ function rewriteHref(rawHref, context) {
   if (/^https?:\/\//i.test(href)) {
     const internal = githubUrlToRoute(href, context.locale);
     if (internal) return { href: internal, external: false };
+
+    if (isPrivateRepoUrl(href)) {
+      context.warnings.push(`ссылка на приватный репозиторий удалена: ${href}`);
+      return { href: '', external: false, drop: true };
+    }
+
     return { href, external: true };
   }
 
@@ -362,19 +380,16 @@ function rewriteHref(rawHref, context) {
   }
 
   context.warnings.push(
-    `относительная ссылка "${href}" не ведёт на README — открывается на GitHub`,
+    `относительная ссылка "${href}" не ведёт на README — показана без ссылки`,
   );
 
-  return {
-    href: `${githubBlobUrl(resolved)}${hash ? `#${hash}` : ''}`,
-    external: true,
-  };
+  return { href: '', external: false, drop: true };
 }
 
 /** GitHub-ссылка на README превращается во внутренний маршрут `/docs/...`. */
 function githubUrlToRoute(href, locale) {
   const match = href.match(
-    /^https?:\/\/github\.com\/[^/]+\/[^/]+\/(?:blob|tree)\/[^/]+\/([^?#]+)(?:\?[^#]*)?(#.*)?$/i,
+    /^https?:\/\/github\.com\/erstdev\/ngx_erst_dev_video\/(?:blob|tree)\/[^/]+\/([^?#]+)(?:\?[^#]*)?(#.*)?$/i,
   );
 
   if (!match) return null;
@@ -383,6 +398,11 @@ function githubUrlToRoute(href, locale) {
   const route = docsMap.get(repoPath);
 
   return route ? `/${locale}/${route}${match[2] ?? ''}` : null;
+}
+
+/** Ссылки на приватный репозиторий не должны попадать на сайт. */
+function isPrivateRepoUrl(href) {
+  return PRIVATE_REPO_URL_PATTERNS.some((pattern) => pattern.test(href));
 }
 
 function resolveImage(href, context) {
@@ -396,10 +416,11 @@ function resolveImage(href, context) {
   }
   if (!src || src.startsWith('#')) return null;
 
-  const resolved = resolveRepoPath(context.sourcePath, src.split('?')[0]);
-  context.warnings.push(`относительная картинка "${src}" открывается с GitHub`);
+  context.warnings.push(
+    `относительная картинка "${src}" показана без ссылки: приватный репозиторий`,
+  );
 
-  return `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${resolved}`;
+  return null;
 }
 
 function resolveRepoPath(sourcePath, relativePath) {
@@ -408,10 +429,6 @@ function resolveRepoPath(sourcePath, relativePath) {
   );
 
   return resolved.replace(/^\.\//, '');
-}
-
-function githubBlobUrl(repoPath) {
-  return `https://github.com/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/${repoPath}`;
 }
 
 function uniqueId(text, context) {
@@ -504,6 +521,12 @@ function validatePages(pages) {
   let checked = 0;
 
   for (const page of pages) {
+    if (PRIVATE_REPO_URL_PATTERNS.some((pattern) => pattern.test(page.html))) {
+      errors.push(
+        `${page.locale}/${page.route}: в HTML осталась ссылка на приватный репозиторий`,
+      );
+    }
+
     const linkPattern = /<a\s[^>]*href="([^"]*)"/g;
     let match;
 

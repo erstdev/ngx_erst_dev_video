@@ -7,17 +7,17 @@
 
 ## Кирпичи
 
-Подробная документация каждого готового кирпича лежит рядом с исходниками. На npm
-показывается только README пакета, поэтому ссылки ведут на GitHub.
+Подробная документация каждого готового кирпича лежит рядом с исходниками. На
+сайте она открывается в разделе `/docs`.
 
-| Кирпич                        | Селектор                    | Статус   | Что решает                                  | Документация                                                                                                                           |
-| ----------------------------- | --------------------------- | -------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `ClickToPlayOverlayComponent` | `ngx-click-to-play-overlay` | ✅ готов | Оверлей с кнопкой Play для запуска по жесту | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/click-to-play-overlay/README.md) |
-| `ErrorDisplayComponent`       | `ngx-error-display`         | ✅ готов | Сообщение об ошибке и кнопка «Повторить»    | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/error-display/README.md)         |
-| `SpeedControlComponent`       | `ngx-speed-control`         | ✅ готов | Выбор скорости воспроизведения              | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/speed-control/README.md)         |
-| `KeyboardShortcutsDirective`  | `ngxKeyboardShortcuts`      | ✅ готов | Управление плеером с клавиатуры             | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/directives/keyboard-shortcuts/README.md)    |
-| `GestureDirective`            | `ngxGesture`                | ✅ готов | Свайпы: перемотка, громкость, яркость       | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/directives/gesture/README.md)               |
-| `SubtitleRendererComponent`   | `ngx-subtitle-renderer`     | ✅ готов | Рендер WebVTT-субтитров                     | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/subtitle-renderer/README.md)     |
+| Кирпич                        | Селектор                    | Статус   | Что решает                                  | Документация                                                 |
+| ----------------------------- | --------------------------- | -------- | ------------------------------------------- | ------------------------------------------------------------ |
+| `ClickToPlayOverlayComponent` | `ngx-click-to-play-overlay` | ✅ готов | Оверлей с кнопкой Play для запуска по жесту | [README](src/lib/components/click-to-play-overlay/README.md) |
+| `ErrorDisplayComponent`       | `ngx-error-display`         | ✅ готов | Сообщение об ошибке и кнопка «Повторить»    | [README](src/lib/components/error-display/README.md)         |
+| `SpeedControlComponent`       | `ngx-speed-control`         | ✅ готов | Выбор скорости воспроизведения              | [README](src/lib/components/speed-control/README.md)         |
+| `KeyboardShortcutsDirective`  | `ngxKeyboardShortcuts`      | ✅ готов | Управление плеером с клавиатуры             | [README](src/lib/directives/keyboard-shortcuts/README.md)    |
+| `GestureDirective`            | `ngxGesture`                | ✅ готов | Свайпы: перемотка, громкость, яркость       | [README](src/lib/directives/gesture/README.md)               |
+| `SubtitleRendererComponent`   | `ngx-subtitle-renderer`     | ✅ готов | Рендер WebVTT-субтитров                     | [README](src/lib/components/subtitle-renderer/README.md)     |
 
 ## Требования
 
@@ -98,4 +98,4 @@ MIT
 
 ---
 
-Документация ядра: [@erst_dev/ngx-video-core](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/core/README.md).
+Документация ядра: [@erst_dev/ngx-video-core](../core/README.md).

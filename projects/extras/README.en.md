@@ -9,16 +9,16 @@ outputs.
 ## Building blocks
 
 Detailed documentation for each finished building block lives next to its
-sources. On npm only the package README is shown, so the links point to GitHub.
+sources. On the site it opens in the `/docs` section.
 
-| Building block                | Selector                    | Status   | What it solves                            | Documentation                                                                                                                          |
-| ----------------------------- | --------------------------- | -------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `ClickToPlayOverlayComponent` | `ngx-click-to-play-overlay` | ✅ ready | Play button overlay to start on a gesture | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/click-to-play-overlay/README.md) |
-| `ErrorDisplayComponent`       | `ngx-error-display`         | ✅ ready | Error message and a Retry button          | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/error-display/README.md)         |
-| `SpeedControlComponent`       | `ngx-speed-control`         | ✅ ready | Playback speed selection                  | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/speed-control/README.md)         |
-| `KeyboardShortcutsDirective`  | `ngxKeyboardShortcuts`      | ✅ ready | Keyboard control of the player            | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/directives/keyboard-shortcuts/README.md)    |
-| `GestureDirective`            | `ngxGesture`                | ✅ ready | Swipes: seek, volume, brightness          | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/directives/gesture/README.md)               |
-| `SubtitleRendererComponent`   | `ngx-subtitle-renderer`     | ✅ ready | WebVTT subtitle rendering                 | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/extras/src/lib/components/subtitle-renderer/README.md)     |
+| Building block                | Selector                    | Status   | What it solves                            | Documentation                                                |
+| ----------------------------- | --------------------------- | -------- | ----------------------------------------- | ------------------------------------------------------------ |
+| `ClickToPlayOverlayComponent` | `ngx-click-to-play-overlay` | ✅ ready | Play button overlay to start on a gesture | [README](src/lib/components/click-to-play-overlay/README.md) |
+| `ErrorDisplayComponent`       | `ngx-error-display`         | ✅ ready | Error message and a Retry button          | [README](src/lib/components/error-display/README.md)         |
+| `SpeedControlComponent`       | `ngx-speed-control`         | ✅ ready | Playback speed selection                  | [README](src/lib/components/speed-control/README.md)         |
+| `KeyboardShortcutsDirective`  | `ngxKeyboardShortcuts`      | ✅ ready | Keyboard control of the player            | [README](src/lib/directives/keyboard-shortcuts/README.md)    |
+| `GestureDirective`            | `ngxGesture`                | ✅ ready | Swipes: seek, volume, brightness          | [README](src/lib/directives/gesture/README.md)               |
+| `SubtitleRendererComponent`   | `ngx-subtitle-renderer`     | ✅ ready | WebVTT subtitle rendering                 | [README](src/lib/components/subtitle-renderer/README.md)     |
 
 ## Requirements
 
@@ -99,4 +99,4 @@ MIT
 
 ---
 
-Core documentation: [@erst_dev/ngx-video-core](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/core/README.md).
+Core documentation: [@erst_dev/ngx-video-core](../core/README.md).

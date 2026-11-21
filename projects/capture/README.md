@@ -315,4 +315,4 @@ MIT
 
 ---
 
-Документация ядра: [@erst_dev/ngx-video-core](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/core/README.md).
+Документация ядра: [@erst_dev/ngx-video-core](../core/README.md).

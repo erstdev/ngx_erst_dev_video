@@ -10,16 +10,16 @@
 
 ## Кирпичи
 
-Подробная документация каждого кирпича лежит рядом с его компонентом. На npm
-показывается только README пакета, поэтому ссылки ведут на GitHub.
+Подробная документация каждого кирпича лежит рядом с его компонентом. На сайте
+она открывается в разделе `/docs`.
 
-| Компонент                     | Селектор                  | Что решает                                               | Документация                                                                                                                           |
-| ----------------------------- | ------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `PlayButtonComponent`         | `ngx-play-button`         | Кнопка Play/Pause, иконка по состоянию, выход `toggle`   | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/play-button/README.md)         |
-| `VolumeSliderComponent`       | `ngx-volume-slider`       | Ползунок громкости `0…1`, выход `volumeChange`           | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/volume-slider/README.md)       |
-| `TimeDisplayComponent`        | `ngx-time-display`        | Текущее время и длительность через `formatTime`          | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/time-display/README.md)        |
-| `FullscreenButtonComponent`   | `ngx-fullscreen-button`   | Кнопка входа/выхода из fullscreen, выход `toggle`        | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/fullscreen-button/README.md)   |
-| `BufferingIndicatorComponent` | `ngx-buffering-indicator` | Спиннер по состоянию `buffering`, задержка и свой шаблон | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/buffering-indicator/README.md) |
+| Компонент                     | Селектор                  | Что решает                                               | Документация                                               |
+| ----------------------------- | ------------------------- | -------------------------------------------------------- | ---------------------------------------------------------- |
+| `PlayButtonComponent`         | `ngx-play-button`         | Кнопка Play/Pause, иконка по состоянию, выход `toggle`   | [README](src/lib/components/play-button/README.md)         |
+| `VolumeSliderComponent`       | `ngx-volume-slider`       | Ползунок громкости `0…1`, выход `volumeChange`           | [README](src/lib/components/volume-slider/README.md)       |
+| `TimeDisplayComponent`        | `ngx-time-display`        | Текущее время и длительность через `formatTime`          | [README](src/lib/components/time-display/README.md)        |
+| `FullscreenButtonComponent`   | `ngx-fullscreen-button`   | Кнопка входа/выхода из fullscreen, выход `toggle`        | [README](src/lib/components/fullscreen-button/README.md)   |
+| `BufferingIndicatorComponent` | `ngx-buffering-indicator` | Спиннер по состоянию `buffering`, задержка и свой шаблон | [README](src/lib/components/buffering-indicator/README.md) |
 
 ## Требования
 
@@ -79,8 +79,7 @@ export class PlayerComponent {
 ## Полный плеер
 
 Собрать плеер можно из готовых контролов. Живой пример — страница
-`/controls/player` в демо-приложении; её исходники:
-[player-demo.ts](https://github.com/erstdev/ngx_erst_dev_video/blob/master/apps/demo/src/app/demos/controls/player/player-demo.ts).
+`/controls/player` в демо-приложении.
 
 Каждому плееру нужен собственный экземпляр `VideoService` — добавьте
 `providers: [VideoService]` в компонент плеера.
@@ -283,4 +282,4 @@ MIT
 
 ---
 
-Документация ядра: [@erst_dev/ngx-video-core](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/core/README.md).
+Документация ядра: [@erst_dev/ngx-video-core](../core/README.md).

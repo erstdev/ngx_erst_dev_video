@@ -10,16 +10,16 @@ works both with `core` and with any custom state.
 
 ## Building blocks
 
-Detailed documentation for each building block lives next to its component. npm
-shows only the package README, so the links point to GitHub.
+Detailed documentation for each building block lives next to its component. On
+the site it opens in the `/docs` section.
 
-| Component                     | Selector                  | What it solves                                                | Documentation                                                                                                                          |
-| ----------------------------- | ------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `PlayButtonComponent`         | `ngx-play-button`         | Play/Pause button, state icon, `toggle` output                | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/play-button/README.md)         |
-| `VolumeSliderComponent`       | `ngx-volume-slider`       | Volume slider `0…1`, `volumeChange` output                    | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/volume-slider/README.md)       |
-| `TimeDisplayComponent`        | `ngx-time-display`        | Current time and duration via `formatTime`                    | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/time-display/README.md)        |
-| `FullscreenButtonComponent`   | `ngx-fullscreen-button`   | Fullscreen enter/exit button, `toggle` output                 | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/fullscreen-button/README.md)   |
-| `BufferingIndicatorComponent` | `ngx-buffering-indicator` | Spinner for the `buffering` state, delay, and custom template | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/controls/src/lib/components/buffering-indicator/README.md) |
+| Component                     | Selector                  | What it solves                                                | Documentation                                              |
+| ----------------------------- | ------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------- |
+| `PlayButtonComponent`         | `ngx-play-button`         | Play/Pause button, state icon, `toggle` output                | [README](src/lib/components/play-button/README.md)         |
+| `VolumeSliderComponent`       | `ngx-volume-slider`       | Volume slider `0…1`, `volumeChange` output                    | [README](src/lib/components/volume-slider/README.md)       |
+| `TimeDisplayComponent`        | `ngx-time-display`        | Current time and duration via `formatTime`                    | [README](src/lib/components/time-display/README.md)        |
+| `FullscreenButtonComponent`   | `ngx-fullscreen-button`   | Fullscreen enter/exit button, `toggle` output                 | [README](src/lib/components/fullscreen-button/README.md)   |
+| `BufferingIndicatorComponent` | `ngx-buffering-indicator` | Spinner for the `buffering` state, delay, and custom template | [README](src/lib/components/buffering-indicator/README.md) |
 
 ## Requirements
 
@@ -79,8 +79,7 @@ Detailed tables of variables and examples are in each building block's README.
 ## Full player
 
 You can assemble a player from ready-made controls. A live example is the
-`/controls/player` page in the demo app; its sources:
-[player-demo.ts](https://github.com/erstdev/ngx_erst_dev_video/blob/master/apps/demo/src/app/demos/controls/player/player-demo.ts).
+`/controls/player` page in the demo app.
 
 Each player needs its own `VideoService` instance — add
 `providers: [VideoService]` to the player component.
@@ -283,4 +282,4 @@ MIT
 
 ---
 
-Core documentation: [@erst_dev/ngx-video-core](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/core/README.md).
+Core documentation: [@erst_dev/ngx-video-core](../core/README.md).

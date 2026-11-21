@@ -7,14 +7,14 @@
 
 ## Кирпичи
 
-Подробная документация каждого готового кирпича лежит рядом с исходниками. На npm
-показывается только README пакета, поэтому ссылки ведут на GitHub.
+Подробная документация каждого готового кирпича лежит рядом с исходниками. На
+сайте она открывается в разделе `/docs`.
 
-| Кирпич                     | Селектор               | Статус   | Что решает                            | Документация                                                                                                                       |
-| -------------------------- | ---------------------- | -------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `HlsSourceDirective`       | `ngxHlsSource`         | ✅ готов | HLS-поток через hls.js или native HLS | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/hls-source/README.md)       |
-| `DashSourceDirective`      | `ngxDashSource`        | ✅ готов | DASH-поток через dash.js (MSE-only)   | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/directives/dash-source/README.md)      |
-| `QualitySwitcherComponent` | `ngx-quality-switcher` | ✅ готов | Выбор качества видео                  | [README](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/components/quality-switcher/README.md) |
+| Кирпич                     | Селектор               | Статус   | Что решает                            | Документация                                            |
+| -------------------------- | ---------------------- | -------- | ------------------------------------- | ------------------------------------------------------- |
+| `HlsSourceDirective`       | `ngxHlsSource`         | ✅ готов | HLS-поток через hls.js или native HLS | [README](src/lib/directives/hls-source/README.md)       |
+| `DashSourceDirective`      | `ngxDashSource`        | ✅ готов | DASH-поток через dash.js (MSE-only)   | [README](src/lib/directives/dash-source/README.md)      |
+| `QualitySwitcherComponent` | `ngx-quality-switcher` | ✅ готов | Выбор качества видео                  | [README](src/lib/components/quality-switcher/README.md) |
 
 Пакет `sources` собран полностью: директивы доставляют поток и отдают уровни,
 компонент выбирает качество, а применение выбора остаётся за родителем.
@@ -113,7 +113,7 @@ protected onLevelChange(level: QualityInterface | null): void {
 ```
 
 Полная документация — в
-[README кирпича](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/sources/src/lib/components/quality-switcher/README.md).
+[README кирпича](src/lib/components/quality-switcher/README.md).
 
 ## Совместимость
 
@@ -127,4 +127,4 @@ MIT
 
 ---
 
-Документация ядра: [@erst_dev/ngx-video-core](https://github.com/erstdev/ngx_erst_dev_video/blob/master/projects/core/README.md).
+Документация ядра: [@erst_dev/ngx-video-core](../core/README.md).
