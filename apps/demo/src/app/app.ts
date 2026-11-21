@@ -10,7 +10,7 @@ import {
 } from '@angular/router';
 import { filter } from 'rxjs';
 
-import { LocaleService } from './i18n/locale.service';
+import { LocaleService } from './i18n/services/locale.service';
 import type { Locale } from './i18n/types/locale.type';
 import { isLocale } from './i18n/utils/is-locale.util';
 

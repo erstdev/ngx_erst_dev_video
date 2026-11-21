@@ -83,22 +83,56 @@ capture (зависит от core) — PRO, платный
 
 ### Демо-приложение
 
-У каждого кирпича — своя демо-страница. Структура:
+У каждого кирпича — своя демо-страница. Раскладка подчинена правилу: то, что
+используется одним компонентом, лежит в его папке; то, что нужно нескольким
+местам, поднимается на их общий уровень. Поэтому у компонентов есть свои
+`pages/` (открываются по роуту) и `components/` (используются через селектор),
+а общие слои лежат в `app/`.
 
-- `apps/demo/src/app/pages/home` — главная-витрина: вводный блок, возможности,
-  пакеты, быстрый старт и индекс всех демо со статусами.
-- `apps/demo/src/app/demos/<пакет>/<кирпич>/<кирпич>-demo.*` — страница конкретного кирпича.
-- `apps/demo/src/app/demos/controls/player/` — сводная страница `/controls/player`:
-  полный плеер из кирпичей `controls`, а не отдельный кирпич.
-- `apps/demo/src/app/demos/shared/demo-shell` — общий каркас: заголовок, пакет, селектор,
-  статус, описание, слот «живого демо» и список ответственностей кирпича.
-- `apps/demo/src/app/demos/shared/code-snippet` — раскрывающийся блок «Код примера»,
+```text
+apps/demo/src/
+├── styles.scss                              ← только глобальное: сброс, чипы,
+│                                              каркас /docs, типографика README
+└── app/
+    ├── app.ts|html|scss|routes.ts|config.ts ← корневая оболочка
+    ├── components/                          ← используются через селектор
+    │   ├── code-snippet/                    ← блок «Код примера»
+    │   └── demo-shell/                      ← каркас демо-страницы (+ utils/)
+    ├── demos/<пакет>/<кирпич>/
+    │   ├── pages/<кирпич>-demo.ts|html|scss ← страница примера
+    │   └── constants|interfaces|types|utils ← только для этого кирпича
+    ├── docs/
+    │   ├── pages/{docs-page,docs-index-page}/   ← страницы /docs
+    │   ├── components/docs-nav/                 ← сайдбар
+    │   └── interfaces|services|utils
+    ├── home/
+    │   ├── pages/home.ts|html|scss          ← главная-витрина
+    │   └── constants|interfaces
+    ├── i18n/                                ← constants|guards|interfaces|services|types|utils
+    └── interfaces|types|constants|utils     ← общее для нескольких мест
+```
+
+- `apps/demo/src/app/demos/controls/player/pages/` — сводная страница
+  `/controls/player`: полный плеер из кирпичей `controls`, а не отдельный кирпич.
+- `apps/demo/src/app/demos/controls/play-button/` — страница и вспомогательный
+  компонент `components/player-layout-demo/` (селектор внутри страницы).
+- `apps/demo/src/app/components/demo-shell` — общий каркас: заголовок, пакет,
+  селектор, статус, описание, слот «живого демо» и список ответственностей кирпича.
+- `apps/demo/src/app/components/code-snippet` — раскрывающийся блок «Код примера»,
   общий для всех демо-страниц.
-- `apps/demo/src/app/demos/demo-registry.ts` — реестр групп, маршрутов и статусов.
+- Реестр сайта разложен по слоям: `app/constants/demo-groups.constants.ts`,
+  `app/types/demo-*.type.ts`, `app/interfaces/demo-*.interface.ts`; поиск —
+  `docs/utils/find-demo-by-id.util.ts` и `components/demo-shell/utils/find-demo-by-path.util.ts`.
+- Стили: в `styles.scss` только общее; стили одного компонента — в его `.scss`.
+  Типографика README остаётся глобальной: разметка приходит через `innerHTML`
+  и не покрывается scoped-стилями.
 
 **Статусы:** `ready` — демо работает; `wip` — кирпич в разработке; `planned` — страница-заготовка
 с описанием контракта и пустым слотом под живой пример. Сейчас все демо-страницы — `ready`.
 Маршруты демо грузятся лениво.
+
+У готовых страниц под каждым примером есть блок «Код примера» с HTML/TS/SCSS, чтобы
+пользователь видел не только результат, но и рецепт.
 
 У готовых страниц под каждым примером есть блок «Код примера» с HTML/TS/SCSS, чтобы
 пользователь видел не только результат, но и рецепт.

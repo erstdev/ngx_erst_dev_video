@@ -1,0 +1,79 @@
+/* Страница документации: хлебные крошки, уведомление о фолбэке и оглавление. */
+
+.docs-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  color: #6b7280;
+  font-size: 0.8125rem;
+}
+
+.docs-breadcrumbs a {
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+.docs-breadcrumbs a:hover {
+  color: #34d399;
+}
+
+.docs-notice {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #92400e;
+  border-radius: 0.5rem;
+  background: #451a03;
+  color: #fcd34d;
+  font-size: 0.875rem;
+}
+
+.docs-toc {
+  margin: 0 0 1.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #1f2937;
+  border-radius: 0.5rem;
+  background: #111827;
+}
+
+.docs-toc__title {
+  margin: 0 0 0.5rem;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.docs-toc__list {
+  margin: 0;
+  padding-left: 1.1rem;
+  columns: 2;
+  column-gap: 1.5rem;
+  color: #9ca3af;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.docs-toc__item--nested {
+  margin-left: 0.75rem;
+}
+
+.docs-toc a {
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+.docs-toc a:hover {
+  color: #34d399;
+}
+
+/* Сгенерированный HTML (innerHTML) скоупингом не покрывается, поэтому
+   типографика `.docs-content` живёт в глобальном styles.scss. */
+
+@media (max-width: 900px) {
+  .docs-toc__list {
+    columns: 1;
+  }
+}

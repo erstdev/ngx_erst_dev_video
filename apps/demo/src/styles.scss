@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+/* Глобальные стили: базовый сброс и только то, что используется несколькими
+   компонентами. Стили одного компонента живут в его собственном `.scss`. */
 
 html,
 body {
@@ -23,7 +24,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Статусы кирпичей: используются и на главной, и на страницах демо. */
+/* Статусы кирпичей: используются и на главной (`home`), и в `demo-shell`. */
 .chip {
   display: inline-block;
   padding: 0.2rem 0.55rem;
@@ -60,177 +61,23 @@ body {
   color: #fdba74;
 }
 
-/* Заглушка в слоте живого демо (контент проецируется из демо-страниц). */
-.demo-placeholder {
-  margin: 0;
-  padding: 1rem 1.25rem;
-  border: 1px dashed #374151;
-  border-radius: 0.5rem;
-  color: #9ca3af;
-  line-height: 1.6;
-}
-
 /* ==========================================================================
-   Документация: общие стили страниц /docs.
-   HTML приходит из innerHTML, поэтому стили глобальные — scoped-стили
-   компонента на сгенерированную разметку не попадают.
+   Документация: общий каркас страниц /docs.
+   Используется двумя страницами — `docs-page` и `docs-index-page`, поэтому
+   лежит на их общем уровне, а не в каждом компоненте.
    ========================================================================== */
 
 .docs-layout {
   display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-columns: 300px minmax(0, 1fr);
   gap: 2rem;
   max-width: 1240px;
   margin: 0 auto;
   padding: 2rem 1.25rem 4rem;
 }
 
-.docs-nav {
-  position: sticky;
-  top: 74px;
-  align-self: start;
-  max-height: calc(100vh - 96px);
-  padding-right: 0.5rem;
-  overflow-y: auto;
-  font-size: 0.875rem;
-}
-
-.docs-nav__group {
-  margin-bottom: 1.25rem;
-}
-
-.docs-nav__package {
-  display: block;
-  padding: 0.25rem 0;
-  color: #e5e7eb;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.docs-nav__package:hover,
-.docs-nav__package.is-active,
-.docs-nav__link:hover,
-.docs-nav__link.is-active {
-  color: #34d399;
-}
-
-.docs-nav__list {
-  margin: 0.25rem 0 0;
-  padding: 0 0 0 0.5rem;
-  border-left: 1px solid #1f2937;
-  list-style: none;
-}
-
-.docs-nav__item {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.15rem 0;
-}
-
-.docs-nav__link {
-  flex: 1 1 auto;
-  color: #9ca3af;
-  line-height: 1.4;
-  text-decoration: none;
-}
-
-.docs-nav__example {
-  color: #6b7280;
-  font-size: 0.6875rem;
-  text-decoration: none;
-}
-
-.docs-nav__example:hover {
-  color: #34d399;
-}
-
-.docs-nav__badge {
-  padding: 0 0.3rem;
-  border: 1px solid #92400e;
-  border-radius: 999px;
-  color: #fbbf24;
-  font-size: 0.625rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.docs-nav__status {
-  color: #6b7280;
-}
-
 .docs-article {
   min-width: 0;
-}
-
-.docs-breadcrumbs {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
-  color: #6b7280;
-  font-size: 0.8125rem;
-}
-
-.docs-breadcrumbs a {
-  color: #9ca3af;
-  text-decoration: none;
-}
-
-.docs-breadcrumbs a:hover {
-  color: #34d399;
-}
-
-.docs-notice {
-  margin: 0 0 1rem;
-  padding: 0.6rem 0.75rem;
-  border: 1px solid #92400e;
-  border-radius: 0.5rem;
-  background: #451a03;
-  color: #fcd34d;
-  font-size: 0.875rem;
-}
-
-.docs-toc {
-  margin: 0 0 1.5rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid #1f2937;
-  border-radius: 0.5rem;
-  background: #111827;
-}
-
-.docs-toc__title {
-  margin: 0 0 0.5rem;
-  color: #6b7280;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.docs-toc__list {
-  margin: 0;
-  padding-left: 1.1rem;
-  columns: 2;
-  column-gap: 1.5rem;
-  color: #9ca3af;
-  font-size: 0.8125rem;
-  line-height: 1.6;
-}
-
-.docs-toc__item--nested {
-  margin-left: 0.75rem;
-}
-
-.docs-toc a {
-  color: #9ca3af;
-  text-decoration: none;
-}
-
-.docs-toc a:hover {
-  color: #34d399;
 }
 
 .docs-status {
@@ -241,6 +88,20 @@ body {
   color: #34d399;
 }
 
+/* Бейдж «ru» у непереведённой страницы: `docs-nav` и `docs-index-page`. */
+.docs-badge {
+  padding: 0 0.3rem;
+  border: 1px solid #92400e;
+  border-radius: 999px;
+  color: #fbbf24;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* README приходит через `innerHTML`, поэтому scoped-стили компонента на
+   сгенерированную разметку не попадают: типографика `.docs-content`
+   остаётся глобальной. */
 .docs-content {
   color: #d1d5db;
   font-size: 0.9375rem;
@@ -362,255 +223,9 @@ body {
   max-width: 100%;
 }
 
-.docs-hero {
-  margin-bottom: 2rem;
-}
-
-.docs-hero__title {
-  margin: 0 0 0.5rem;
-  color: #f3f4f6;
-  font-size: 2rem;
-}
-
-.docs-hero__subtitle {
-  max-width: 70ch;
-  margin: 0;
-  color: #9ca3af;
-  line-height: 1.6;
-}
-
-.docs-package {
-  padding: 1.25rem 0;
-  border-top: 1px solid #1f2937;
-}
-
-.docs-package__header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.75rem;
-}
-
-.docs-package__title {
-  margin: 0;
-  font-size: 1.15rem;
-}
-
-.docs-package__title a {
-  color: #e5e7eb;
-  text-decoration: none;
-}
-
-.docs-package__title a:hover {
-  color: #34d399;
-}
-
-.docs-package__name {
-  color: #6b7280;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.8125rem;
-}
-
-.docs-package__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 0.5rem;
-  margin: 0.75rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.docs-package__item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.6rem;
-  border: 1px solid #1f2937;
-  border-radius: 0.375rem;
-  background: #111827;
-}
-
-.docs-package__link {
-  flex: 1 1 auto;
-  color: #e5e7eb;
-  text-decoration: none;
-}
-
-.docs-package__link:hover {
-  color: #34d399;
-}
-
-.docs-package__example {
-  color: #6b7280;
-  font-size: 0.75rem;
-  text-decoration: none;
-}
-
-.docs-package__example:hover {
-  color: #34d399;
-}
-
-.docs-package__empty {
-  margin: 0.75rem 0 0;
-}
-
-.docs-package__empty a {
-  color: #34d399;
-}
-
 @media (max-width: 900px) {
   .docs-layout {
     grid-template-columns: minmax(0, 1fr);
     padding: 1.25rem 1rem 3rem;
-  }
-
-  .docs-nav {
-    position: static;
-    max-height: none;
-    padding: 0 0 1rem;
-    border-bottom: 1px solid #1f2937;
-  }
-
-  .docs-toc__list {
-    columns: 1;
-  }
-}
-
-/* ==========================================================================
-   Главная: индекс примеров.
-   Вынесено из home.scss, чтобы стили компонента не превышали бюджет 4 kB.
-   CSS-переменные --home-* задаются на :host компонента Home.
-   ========================================================================== */
-
-.home {
-  .group {
-    margin-top: 0.75rem;
-    border: 1px solid var(--home-border);
-    border-radius: 0.75rem;
-    overflow: hidden;
-    background: var(--home-card);
-  }
-
-  .group__header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--home-border);
-    background: var(--home-card-strong);
-  }
-
-  .group__title {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-  }
-
-  .group__title a {
-    color: var(--home-text);
-    text-decoration: none;
-  }
-
-  .group__title a:hover {
-    color: var(--home-accent);
-  }
-
-  .group__pkg {
-    margin-left: auto;
-    color: var(--home-dim);
-    font-family:
-      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.8125rem;
-  }
-
-  .group__list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .group__item {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.65rem 1rem;
-    border-bottom: 1px solid var(--home-border);
-  }
-
-  .group__item:last-child {
-    border-bottom: none;
-  }
-
-  .group__name {
-    color: var(--home-text);
-  }
-
-  .group__actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .group__action {
-    padding: 0.2rem 0.55rem;
-    border: 1px solid #374151;
-    border-radius: 0.375rem;
-    color: var(--home-muted);
-    font-size: 0.75rem;
-    text-decoration: none;
-  }
-
-  .group__action:hover {
-    border-color: var(--home-accent);
-    color: var(--home-accent);
-  }
-
-  @media (max-width: 760px) {
-    .group__pkg {
-      margin-left: 0;
-    }
-  }
-}
-
-/* Главная: быстрый старт. Продолжение блока `.home` (см. выше). */
-.home {
-  .quick-start__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-  }
-
-  .quick-start__column {
-    min-width: 0;
-    padding: 1rem;
-    border: 1px solid var(--home-border);
-    border-radius: 0.75rem;
-    background: var(--home-card);
-  }
-
-  .quick-start__label {
-    margin: 0 0 0.6rem;
-    color: var(--home-dim);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .quick-start__note {
-    margin: 0.75rem 0 0;
-    color: var(--home-muted);
-    font-size: 0.8125rem;
-    line-height: 1.55;
-  }
-
-  @media (max-width: 760px) {
-    .quick-start__grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
   }
 }
