@@ -13,6 +13,7 @@ export interface UiStrings {
   readonly example: string;
   readonly api: string;
   readonly allExamples: string;
+  readonly fullPlayer: string;
   readonly liveDemo: string;
   readonly selector: string;
   readonly demosTitle: string;
@@ -40,6 +41,7 @@ export const UI_STRINGS = {
     example: 'Пример',
     api: 'API',
     allExamples: 'Все примеры',
+    fullPlayer: 'Полный плеер',
     liveDemo: 'Живое демо',
     selector: 'Селектор',
     demosTitle: 'ngx-video — живые примеры',
@@ -67,6 +69,7 @@ export const UI_STRINGS = {
     example: 'Example',
     api: 'API',
     allExamples: 'All examples',
+    fullPlayer: 'Full player',
     liveDemo: 'Live demo',
     selector: 'Selector',
     demosTitle: 'ngx-video live examples',

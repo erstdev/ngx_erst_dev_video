@@ -15,6 +15,9 @@ export class CodeSnippetComponent {
   /** Подпись в заголовке блока. */
   readonly title = input('Код примера');
 
+  /** Открыть блок сразу, без клика. */
+  readonly open = input(false);
+
   /** Код для отображения. */
   readonly code = input.required<string>();
 }

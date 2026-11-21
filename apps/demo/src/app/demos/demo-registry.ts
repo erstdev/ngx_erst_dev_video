@@ -1,8 +1,14 @@
+import type { UiKey } from '../i18n/ui-strings';
+
 /**
  * Реестр сайта: используется главной, сайдбаром документации и demo-shell.
  * У каждого кирпича два адреса — живой пример и API-справка.
  */
 export type DemoStatus = 'ready' | 'wip' | 'planned';
+
+/** Идентификаторы пакетов сайта. */
+export type DemoGroupId =
+  'core' | 'controls' | 'timeline' | 'extras' | 'sources' | 'capture';
 
 export interface DemoEntry {
   /** Идентификатор внутри группы (совпадает с именем каталога демо). */
@@ -17,11 +23,13 @@ export interface DemoEntry {
   /** Маршрут API-справки без локали: `docs/<пакет>` или `docs/<пакет>/<кирпич>`. */
   readonly docsPath: string;
   readonly title: string;
+  /** Ключ перевода для заголовков, которые отличаются в локалях. */
+  readonly titleKey?: UiKey;
   readonly status: DemoStatus;
 }
 
 export interface DemoGroup {
-  readonly id: string;
+  readonly id: DemoGroupId;
   readonly title: string;
   readonly pkg: string;
   /** Маршрут README пакета без локали: `docs/<пакет>`. */
@@ -58,6 +66,7 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
         path: 'controls/player',
         docsPath: 'docs/controls',
         title: 'Полный плеер',
+        titleKey: 'fullPlayer',
         status: 'ready',
       },
       {

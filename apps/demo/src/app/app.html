@@ -1,4 +1,4 @@
-<header class="app-bar">
+﻿<header class="app-bar">
   <a class="app-bar__brand" [routerLink]="i18n.homeLink()">ngx-video</a>
 
   <nav class="app-bar__nav" [attr.aria-label]="i18n.t('navHome')">
@@ -23,12 +23,13 @@
     <span class="visually-hidden">{{ i18n.t('language') }}</span>
     <select
       class="app-bar__select"
-      [value]="i18n.locale()"
       (change)="changeLocale($event)"
       [attr.aria-label]="i18n.t('language')"
     >
       @for (item of locales; track item.code) {
-      <option [value]="item.code">{{ item.label }}</option>
+      <option [value]="item.code" [selected]="item.code === i18n.locale()">
+        {{ item.label }}
+      </option>
       }
     </select>
   </label>
