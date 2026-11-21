@@ -197,4 +197,4 @@ pure CSS, and the component does not use the DOM API.
 
 ---
 
-[package README](../../../../README.md)
+[Package README](../../../../README.md)
