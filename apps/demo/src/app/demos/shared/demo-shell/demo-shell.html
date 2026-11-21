@@ -1,5 +1,7 @@
 <article class="demo-page">
-  <a class="demo-page__back" routerLink="/">← Все демо</a>
+  <a class="demo-page__back" [routerLink]="i18n.homeLink()"
+    >← {{ i18n.t('allExamples') }}</a
+  >
 
   <header class="demo-page__header">
     <div class="demo-page__titles">
@@ -15,8 +17,17 @@
     </div>
   </header>
 
+  <nav class="demo-page__tabs">
+    <span class="demo-page__tab is-active">{{ i18n.t('example') }}</span>
+    @if (docsLink(); as link) {
+    <a class="demo-page__tab" [routerLink]="link">{{ i18n.t('api') }}</a>
+    }
+  </nav>
+
   @if (selector()) {
-  <p class="demo-page__selector">Селектор: <code>{{ selector() }}</code></p>
+  <p class="demo-page__selector">
+    {{ i18n.t('selector') }}: <code>{{ selector() }}</code>
+  </p>
   }
 
   <p class="demo-page__description">{{ description() }}</p>
@@ -30,7 +41,7 @@
   }
 
   <section class="panel">
-    <h2 class="panel__title">Живое демо</h2>
+    <h2 class="panel__title">{{ i18n.t('liveDemo') }}</h2>
     <div class="panel__body">
       <ng-content />
     </div>

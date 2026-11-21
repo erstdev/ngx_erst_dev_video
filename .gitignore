@@ -11,6 +11,9 @@
 /out-tsc
 *.tsbuildinfo
 
+# Сгенерированная документация сайта (tools/docs/generate.mjs)
+/apps/demo/public/docs-content/
+
 # --- Кеши Nx и Angular -------------------------------------------------------
 .nx/cache
 .nx/workspace-data

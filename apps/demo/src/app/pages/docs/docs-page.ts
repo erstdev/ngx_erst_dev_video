@@ -1,0 +1,172 @@
+import { DOCUMENT } from '@angular/common';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
+import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
+
+import { isLocale } from '../../i18n/locale';
+import { LocaleService } from '../../i18n/locale.service';
+import { DocsNavComponent } from './docs-nav';
+import { DocsService } from './docs.service';
+import type { DocsPageData } from './docs.types';
+
+/**
+ * Страница API-справки `/docs/<пакет>` и `/docs/<пакет>/<кирпич>`.
+ *
+ * HTML приходит из сгенерированного JSON-ассета. `bypassSecurityTrustHtml`
+ * используется осознанно: генератор экранирует сырой HTML из README и сам
+ * собирает разметку, а стандартный санитайзер Angular вырезал бы `id`
+ * заголовков — без них не работают якоря.
+ */
+@Component({
+  selector: 'app-docs-page',
+  imports: [DocsNavComponent, RouterLink],
+  templateUrl: './docs-page.html',
+})
+export class DocsPage {
+  readonly locale = input.required<string>();
+  readonly pkg = input.required<string>();
+  readonly brick = input('');
+
+  protected readonly i18n = inject(LocaleService);
+  private readonly docs = inject(DocsService);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
+
+  protected readonly page = signal<DocsPageData | null>(null);
+  protected readonly loading = signal(true);
+  protected readonly failed = signal(false);
+
+  protected readonly activeRoute = computed(() => {
+    const brick = this.brick();
+
+    return brick ? `docs/${this.pkg()}/${brick}` : `docs/${this.pkg()}`;
+  });
+  protected readonly pkgLink = computed(
+    () => `/${this.locale()}/docs/${this.pkg()}`,
+  );
+  protected readonly toc = computed(() =>
+    (this.page()?.headings ?? []).filter(
+      (heading) => heading.level === 2 || heading.level === 3,
+    ),
+  );
+  protected readonly safeHtml = computed<SafeHtml | string>(() => {
+    const page = this.page();
+
+    return page ? this.sanitizer.bypassSecurityTrustHtml(page.html) : '';
+  });
+
+  constructor() {
+    effect((onCleanup) => {
+      const locale = this.locale();
+      const pkg = this.pkg();
+      const brick = this.brick();
+      let cancelled = false;
+
+      onCleanup(() => {
+        cancelled = true;
+      });
+
+      this.loading.set(true);
+      this.failed.set(false);
+      this.page.set(null);
+
+      if (!isLocale(locale)) {
+        this.loading.set(false);
+        this.failed.set(true);
+        return;
+      }
+
+      void this.docs
+        .loadPage(locale, pkg, brick || undefined)
+        .then((page) => {
+          if (cancelled) return;
+          this.page.set(page);
+          this.loading.set(false);
+          setTimeout(() => this.scrollToFragment());
+        })
+        .catch(() => {
+          if (cancelled) return;
+          this.failed.set(true);
+          this.loading.set(false);
+        });
+    });
+
+    this.router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.scrollToFragment());
+  }
+
+  /** Оглавление: тот же якорь, но без перезагрузки страницы. */
+  protected onTocClick(event: MouseEvent, id: string): void {
+    event.preventDefault();
+    const path = splitOnce(this.router.url, '#')[0];
+    void this.router.navigateByUrl(`${path}#${id}`, { replaceUrl: true });
+    this.document.getElementById(id)?.scrollIntoView({ block: 'start' });
+  }
+
+  /** Внутренние ссылки из README ведут через роутер, а не перезагрузкой. */
+  protected onContentClick(event: MouseEvent): void {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const anchor = target.closest('a');
+    if (!(anchor instanceof HTMLAnchorElement)) return;
+    if (anchor.target === '_blank' || anchor.hasAttribute('download')) return;
+
+    const href = anchor.getAttribute('href');
+    if (!href) return;
+
+    if (href.startsWith('#')) {
+      event.preventDefault();
+      const path = splitOnce(this.router.url, '#')[0];
+      void this.router.navigateByUrl(`${path}${href}`, { replaceUrl: true });
+      this.scrollToFragment();
+      return;
+    }
+
+    if (href.startsWith('/')) {
+      event.preventDefault();
+      void this.router.navigateByUrl(href);
+    }
+  }
+
+  private scrollToFragment(): void {
+    const [, hash = ''] = splitOnce(this.router.url, '#');
+    if (!hash) return;
+
+    this.document
+      .getElementById(decodeFragment(hash))
+      ?.scrollIntoView({ block: 'start' });
+  }
+}
+
+function splitOnce(value: string, separator: string): [string, string] {
+  const index = value.indexOf(separator);
+
+  return index === -1
+    ? [value, '']
+    : [value.slice(0, index), value.slice(index + separator.length)];
+}
+
+function decodeFragment(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}

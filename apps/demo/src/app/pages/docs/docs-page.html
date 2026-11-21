@@ -1,0 +1,49 @@
+<div class="docs-layout">
+  <app-docs-nav [locale]="locale()" [activeRoute]="activeRoute()" />
+
+  <article class="docs-article">
+    <nav class="docs-breadcrumbs" [attr.aria-label]="i18n.t('navDocs')">
+      <a [routerLink]="i18n.docsLink()">{{ i18n.t('navDocs') }}</a>
+      <span class="docs-breadcrumbs__sep" aria-hidden="true">/</span>
+      <a [routerLink]="pkgLink()">{{ pkg() }}</a>
+      @if (brick()) {
+      <span class="docs-breadcrumbs__sep" aria-hidden="true">/</span>
+      <span aria-current="page">{{ page()?.title ?? brick() }}</span>
+      }
+    </nav>
+
+    @if (loading()) {
+    <p class="docs-status">{{ i18n.t('loading') }}</p>
+    } @else if (failed()) {
+    <div class="docs-status">
+      <p>{{ i18n.t('notFound') }}</p>
+      <p><a [routerLink]="i18n.docsLink()">{{ i18n.t('docsTitle') }}</a></p>
+    </div>
+    } @else if (page(); as doc) { @if (doc.fallback) {
+    <p class="docs-notice">{{ i18n.t('translationFallback') }}</p>
+    } @if (toc().length) {
+    <nav class="docs-toc" [attr.aria-label]="i18n.t('onThisPage')">
+      <p class="docs-toc__title">{{ i18n.t('onThisPage') }}</p>
+      <ul class="docs-toc__list">
+        @for (heading of toc(); track heading.id) {
+        <li [class.docs-toc__item--nested]="heading.level === 3">
+          <a [href]="'#' + heading.id" (click)="onTocClick($event, heading.id)"
+            >{{ heading.text }}</a
+          >
+        </li>
+        }
+      </ul>
+    </nav>
+    }
+
+    <!-- Клики делегируются ссылкам внутри README: клавиатура и Enter работают
+         нативно на самих ссылках, контейнер интерактивным не является. -->
+    <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+    <div
+      class="docs-content"
+      [innerHTML]="safeHtml()"
+      (click)="onContentClick($event)"
+    ></div>
+    }
+  </article>
+</div>

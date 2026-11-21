@@ -6,8 +6,22 @@
   "sourceRoot": "apps/demo/src",
   "tags": [],
   "targets": {
+    "docs": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": [
+        "{workspaceRoot}/projects/**/README.md",
+        "{workspaceRoot}/projects/**/README.en.md",
+        "{workspaceRoot}/tools/docs/**/*"
+      ],
+      "outputs": ["{workspaceRoot}/apps/demo/public/docs-content"],
+      "options": {
+        "command": "node tools/docs/generate.mjs"
+      }
+    },
     "build": {
       "executor": "@angular/build:application",
+      "dependsOn": ["docs"],
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {

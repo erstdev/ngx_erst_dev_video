@@ -1,10 +1,14 @@
+import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 
-export const appRoutes: Routes = [
-  {
-    path: '',
-    loadComponent: () => import('./pages/home/home').then((m) => m.Home),
-  },
+import { localeGuard } from './i18n/locale.guard';
+import { LocaleService } from './i18n/locale.service';
+
+/**
+ * Маршруты примеров без локали. Локаль — первый сегмент URL, поэтому весь
+ * список живёт внутри `path: ':locale'`.
+ */
+const demoRoutes: Routes = [
   {
     path: 'core/video-service',
     loadComponent: () =>
@@ -155,8 +159,45 @@ export const appRoutes: Routes = [
         (m) => m.ClipRecorderDemo,
       ),
   },
+];
+
+const docsRoutes: Routes = [
   {
-    path: '**',
-    redirectTo: '',
+    path: 'docs',
+    loadComponent: () =>
+      import('./pages/docs/docs-index-page').then((m) => m.DocsIndexPage),
   },
+  {
+    path: 'docs/:pkg',
+    loadComponent: () =>
+      import('./pages/docs/docs-page').then((m) => m.DocsPage),
+  },
+  {
+    path: 'docs/:pkg/:brick',
+    loadComponent: () =>
+      import('./pages/docs/docs-page').then((m) => m.DocsPage),
+  },
+];
+
+export const appRoutes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    // `/` ведёт на сохранённую локаль, а если выбора ещё не было — на дефолт.
+    redirectTo: () => `/${inject(LocaleService).preferredLocale()}`,
+  },
+  {
+    path: ':locale',
+    canActivate: [localeGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/home/home').then((m) => m.Home),
+      },
+      ...demoRoutes,
+      ...docsRoutes,
+      { path: '**', redirectTo: '' },
+    ],
+  },
+  { path: '**', redirectTo: '' },
 ];

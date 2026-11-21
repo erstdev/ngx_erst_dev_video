@@ -1,16 +1,18 @@
 <section class="home">
   <header class="home__header">
-    <h1 class="home__title">Демо ngx-video</h1>
-    <p class="home__subtitle">
-      Живые примеры кирпичей экосистемы. У каждого кирпича своя страница:
-      готовые показывают работу, запланированные — контракт и место под демо.
+    <h1 class="home__title">{{ i18n.t('demosTitle') }}</h1>
+    <p class="home__subtitle">{{ i18n.t('demosSubtitle') }}</p>
+    <p class="home__docs">
+      <a [routerLink]="i18n.docsLink()">{{ i18n.t('navDocs') }} →</a>
     </p>
   </header>
 
   @for (group of groups; track group.id) {
   <section class="group">
     <header class="group__header">
-      <h2 class="group__title">{{ group.title }}</h2>
+      <h2 class="group__title">
+        <a [routerLink]="link(group.docsPath)">{{ group.title }}</a>
+      </h2>
       @if (group.pro) {
       <span class="chip chip--pro">PRO</span>
       }
@@ -20,11 +22,18 @@
     <ul class="group__list">
       @for (demo of group.demos; track demo.id) {
       <li class="group__item">
-        <a class="group__link" [routerLink]="'/' + demo.path">
-          {{ demo.title }}
-        </a>
-        <span [class]="'chip chip--' + demo.status">
-          {{ statusLabels[demo.status] }}
+        <span class="group__name">{{ demo.title }}</span>
+
+        <span class="group__actions">
+          <a class="group__action" [routerLink]="link(demo.path)"
+            >{{ i18n.t('example') }}</a
+          >
+          <a class="group__action" [routerLink]="link(demo.docsPath)"
+            >{{ i18n.t('api') }}</a
+          >
+          <span [class]="'chip chip--' + demo.status"
+            >{{ statusLabel(demo.status) }}</span
+          >
         </span>
       </li>
       }

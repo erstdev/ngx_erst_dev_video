@@ -1,0 +1,44 @@
+<aside class="docs-nav" [attr.aria-label]="i18n.t('docsTitle')">
+  @if (index(); as data) { @for (pkg of data.packages; track pkg.id) {
+  <section class="docs-nav__group">
+    <a
+      class="docs-nav__package"
+      [routerLink]="link(pkg.route)"
+      [class.is-active]="activeRoute() === pkg.route"
+    >
+      {{ pkg.title }}
+    </a>
+
+    @if (pkg.bricks.length) {
+    <ul class="docs-nav__list">
+      @for (brick of pkg.bricks; track brick.id) {
+      <li class="docs-nav__item">
+        <a
+          class="docs-nav__link"
+          [routerLink]="link(brick.route)"
+          [class.is-active]="activeRoute() === brick.route"
+        >
+          {{ brick.title }}
+        </a>
+        @if (brick.fallback) {
+        <span
+          class="docs-nav__badge"
+          [attr.title]="i18n.t('translationFallback')"
+          >ru</span
+        >
+        } @if (exampleLink(pkg.id, brick.id); as example) {
+        <a class="docs-nav__example" [routerLink]="example"
+          >{{ i18n.t('example') }}</a
+        >
+        }
+      </li>
+      }
+    </ul>
+    }
+  </section>
+  } } @else if (failed()) {
+  <p class="docs-nav__status">{{ i18n.t('loadError') }}</p>
+  } @else {
+  <p class="docs-nav__status">{{ i18n.t('loading') }}</p>
+  }
+</aside>

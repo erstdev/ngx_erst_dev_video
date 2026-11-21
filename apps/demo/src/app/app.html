@@ -1,6 +1,37 @@
 <header class="app-bar">
-  <a class="app-bar__brand" routerLink="/">ngx-video</a>
-  <span class="app-bar__meta">demo</span>
+  <a class="app-bar__brand" [routerLink]="i18n.homeLink()">ngx-video</a>
+
+  <nav class="app-bar__nav" [attr.aria-label]="i18n.t('navHome')">
+    <a
+      class="app-bar__link"
+      [routerLink]="i18n.homeLink()"
+      routerLinkActive="is-active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      {{ i18n.t('navHome') }}
+    </a>
+    <a
+      class="app-bar__link"
+      [routerLink]="i18n.docsLink()"
+      routerLinkActive="is-active"
+    >
+      {{ i18n.t('navDocs') }}
+    </a>
+  </nav>
+
+  <label class="app-bar__locale">
+    <span class="visually-hidden">{{ i18n.t('language') }}</span>
+    <select
+      class="app-bar__select"
+      [value]="i18n.locale()"
+      (change)="changeLocale($event)"
+      [attr.aria-label]="i18n.t('language')"
+    >
+      @for (item of locales; track item.code) {
+      <option [value]="item.code">{{ item.label }}</option>
+      }
+    </select>
+  </label>
 </header>
 
 <main class="app-main">
