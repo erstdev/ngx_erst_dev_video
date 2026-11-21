@@ -12,7 +12,7 @@ Selector: `ngx-error-display`.
 
 - renders the card only when `error` is non-empty;
 - shows `error.message`, substituting a neutral fallback for empty text;
-- draws the “Retry” button and reports a click through the `retry` output;
+- displays the “Retry” button and reports a click through the `retry` output;
 - supports `customClass` and the `--ngx-error-*` CSS variables.
 
 **Does not:**
@@ -83,9 +83,9 @@ signal or the application's own signal — the component only cares about the
 
 ## Outputs
 
-| Output  | Type   | Description                                            |
-| ------- | ------ | ------------------------------------------------------ |
-| `retry` | `void` | Click on the “Retry” button. The parent performs retry |
+| Output  | Type   | Description                                                |
+| ------- | ------ | ---------------------------------------------------------- |
+| `retry` | `void` | Click on the “Retry” button. The parent performs the retry |
 
 ## Behavior
 

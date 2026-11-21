@@ -13,8 +13,8 @@ Selector: `ngx-speed-control`.
 - shows the current rate in a native `<select>`;
 - builds the option list from `rates` in the given order, without duplicates;
 - appends the current rate to the end of the list if it is not among `rates`;
-- reports a selection through the `rateChange` output only as a finite positive
-  number;
+- reports a selection through the `rateChange` output only when it is a finite
+  positive number;
 - supports `customClass` and the `--ngx-speed-*` CSS variables.
 
 **Does not:**
@@ -82,14 +82,14 @@ support, and syncing with the service are the parent's responsibility.
 
 - Options are built from `rates` in the order they are passed. Duplicates are
   collapsed: a repeated rate does not create a second option.
-- Invalid values in `rates` (non-finite numbers or values not greater than zero)
-  are discarded — they can neither be displayed meaningfully nor applied.
+- Invalid values in `rates` (non-finite numbers or values less than or equal to
+  zero) are discarded — they can neither be displayed meaningfully nor applied.
 - If `playbackRate` is missing from `rates`, it is appended to the end of the
-  list. Therefore the select never shows an empty value because the current rate
-  is not among the available ones.
+  list. So the select never shows an empty value because the current rate is
+  missing from the available ones.
 - Option labels are `0.5x`, `1x`, `1.5x`, `2x`: a number and the `x` suffix.
-- The value is read on the native `change` event, converted through `Number`,
-  and emitted only if it is finite and greater than zero. An invalid value is
+- The value is read from the native `change` event, converted via `Number`, and
+  emitted only if it is finite and greater than zero. An invalid value is
   silently ignored.
 - The component does not store the selected value: the displayed rate is
   determined by the `playbackRate` input. If the parent does not apply the
