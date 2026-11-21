@@ -18,30 +18,11 @@ import type {
 
 import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
 import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
-
-/** Итог последнего удачного кадра для предпросмотра и статуса. */
-interface CapturedFrameInfo {
-  readonly mimeType: string;
-  readonly size: number;
-  readonly fileName: string;
-}
-
-/** Пресет оформления кнопки скриншота. */
-interface ShotTheme {
-  readonly id: ShotThemeId;
-  readonly label: string;
-  readonly className: string;
-}
-
-/** Идентификатор пресета оформления кнопки. */
-type ShotThemeId = 'default' | 'emerald' | 'compact';
-
-/** Расширения для подписи имени файла в демо. */
-const FRAME_EXTENSIONS: Readonly<Record<CaptureFrameType, string>> = {
-  'image/png': '.png',
-  'image/jpeg': '.jpg',
-  'image/webp': '.webp',
-};
+import { formatBytes } from '../../shared/utils/format-bytes.util';
+import type { CapturedFrameInfo } from './interfaces/captured-frame-info.interface';
+import type { ShotTheme } from './interfaces/shot-theme.interface';
+import type { ShotThemeId } from './types/shot-theme-id.type';
+import { buildDemoFileName } from './utils/build-demo-file-name.util';
 
 /**
  * Демо для ScreenshotButtonComponent.
@@ -286,27 +267,4 @@ protected onError(error: CaptureError): void {
   protected onError(error: CaptureError): void {
     this.error.set(error);
   }
-}
-
-/** Имя, которое покажет демо; компонент собирает его по тем же правилам. */
-function buildDemoFileName(fileName: string, type: CaptureFrameType): string {
-  const base = fileName
-    .trim()
-    .replace(/\.(?:png|jpe?g|webp)$/i, '')
-    .trim();
-
-  return `${base || 'screenshot'}${FRAME_EXTENSIONS[type]}`;
-}
-
-/** Размер файла в удобных единицах. */
-function formatBytes(size: number): string {
-  if (size < 1024) {
-    return `${size} Б`;
-  }
-
-  if (size < 1024 * 1024) {
-    return `${(size / 1024).toFixed(1)} КБ`;
-  }
-
-  return `${(size / (1024 * 1024)).toFixed(1)} МБ`;
 }

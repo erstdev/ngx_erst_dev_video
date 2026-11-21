@@ -11,12 +11,10 @@ import { SpeedControlComponent } from '@erst_dev/ngx-video-extras';
 
 import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
 import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
-
-/** Стандартный набор скоростей из дефолта компонента. */
-const DEFAULT_RATES: readonly number[] = [0.5, 1, 1.5, 2];
-
-/** Альтернативный набор: замедление и сильное ускорение. */
-const CUSTOM_RATES: readonly number[] = [0.25, 1, 3];
+import {
+  CUSTOM_RATES,
+  DEFAULT_RATES,
+} from './constants/speed-control-demo.constants';
 
 /**
  * Демо для SpeedControlComponent.

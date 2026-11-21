@@ -12,6 +12,7 @@ import {
   localeFromUrl,
 } from './locale';
 import { UI_STRINGS, type UiKey, type UiStrings } from './ui-strings';
+import { splitOnce } from '../utils/split-once.util';
 
 /**
  * Текущая локаль сайта и словарь UI-строк.
@@ -106,12 +107,4 @@ export class LocaleService {
   private applyDocumentLang(locale: Locale): void {
     this.document.documentElement.lang = locale;
   }
-}
-
-function splitOnce(value: string, separator: string): [string, string] {
-  const index = value.indexOf(separator);
-
-  return index === -1
-    ? [value, '']
-    : [value.slice(0, index), value.slice(index + separator.length)];
 }

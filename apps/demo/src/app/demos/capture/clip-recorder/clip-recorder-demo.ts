@@ -15,17 +15,10 @@ import type { CaptureError } from '@erst_dev/ngx-video-capture';
 
 import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
 import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
-
-/** Итог последней записи для предпросмотра и статуса. */
-interface RecordedClipInfo {
-  readonly mimeType: string;
-  readonly size: number;
-  readonly durationMs: number;
-  readonly fileName: string;
-}
-
-/** Доступные в демо лимиты записи, секунды. */
-const MAX_DURATIONS = [5, 10, 30] as const;
+import { formatBytes } from '../../shared/utils/format-bytes.util';
+import { MAX_DURATIONS } from './constants/clip-recorder-demo.constants';
+import type { RecordedClipInfo } from './interfaces/recorded-clip-info.interface';
+import { formatDuration } from './utils/format-duration.util';
 
 /**
  * Демо для ClipRecorderComponent.
@@ -243,30 +236,4 @@ protected onError(error: CaptureError): void {
     this.recording.set(false);
     this.error.set(error);
   }
-}
-
-/** Длительность записи как `mm:ss`. */
-function formatDuration(durationMs: number): string {
-  const totalSeconds =
-    Number.isFinite(durationMs) && durationMs > 0
-      ? Math.floor(durationMs / 1000)
-      : 0;
-
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
-
-/** Размер файла в удобных единицах. */
-function formatBytes(size: number): string {
-  if (size < 1024) {
-    return `${size} Б`;
-  }
-
-  if (size < 1024 * 1024) {
-    return `${(size / 1024).toFixed(1)} КБ`;
-  }
-
-  return `${(size / (1024 * 1024)).toFixed(1)} МБ`;
 }

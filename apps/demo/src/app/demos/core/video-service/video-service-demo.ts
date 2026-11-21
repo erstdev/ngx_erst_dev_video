@@ -12,17 +12,7 @@ import {
 
 import { LocaleService } from '../../../i18n/locale.service';
 import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
-
-/** Человекочитаемые подписи для значений `VideoState`. */
-const STATE_LABELS: Readonly<Record<VideoState, string>> = {
-  idle: 'idle — нет данных',
-  playing: 'playing — воспроизведение',
-  paused: 'paused — пауза',
-  buffering: 'buffering — буферизация',
-  seeking: 'seeking — перемотка',
-  ended: 'ended — завершено',
-  error: 'error — ошибка',
-};
+import { STATE_LABELS } from './constants/video-service-demo.constants';
 
 /**
  * Демо для VideoService: сырой `<video>`, управляемый через сервис.

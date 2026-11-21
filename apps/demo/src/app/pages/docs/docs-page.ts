@@ -15,9 +15,11 @@ import { filter } from 'rxjs';
 
 import { isLocale } from '../../i18n/locale';
 import { LocaleService } from '../../i18n/locale.service';
+import { splitOnce } from '../../utils/split-once.util';
 import { DocsNavComponent } from './docs-nav';
 import { DocsService } from './docs.service';
 import type { DocsPageData } from './docs.types';
+import { decodeFragment } from './utils/decode-fragment.util';
 
 /**
  * Страница API-справки `/docs/<пакет>` и `/docs/<пакет>/<кирпич>`.
@@ -154,21 +156,5 @@ export class DocsPage {
     this.document
       .getElementById(decodeFragment(hash))
       ?.scrollIntoView({ block: 'start' });
-  }
-}
-
-function splitOnce(value: string, separator: string): [string, string] {
-  const index = value.indexOf(separator);
-
-  return index === -1
-    ? [value, '']
-    : [value.slice(0, index), value.slice(index + separator.length)];
-}
-
-function decodeFragment(value: string): string {
-  try {
-    return decodeURIComponent(value);
-  } catch {
-    return value;
   }
 }

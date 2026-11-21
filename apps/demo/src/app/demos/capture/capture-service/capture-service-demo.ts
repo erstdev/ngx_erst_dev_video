@@ -21,6 +21,8 @@ import type {
 
 import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
 import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
+import { formatBytes } from '../../shared/utils/format-bytes.util';
+import { isCaptureError } from './utils/is-capture-error.util';
 
 /**
  * Демо для CaptureService.
@@ -287,30 +289,4 @@ protected async captureGif(): Promise<void> {
       this.objectUrls.delete(previous);
     }
   }
-}
-
-/** Отличает `CaptureError` от любого другого исключения. */
-function isCaptureError(value: unknown): value is CaptureError {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-
-  const candidate = value as { code?: unknown; message?: unknown };
-
-  return (
-    typeof candidate.code === 'string' && typeof candidate.message === 'string'
-  );
-}
-
-/** Размер файла в удобных единицах. */
-function formatBytes(size: number): string {
-  if (size < 1024) {
-    return `${size} Б`;
-  }
-
-  if (size < 1024 * 1024) {
-    return `${(size / 1024).toFixed(1)} КБ`;
-  }
-
-  return `${(size / (1024 * 1024)).toFixed(1)} МБ`;
 }

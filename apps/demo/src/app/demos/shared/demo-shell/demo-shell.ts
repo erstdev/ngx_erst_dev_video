@@ -10,13 +10,7 @@ import { Router, RouterLink } from '@angular/router';
 import { type DemoStatus, findDemoByPath } from '../../demo-registry';
 import { isLocale } from '../../../i18n/locale';
 import { LocaleService } from '../../../i18n/locale.service';
-import type { UiKey } from '../../../i18n/ui-strings';
-
-const STATUS_KEYS: Readonly<Record<DemoStatus, UiKey>> = {
-  ready: 'statusReady',
-  wip: 'statusWip',
-  planned: 'statusPlanned',
-};
+import { DEMO_STATUS_KEYS } from '../../constants/demo-status.constants';
 
 /**
  * Общий каркас страницы демо: заголовок, статус, описание, «живое демо»
@@ -61,7 +55,7 @@ export class DemoShellComponent {
   });
 
   protected readonly statusLabel = computed(() =>
-    this.i18n.t(STATUS_KEYS[this.status()]),
+    this.i18n.t(DEMO_STATUS_KEYS[this.status()]),
   );
 
   protected readonly statusClass = computed(

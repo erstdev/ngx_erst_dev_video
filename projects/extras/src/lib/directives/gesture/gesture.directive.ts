@@ -20,22 +20,9 @@ import {
   roundGestureDelta,
   sanitizeGestureStep,
   sanitizeGestureThreshold,
-  type GestureAxis,
 } from './utils';
 import { isInteractiveTarget } from '../utils';
-
-/** Состояние одного отслеживаемого указателя. */
-interface GestureSession {
-  readonly pointerId: number;
-  readonly startX: number;
-  readonly startY: number;
-  readonly width: number;
-  readonly height: number;
-  readonly startsOnLeft: boolean;
-  axis: GestureAxis | null;
-  dx: number;
-  dy: number;
-}
+import type { GestureSession } from './interfaces';
 
 /**
  * Свайпы для плеера.

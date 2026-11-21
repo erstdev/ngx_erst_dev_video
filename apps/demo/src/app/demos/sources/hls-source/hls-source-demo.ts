@@ -12,6 +12,7 @@ import { HlsSourceDirective } from '@erst_dev/ngx-video-sources';
 
 import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
 import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
+import { isVideoError } from '../../shared/utils/is-video-error.util';
 
 /**
  * Демо для HlsSourceDirective.
@@ -194,17 +195,4 @@ protected onError(error: VideoError | Event): void {
   protected toggleAutoplay(): void {
     this.autoplay.update((value) => !value);
   }
-}
-
-/** Отличает `VideoError` директивы от нативного события `error` на `<video>`. */
-function isVideoError(value: unknown): value is VideoError {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-
-  const candidate = value as { code?: unknown; message?: unknown };
-
-  return (
-    typeof candidate.code === 'string' && typeof candidate.message === 'string'
-  );
 }

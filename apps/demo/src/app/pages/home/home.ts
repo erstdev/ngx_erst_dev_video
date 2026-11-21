@@ -15,15 +15,9 @@ import {
   type DemoStatus,
 } from '../../demos/demo-registry';
 import { LocaleService } from '../../i18n/locale.service';
-import type { UiKey } from '../../i18n/ui-strings';
 import { CodeSnippetComponent } from '../../demos/shared/code-snippet/code-snippet';
+import { DEMO_STATUS_KEYS } from '../../demos/constants/demo-status.constants';
 import { LANDING_CONTENT } from './home-content';
-
-const STATUS_KEYS: Readonly<Record<DemoStatus, UiKey>> = {
-  ready: 'statusReady',
-  wip: 'statusWip',
-  planned: 'statusPlanned',
-};
 
 /**
  * Главная-витрина сайта: что это за библиотеки, из каких пакетов состоят,
@@ -67,7 +61,7 @@ export class Home {
   ].join('\n');
 
   protected statusLabel(status: DemoStatus): string {
-    return this.i18n.t(STATUS_KEYS[status]);
+    return this.i18n.t(DEMO_STATUS_KEYS[status]);
   }
 
   protected link(path: string): string {

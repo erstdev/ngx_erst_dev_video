@@ -15,9 +15,8 @@ import {
 
 import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
 import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
-
-/** Идентификатор темы оформления селекта в демо. */
-type QualityThemeId = 'default' | 'emerald' | 'compact' | 'light';
+import { isVideoError } from '../../shared/utils/is-video-error.util';
+import type { QualityThemeId } from './types/quality-theme-id.type';
 
 /**
  * Демо для QualitySwitcherComponent.
@@ -286,17 +285,4 @@ export class DashPlayerComponent {
   protected toggleAutoplay(): void {
     this.autoplay.update((value) => !value);
   }
-}
-
-/** Отличает `VideoError` директивы от нативного события `error` на `<video>`. */
-function isVideoError(value: unknown): value is VideoError {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-
-  const candidate = value as { code?: unknown; message?: unknown };
-
-  return (
-    typeof candidate.code === 'string' && typeof candidate.message === 'string'
-  );
 }
