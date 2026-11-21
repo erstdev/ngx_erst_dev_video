@@ -11,11 +11,10 @@ export const SUPPORTED_LOCALES = ['ru', 'en'] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 /**
- * Локаль по умолчанию.
- *
- * Пока переводы README не готовы — `ru`. После перевода всех 25 файлов
- * значение переключается на `en` (docs/roadmap.md, шаг 2). То же значение
- * продублировано в `tools/docs/generate.mjs` для манифеста ассетов.
+ * Локаль по умолчанию — `en` (docs/roadmap.md, шаг 2: `/` ведёт на `/en/`).
+ * Пока перевод всех 25 README не закончен, здесь стоит `ru`, чтобы сайт не
+ * открывался на английском с фолбэком на каждой странице. После перевода
+ * значение меняется на `en`.
  */
 export const DEFAULT_LOCALE: Locale = 'ru';
 

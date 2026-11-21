@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nx serve demo",
     "docs:generate": "node tools/docs/generate.mjs",
+    "docs:verify": "node tools/docs/verify-translations.mjs",
     "build": "nx build demo",
     "build:all": "nx run-many --target=build --all",
     "lint": "nx run-many --target=lint --all",

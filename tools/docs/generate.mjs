@@ -118,7 +118,7 @@ async function collectSources() {
     const sourcePath = path.join(PROJECTS_DIR, id, 'README.md');
     const source = toPosix(path.relative(ROOT, sourcePath));
     const route = `docs/${id}`;
-    docsMap.set(source, route);
+    registerReadme(source, route);
 
     const npmName = await readPackageName(id);
     const bricks = [];
@@ -134,7 +134,7 @@ async function collectSources() {
           throw new Error(`Дублирующийся README: ${brickSource}`);
         }
 
-        docsMap.set(brickSource, brickRoute);
+        registerReadme(brickSource, brickRoute);
         bricks.push({ id: brick, source: brickSource, route: brickRoute });
       }
     }
@@ -155,6 +155,12 @@ async function collectSources() {
   }
 
   return packages;
+}
+
+/** Регистрирует русский README и его английскую пару как один маршрут. */
+function registerReadme(source, route) {
+  docsMap.set(source, route);
+  docsMap.set(source.replace(/README\.md$/, 'README.en.md'), route);
 }
 
 /** Рекурсивно находит только русские README (английские — производные). */
