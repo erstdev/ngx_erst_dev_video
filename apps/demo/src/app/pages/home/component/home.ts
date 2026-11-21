@@ -7,17 +7,15 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import {
-  DEMO_GROUPS,
-  type DemoEntry,
-  type DemoGroup,
-  type DemoGroupId,
-  type DemoStatus,
-} from '../demos/demo-registry';
-import { LocaleService } from '../../i18n/locale.service';
-import { CodeSnippetComponent } from '../demos/shared/code-snippet/code-snippet';
-import { DEMO_STATUS_KEYS } from '../demos/constants/demo-status.constants';
-import { LANDING_CONTENT } from './home-content';
+import { DEMO_GROUPS } from '../../demos/constants/demo-groups.constants';
+import { DEMO_STATUS_KEYS } from '../../demos/constants/demo-status.constants';
+import type { DemoEntry } from '../../demos/interfaces/demo-entry.interface';
+import type { DemoGroup } from '../../demos/interfaces/demo-group.interface';
+import type { DemoGroupId } from '../../demos/types/demo-group-id.type';
+import type { DemoStatus } from '../../demos/types/demo-status.type';
+import { LocaleService } from '../../../i18n/locale.service';
+import { CodeSnippetComponent } from '../../../code-snippet/code-snippet';
+import { LANDING_CONTENT } from '../constants/landing-content.constants';
 
 /**
  * Главная-витрина сайта: что это за библиотеки, из каких пакетов состоят,

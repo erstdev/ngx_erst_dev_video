@@ -13,13 +13,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 
-import { isLocale } from '../../i18n/locale';
-import { LocaleService } from '../../i18n/locale.service';
-import { splitOnce } from '../../utils/split-once.util';
-import { DocsNavComponent } from './docs-nav';
-import { DocsService } from '../../services/docs.service';
-import type { DocsPageData } from './docs.types';
-import { decodeFragment } from './utils/decode-fragment.util';
+import { isLocale } from '../../../../i18n/utils/is-locale.util';
+import { LocaleService } from '../../../../i18n/locale.service';
+import { splitOnce } from '../../../../utils/split-once.util';
+import { DocsNavComponent } from '../docs-nav/docs-nav';
+import { DocsService } from '../../../../services/docs.service';
+import type { DocsPageData } from '../../interfaces/docs-page-data.interface';
+import { decodeFragment } from '../../utils/decode-fragment.util';
 
 /**
  * Страница API-справки `/docs/<пакет>` и `/docs/<пакет>/<кирпич>`.

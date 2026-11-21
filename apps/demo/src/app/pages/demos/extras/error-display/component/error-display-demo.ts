@@ -10,8 +10,8 @@ import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import type { VideoError } from '@erst_dev/ngx-video-core';
 import { ErrorDisplayComponent } from '@erst_dev/ngx-video-extras';
 
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
-import { DemoShellComponent } from '../../../shared/demo-shell/demo-shell';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
+import { DemoShellComponent } from '../../../../../demo-shell/demo-shell';
 
 /**
  * Демо для ErrorDisplayComponent.

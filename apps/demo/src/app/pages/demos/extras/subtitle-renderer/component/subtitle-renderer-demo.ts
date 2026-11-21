@@ -9,8 +9,8 @@ import {
 import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import { SubtitleRendererComponent } from '@erst_dev/ngx-video-extras';
 
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
-import { DemoShellComponent } from '../../../shared/demo-shell/demo-shell';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
+import { DemoShellComponent } from '../../../../../demo-shell/demo-shell';
 import { DEMO_VTT } from '../constants/subtitle-renderer-demo.constants';
 
 /**

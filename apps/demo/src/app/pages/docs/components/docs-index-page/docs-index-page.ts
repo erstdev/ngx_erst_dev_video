@@ -8,25 +8,22 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { findDemoById } from '../demos/demo-registry';
-import { LocaleService } from '../../i18n/locale.service';
-import { isLocale } from '../../i18n/locale';
-import { DocsService } from '../../services/docs.service';
-import type { DocsIndex } from './docs.types';
+import { findDemoById } from '../../../demos/utils/find-demo-by-id.util';
+import { LocaleService } from '../../../../i18n/locale.service';
+import { isLocale } from '../../../../i18n/utils/is-locale.util';
+import { DocsNavComponent } from '../docs-nav/docs-nav';
+import { DocsService } from '../../../../services/docs.service';
+import type { DocsIndex } from '../../interfaces/docs-index.interface';
 
-/**
- * Сайдбар документации: пакеты и кирпичи из `index.json`.
- * У кирпича две ссылки — API-справка и живой пример (если он есть в реестре).
- */
+/** Список документации `/<локаль>/docs`: пакеты, кирпичи, ссылки на примеры. */
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-docs-nav',
-  imports: [RouterLink],
-  templateUrl: './docs-nav.html',
+  selector: 'app-docs-index-page',
+  imports: [DocsNavComponent, RouterLink],
+  templateUrl: './docs-index-page.html',
 })
-export class DocsNavComponent {
+export class DocsIndexPage {
   readonly locale = input.required<string>();
-  readonly activeRoute = input('');
 
   protected readonly i18n = inject(LocaleService);
   private readonly docs = inject(DocsService);

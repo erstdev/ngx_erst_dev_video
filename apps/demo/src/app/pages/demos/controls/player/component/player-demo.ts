@@ -19,8 +19,8 @@ import {
   VolumeSliderComponent,
 } from '@erst_dev/ngx-video-controls';
 
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
-import { DemoShellComponent } from '../../../shared/demo-shell/demo-shell';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
+import { DemoShellComponent } from '../../../../../demo-shell/demo-shell';
 
 /**
  * Полноценный плеер из кирпичей `controls`.

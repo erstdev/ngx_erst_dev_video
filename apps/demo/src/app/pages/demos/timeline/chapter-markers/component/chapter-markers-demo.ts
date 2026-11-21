@@ -12,8 +12,8 @@ import {
   type ChapterInterface,
 } from '@erst_dev/ngx-video-timeline';
 
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
-import { DemoShellComponent } from '../../../shared/demo-shell/demo-shell';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
+import { DemoShellComponent } from '../../../../../demo-shell/demo-shell';
 
 /**
  * Демо для ChapterMarkersComponent.

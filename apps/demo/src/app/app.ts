@@ -10,8 +10,9 @@ import {
 } from '@angular/router';
 import { filter } from 'rxjs';
 
-import { type Locale, isLocale } from './i18n/locale';
 import { LocaleService } from './i18n/locale.service';
+import type { Locale } from './i18n/types/locale.type';
+import { isLocale } from './i18n/utils/is-locale.util';
 
 /** Корневая оболочка сайта: шапка с навигацией и переключателем языка. */
 @Component({

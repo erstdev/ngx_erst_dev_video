@@ -10,9 +10,9 @@ import type { QualityInterface, VideoError } from '@erst_dev/ngx-video-core';
 import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import { DashSourceDirective } from '@erst_dev/ngx-video-sources';
 
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
-import { DemoShellComponent } from '../../../shared/demo-shell/demo-shell';
-import { isVideoError } from '../../../shared/utils/is-video-error.util';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
+import { DemoShellComponent } from '../../../../../demo-shell/demo-shell';
+import { isVideoError } from '../../../../../utils/is-video-error.util';
 
 /**
  * Демо для DashSourceDirective.

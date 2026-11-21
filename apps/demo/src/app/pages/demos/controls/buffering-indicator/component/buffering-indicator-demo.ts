@@ -12,8 +12,8 @@ import {
 } from '@erst_dev/ngx-video-core';
 import { BufferingIndicatorComponent } from '@erst_dev/ngx-video-controls';
 
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
-import { DemoShellComponent } from '../../../shared/demo-shell/demo-shell';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
+import { DemoShellComponent } from '../../../../../demo-shell/demo-shell';
 
 /**
  * Демо для BufferingIndicatorComponent.

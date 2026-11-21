@@ -16,9 +16,9 @@ import type {
   CaptureFrameType,
 } from '@erst_dev/ngx-video-capture';
 
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
-import { DemoShellComponent } from '../../../shared/demo-shell/demo-shell';
-import { formatBytes } from '../../../shared/utils/format-bytes.util';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
+import { DemoShellComponent } from '../../../../../demo-shell/demo-shell';
+import { formatBytes } from '../../../../../utils/format-bytes.util';
 import type { CapturedFrameInfo } from '../interfaces/captured-frame-info.interface';
 import type { ShotTheme } from '../interfaces/shot-theme.interface';
 import type { ShotThemeId } from '../types/shot-theme-id.type';

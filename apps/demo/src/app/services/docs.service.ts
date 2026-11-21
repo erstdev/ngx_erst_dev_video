@@ -1,8 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 
-import type { Locale } from '../i18n/locale';
-import type { DocsIndex, DocsPageData } from '../pages/docs/docs.types';
+import type { Locale } from '../i18n/types/locale.type';
+import type { DocsIndex } from '../pages/docs/interfaces/docs-index.interface';
+import type { DocsPageData } from '../pages/docs/interfaces/docs-page-data.interface';
 
 /**
  * Загрузка сгенерированных JSON-ассетов документации из `public/docs-content`.

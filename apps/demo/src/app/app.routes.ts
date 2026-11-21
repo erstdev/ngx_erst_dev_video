@@ -19,7 +19,7 @@ const demoRoutes: Routes = [
   {
     path: 'controls/play-button',
     loadComponent: () =>
-      import('./pages/demos/controls/play-button/component/play-button-demo').then(
+      import('./pages/demos/controls/play-button/component/play-button/play-button-demo').then(
         (m) => m.PlayButtonDemo,
       ),
   },
@@ -169,17 +169,23 @@ const docsRoutes: Routes = [
   {
     path: 'docs',
     loadComponent: () =>
-      import('./pages/docs/docs-index-page').then((m) => m.DocsIndexPage),
+      import('./pages/docs/components/docs-index-page/docs-index-page').then(
+        (m) => m.DocsIndexPage,
+      ),
   },
   {
     path: 'docs/:pkg',
     loadComponent: () =>
-      import('./pages/docs/docs-page').then((m) => m.DocsPage),
+      import('./pages/docs/components/docs-page/docs-page').then(
+        (m) => m.DocsPage,
+      ),
   },
   {
     path: 'docs/:pkg/:brick',
     loadComponent: () =>
-      import('./pages/docs/docs-page').then((m) => m.DocsPage),
+      import('./pages/docs/components/docs-page/docs-page').then(
+        (m) => m.DocsPage,
+      ),
   },
 ];
 
@@ -196,7 +202,8 @@ export const appRoutes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./pages/home/home').then((m) => m.Home),
+        loadComponent: () =>
+          import('./pages/home/component/home').then((m) => m.Home),
       },
       ...demoRoutes,
       ...docsRoutes,

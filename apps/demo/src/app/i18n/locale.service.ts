@@ -7,11 +7,13 @@ import { filter } from 'rxjs';
 import {
   DEFAULT_LOCALE,
   LOCALE_STORAGE_KEY,
-  type Locale,
-  isLocale,
-  localeFromUrl,
-} from './locale';
-import { UI_STRINGS, type UiKey, type UiStrings } from './ui-strings';
+} from './constants/locale.constants';
+import { UI_STRINGS } from './constants/ui-strings.constants';
+import type { UiStrings } from './interfaces/ui-strings.interface';
+import type { Locale } from './types/locale.type';
+import type { UiKey } from './types/ui-key.type';
+import { isLocale } from './utils/is-locale.util';
+import { localeFromUrl } from './utils/locale-from-url.util';
 import { splitOnce } from '../utils/split-once.util';
 
 /**

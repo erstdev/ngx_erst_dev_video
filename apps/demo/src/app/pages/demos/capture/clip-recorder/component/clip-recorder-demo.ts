@@ -13,9 +13,9 @@ import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import { ClipRecorderComponent } from '@erst_dev/ngx-video-capture';
 import type { CaptureError } from '@erst_dev/ngx-video-capture';
 
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
-import { DemoShellComponent } from '../../../shared/demo-shell/demo-shell';
-import { formatBytes } from '../../../shared/utils/format-bytes.util';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
+import { DemoShellComponent } from '../../../../../demo-shell/demo-shell';
+import { formatBytes } from '../../../../../utils/format-bytes.util';
 import { MAX_DURATIONS } from '../constants/clip-recorder-demo.constants';
 import type { RecordedClipInfo } from '../interfaces/recorded-clip-info.interface';
 import { formatDuration } from '../utils/format-duration.util';

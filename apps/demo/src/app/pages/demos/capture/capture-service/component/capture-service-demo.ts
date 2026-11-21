@@ -19,9 +19,9 @@ import type {
   ClipRecordingState,
 } from '@erst_dev/ngx-video-capture';
 
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
-import { DemoShellComponent } from '../../../shared/demo-shell/demo-shell';
-import { formatBytes } from '../../../shared/utils/format-bytes.util';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
+import { DemoShellComponent } from '../../../../../demo-shell/demo-shell';
+import { formatBytes } from '../../../../../utils/format-bytes.util';
 import { isCaptureError } from '../utils/is-capture-error.util';
 
 /**

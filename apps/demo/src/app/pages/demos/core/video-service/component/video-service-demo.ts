@@ -11,7 +11,7 @@ import {
 } from '@erst_dev/ngx-video-core';
 
 import { LocaleService } from '../../../../../i18n/locale.service';
-import { CodeSnippetComponent } from '../../../shared/code-snippet/code-snippet';
+import { CodeSnippetComponent } from '../../../../../code-snippet/code-snippet';
 import { STATE_LABELS } from '../constants/video-service-demo.constants';
 
 /**

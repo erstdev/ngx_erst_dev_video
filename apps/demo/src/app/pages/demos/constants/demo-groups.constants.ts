@@ -1,44 +1,9 @@
-import type { UiKey } from '../../i18n/ui-strings';
+import type { DemoGroup } from '../interfaces/demo-group.interface';
 
 /**
  * Реестр сайта: используется главной, сайдбаром документации и demo-shell.
  * У каждого кирпича два адреса — живой пример и API-справка.
  */
-export type DemoStatus = 'ready' | 'wip' | 'planned';
-
-/** Идентификаторы пакетов сайта. */
-export type DemoGroupId =
-  'core' | 'controls' | 'timeline' | 'extras' | 'sources' | 'capture';
-
-export interface DemoEntry {
-  /** Идентификатор внутри группы (совпадает с именем каталога демо). */
-  readonly id: string;
-  /**
-   * Путь маршрута примера без ведущего слэша (совпадает с `path` в
-   * `app.routes.ts`). Ссылка строится как `'/' + path`: массив команд вида
-   * `['/', path]` Angular превращает в один закодированный сегмент (`%2F`)
-   * и маршрут не находится.
-   */
-  readonly path: string;
-  /** Маршрут API-справки без локали: `docs/<пакет>` или `docs/<пакет>/<кирпич>`. */
-  readonly docsPath: string;
-  readonly title: string;
-  /** Ключ перевода для заголовков, которые отличаются в локалях. */
-  readonly titleKey?: UiKey;
-  readonly status: DemoStatus;
-}
-
-export interface DemoGroup {
-  readonly id: DemoGroupId;
-  readonly title: string;
-  readonly pkg: string;
-  /** Маршрут README пакета без локали: `docs/<пакет>`. */
-  readonly docsPath: string;
-  /** Платный пакет (capture). */
-  readonly pro?: boolean;
-  readonly demos: readonly DemoEntry[];
-}
-
 export const DEMO_GROUPS: readonly DemoGroup[] = [
   {
     id: 'core',
@@ -245,28 +210,3 @@ export const DEMO_GROUPS: readonly DemoGroup[] = [
     ],
   },
 ];
-
-/** Группа по id пакета. */
-export function findDemoGroup(id: string): DemoGroup | undefined {
-  return DEMO_GROUPS.find((group) => group.id === id);
-}
-
-/** Кирпич по id группы и id кирпича. */
-export function findDemoById(
-  groupId: string,
-  demoId: string,
-): DemoEntry | undefined {
-  return findDemoGroup(groupId)?.demos.find((demo) => demo.id === demoId);
-}
-
-/** Кирпич по пути примера (`controls/play-button`). */
-export function findDemoByPath(
-  path: string,
-): { group: DemoGroup; demo: DemoEntry } | undefined {
-  for (const group of DEMO_GROUPS) {
-    const demo = group.demos.find((entry) => entry.path === path);
-    if (demo) return { group, demo };
-  }
-
-  return undefined;
-}

@@ -1,40 +1,7 @@
-import type { Locale } from '../../i18n/locale';
-import type { DemoGroupId } from '../demos/demo-registry';
+import type { Locale } from '../../../i18n/types/locale.type';
+import type { LandingContent } from '../interfaces/landing-content.interface';
 
-export interface LandingFeature {
-  readonly tag: string;
-  readonly title: string;
-  readonly description: string;
-}
-
-/**
- * Тексты вводной страницы. Контентная локализация без `@angular/localize`:
- * два набора лежат рядом и проверяются типом `LandingContent`.
- */
-export interface LandingContent {
-  readonly heroEyebrow: string;
-  readonly heroTitle: string;
-  readonly heroSubtitle: string;
-  readonly ctaDocs: string;
-  readonly ctaExamples: string;
-  readonly facts: readonly string[];
-  readonly featuresTitle: string;
-  readonly featuresSubtitle: string;
-  readonly features: readonly LandingFeature[];
-  readonly packagesTitle: string;
-  readonly packagesSubtitle: string;
-  readonly packageDescriptions: Readonly<Record<DemoGroupId, string>>;
-  readonly docsLink: string;
-  readonly examplesLink: string;
-  readonly quickStartTitle: string;
-  readonly quickStartSubtitle: string;
-  readonly installLabel: string;
-  readonly installNote: string;
-  readonly usageLabel: string;
-  readonly examplesTitle: string;
-  readonly examplesSubtitle: string;
-}
-
+/** Тексты витрины на двух локалях; проверяются типом `LandingContent`. */
 export const LANDING_CONTENT = {
   ru: {
     heroEyebrow: 'Angular 22 · headless · signals',

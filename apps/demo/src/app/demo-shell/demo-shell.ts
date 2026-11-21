@@ -7,10 +7,11 @@ import {
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
-import { type DemoStatus, findDemoByPath } from '../../demo-registry';
-import { isLocale } from '../../../../i18n/locale';
-import { LocaleService } from '../../../../i18n/locale.service';
-import { DEMO_STATUS_KEYS } from '../../constants/demo-status.constants';
+import { DEMO_STATUS_KEYS } from '../pages/demos/constants/demo-status.constants';
+import type { DemoStatus } from '../pages/demos/types/demo-status.type';
+import { findDemoByPath } from '../pages/demos/utils/find-demo-by-path.util';
+import { LocaleService } from '../i18n/locale.service';
+import { isLocale } from '../i18n/utils/is-locale.util';
 
 /**
  * Общий каркас страницы демо: заголовок, статус, описание, «живое демо»

@@ -1,7 +1,8 @@
 import { inject } from '@angular/core';
 import { type CanActivateFn, Router } from '@angular/router';
 
-import { DEFAULT_LOCALE, isLocale } from './locale';
+import { DEFAULT_LOCALE } from './constants/locale.constants';
+import { isLocale } from './utils/is-locale.util';
 
 /**
  * Не пускает в `/:locale/...` неизвестную локаль: заменяет первый сегмент

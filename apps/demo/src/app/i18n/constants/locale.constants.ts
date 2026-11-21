@@ -1,3 +1,5 @@
+import type { Locale } from '../types/locale.type';
+
 /**
  * Локали сайта и правила работы с ними.
  *
@@ -5,10 +7,7 @@
  * сегмент URL (`/ru/...`, `/en/...`), поэтому переключение языка не теряет
  * текущую страницу: меняется только первый сегмент.
  */
-
 export const SUPPORTED_LOCALES = ['ru', 'en'] as const;
-
-export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 /**
  * Локаль по умолчанию — `en` (docs/roadmap.md, шаг 2: `/` ведёт на `/en/`).
@@ -19,16 +18,3 @@ export const DEFAULT_LOCALE: Locale = 'en';
 
 /** Ключ в localStorage, в котором запоминается выбор языка. */
 export const LOCALE_STORAGE_KEY = 'ngx-video.locale';
-
-/** Проверяет, что строка — поддерживаемая локаль. */
-export function isLocale(value: unknown): value is Locale {
-  return value === 'ru' || value === 'en';
-}
-
-/** Достаёт локаль из URL (`/en/docs/core` → `en`). */
-export function localeFromUrl(url: string): Locale | null {
-  const [pathname] = url.split(/[?#]/);
-  const [firstSegment] = pathname.split('/').filter(Boolean);
-
-  return isLocale(firstSegment) ? firstSegment : null;
-}
