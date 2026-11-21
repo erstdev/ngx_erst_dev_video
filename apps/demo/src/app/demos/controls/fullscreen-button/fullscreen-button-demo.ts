@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import { FullscreenButtonComponent } from '@erst_dev/ngx-video-controls';
@@ -14,6 +14,7 @@ import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
  * вызывает родитель по выходу `toggle`.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-fullscreen-button-demo',
   imports: [
     CodeSnippetComponent,

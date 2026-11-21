@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -27,6 +28,7 @@ import type { DocsPageData } from './docs.types';
  * заголовков — без них не работают якоря.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-docs-page',
   imports: [DocsNavComponent, RouterLink],
   templateUrl: './docs-page.html',

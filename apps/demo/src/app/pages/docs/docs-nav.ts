@@ -1,4 +1,11 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { findDemoById } from '../../demos/demo-registry';
@@ -12,6 +19,7 @@ import type { DocsIndex } from './docs.types';
  * У кирпича две ссылки — API-справка и живой пример (если он есть в реестре).
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-docs-nav',
   imports: [RouterLink],
   templateUrl: './docs-nav.html',

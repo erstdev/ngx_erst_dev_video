@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import {
@@ -31,6 +31,7 @@ const STATE_LABELS: Readonly<Record<VideoState, string>> = {
  * и нативные контролы браузера. Под примерами — блоки с готовым кодом.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-video-service-demo',
   imports: [AsyncPipe, CodeSnippetComponent, RouterLink, VideoDirective],
   templateUrl: './video-service-demo.html',

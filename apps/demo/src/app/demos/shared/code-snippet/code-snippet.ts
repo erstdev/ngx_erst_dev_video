@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 /**
  * Раскрывающийся блок с кодом примера.
@@ -7,6 +7,7 @@ import { Component, input } from '@angular/core';
  * экранируется автоматически и его не нужно вручную оборачивать в `&lt;`.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-code-snippet',
   templateUrl: './code-snippet.html',
   styleUrl: './code-snippet.scss',

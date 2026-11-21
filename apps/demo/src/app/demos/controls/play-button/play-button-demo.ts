@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import { PlayButtonComponent } from '@erst_dev/ngx-video-controls';
@@ -17,6 +17,7 @@ import { PlayerLayoutDemo } from './player-layout-demo';
  * У каждого примера есть блок «Код примера» с готовым HTML и SCSS.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-play-button-demo',
   imports: [
     CodeSnippetComponent,

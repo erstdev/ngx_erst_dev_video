@@ -1,4 +1,11 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { findDemoById } from '../../demos/demo-registry';
@@ -10,6 +17,7 @@ import type { DocsIndex } from './docs.types';
 
 /** Список документации `/<локаль>/docs`: пакеты, кирпичи, ссылки на примеры. */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-docs-index-page',
   imports: [DocsNavComponent, RouterLink],
   templateUrl: './docs-index-page.html',

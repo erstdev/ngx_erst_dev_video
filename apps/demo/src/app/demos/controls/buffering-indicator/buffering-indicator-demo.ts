@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 
 import {
   VideoDirective,
@@ -20,6 +25,7 @@ import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
  * Компонент не решает, когда включать буферизацию: состояние приходит снаружи.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-buffering-indicator-demo',
   imports: [
     BufferingIndicatorComponent,

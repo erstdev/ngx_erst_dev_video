@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   NavigationEnd,
@@ -15,6 +15,7 @@ import { LocaleService } from './i18n/locale.service';
 
 /** Корневая оболочка сайта: шапка с навигацией и переключателем языка. */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RouterLinkActive, RouterOutlet],
   selector: 'app-root',
   templateUrl: './app.html',

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import { TimeDisplayComponent } from '@erst_dev/ngx-video-controls';
@@ -13,6 +13,7 @@ import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
  * `customClass` и статичный пример с часами, чтобы показать формат `ч:мм:сс`.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-time-display-demo',
   imports: [
     CodeSnippetComponent,

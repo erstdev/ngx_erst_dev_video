@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import {
@@ -17,6 +22,7 @@ import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
  * `chapterSelect` с полным объектом главы. Перемотку применяет родитель.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-chapter-markers-demo',
   imports: [
     ChapterMarkersComponent,

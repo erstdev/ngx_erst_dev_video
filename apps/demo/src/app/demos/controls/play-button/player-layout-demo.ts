@@ -1,4 +1,9 @@
-import { Component, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+} from '@angular/core';
 
 import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import { PlayButtonComponent } from '@erst_dev/ngx-video-controls';
@@ -12,6 +17,7 @@ import { PlayButtonComponent } from '@erst_dev/ngx-video-controls';
  * подключается к последнему элементу.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-player-layout-demo',
   imports: [VideoDirective, PlayButtonComponent],
   providers: [VideoService],

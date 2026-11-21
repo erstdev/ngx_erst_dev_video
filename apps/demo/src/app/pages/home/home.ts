@@ -1,5 +1,10 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import {
@@ -25,6 +30,7 @@ const STATUS_KEYS: Readonly<Record<DemoStatus, UiKey>> = {
  * быстрый старт и индекс всех примеров. Отдельной точки входа нет.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
   imports: [CodeSnippetComponent, RouterLink],
   templateUrl: './home.html',

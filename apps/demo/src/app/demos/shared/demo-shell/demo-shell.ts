@@ -1,4 +1,10 @@
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import { type DemoStatus, findDemoByPath } from '../../demo-registry';
@@ -20,6 +26,7 @@ const STATUS_KEYS: Readonly<Record<DemoStatus, UiKey>> = {
  * содержимое в слот живого примера. Ссылка на API берётся из реестра.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-demo-shell',
   imports: [RouterLink],
   templateUrl: './demo-shell.html',

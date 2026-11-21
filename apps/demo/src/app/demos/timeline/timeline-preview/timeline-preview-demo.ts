@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import {
@@ -17,6 +22,7 @@ import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
  * и не загружается.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-timeline-preview-demo',
   imports: [
     CodeSnippetComponent,

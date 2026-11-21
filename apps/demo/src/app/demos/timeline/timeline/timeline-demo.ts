@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { VideoDirective, VideoService } from '@erst_dev/ngx-video-core';
 import { TimelineComponent } from '@erst_dev/ngx-video-timeline';
@@ -14,6 +19,7 @@ import { DemoShellComponent } from '../../shared/demo-shell/demo-shell';
  * на паузу, а после отпускания возобновляется, если играло.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-timeline-demo',
   imports: [
     CodeSnippetComponent,
