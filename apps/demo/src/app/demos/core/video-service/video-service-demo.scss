@@ -10,6 +10,42 @@
   margin-bottom: 1.5rem;
 }
 
+.demo__back {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.demo__back:hover {
+  color: #34d399;
+}
+
+.demo__tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+.demo__tab {
+  padding: 0.45rem 0.75rem;
+  border-bottom: 2px solid transparent;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.demo__tab:hover {
+  color: #e5e7eb;
+}
+
+.demo__tab.is-active {
+  border-bottom-color: #34d399;
+  color: #34d399;
+}
+
 .demo__title {
   margin: 0;
   font-size: 1.75rem;

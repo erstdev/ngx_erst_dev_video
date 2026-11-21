@@ -12,11 +12,10 @@ export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 /**
  * Локаль по умолчанию — `en` (docs/roadmap.md, шаг 2: `/` ведёт на `/en/`).
- * Пока перевод всех 25 README не закончен, здесь стоит `ru`, чтобы сайт не
- * открывался на английском с фолбэком на каждой странице. После перевода
- * значение меняется на `en`.
+ * На время перевода здесь стоял `ru`, чтобы сайт не открывался на английском
+ * с фолбэком на каждой странице; после перевода всех 25 README — снова `en`.
  */
-export const DEFAULT_LOCALE: Locale = 'ru';
+export const DEFAULT_LOCALE: Locale = 'en';
 
 /** Ключ в localStorage, в котором запоминается выбор языка. */
 export const LOCALE_STORAGE_KEY = 'ngx-video.locale';

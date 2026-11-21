@@ -1,4 +1,13 @@
 <section class="demo">
+  <a class="demo__back" [routerLink]="i18n.homeLink()"
+    >← {{ i18n.t('allExamples') }}</a
+  >
+
+  <nav class="demo__tabs">
+    <span class="demo__tab is-active">{{ i18n.t('example') }}</span>
+    <a class="demo__tab" [routerLink]="apiLink()">{{ i18n.t('api') }}</a>
+  </nav>
+
   <header class="demo__header">
     <h1 class="demo__title">ngx-video-core</h1>
     <p class="demo__subtitle">

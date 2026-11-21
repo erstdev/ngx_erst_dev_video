@@ -1,5 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import {
   VideoDirective,
@@ -9,6 +10,7 @@ import {
   type VideoState,
 } from '@erst_dev/ngx-video-core';
 
+import { LocaleService } from '../../../i18n/locale.service';
 import { CodeSnippetComponent } from '../../shared/code-snippet/code-snippet';
 
 /** Человекочитаемые подписи для значений `VideoState`. */
@@ -30,16 +32,21 @@ const STATE_LABELS: Readonly<Record<VideoState, string>> = {
  */
 @Component({
   selector: 'app-video-service-demo',
-  imports: [AsyncPipe, CodeSnippetComponent, VideoDirective],
+  imports: [AsyncPipe, CodeSnippetComponent, RouterLink, VideoDirective],
   templateUrl: './video-service-demo.html',
   styleUrl: './video-service-demo.scss',
 })
 export class VideoServiceDemo {
   protected readonly video = inject(VideoService);
+  protected readonly i18n = inject(LocaleService);
 
   protected readonly formatTime = formatTime;
 
   protected readonly rates = [0.5, 1, 1.5, 2];
+
+  protected apiLink(): string {
+    return `/${this.i18n.locale()}/docs/core`;
+  }
 
   protected readonly src =
     'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
