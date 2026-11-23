@@ -1,4 +1,4 @@
-﻿<header class="app-bar">
+<header class="app-bar">
   <a class="app-bar__brand" [routerLink]="i18n.homeLink()">ngx-video</a>
 
   <nav class="app-bar__nav" [attr.aria-label]="i18n.t('navHome')">
@@ -18,6 +18,17 @@
       {{ i18n.t('navDocs') }}
     </a>
   </nav>
+
+  <label class="app-bar__version">
+    <span class="visually-hidden">{{ i18n.t('version') }}</span>
+    <select class="app-bar__select" [attr.aria-label]="i18n.t('version')">
+      @for (version of versions; track version) {
+      <option [value]="version" [selected]="version === currentVersion">
+        {{ version }}
+      </option>
+      }
+    </select>
+  </label>
 
   <label class="app-bar__locale">
     <span class="visually-hidden">{{ i18n.t('language') }}</span>

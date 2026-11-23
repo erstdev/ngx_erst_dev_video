@@ -26,10 +26,6 @@
       </li>
       }
     </ul>
-    } @else {
-    <p class="docs-package__empty">
-      <a [routerLink]="link(pkg.route)">{{ i18n.t('api') }}</a>
-    </p>
     }
   </section>
   } } @else if (failed()) {

@@ -11,6 +11,10 @@ import {
 import { filter } from 'rxjs';
 
 import { LocaleService } from './i18n/services/locale.service';
+import {
+  CURRENT_DOCS_VERSION,
+  DOCS_VERSIONS,
+} from './constants/docs-versions.constants';
 import type { Locale } from './i18n/types/locale.type';
 import { isLocale } from './i18n/utils/is-locale.util';
 
@@ -24,6 +28,8 @@ import { isLocale } from './i18n/utils/is-locale.util';
 })
 export class App {
   protected readonly i18n = inject(LocaleService);
+  protected readonly versions = DOCS_VERSIONS;
+  protected readonly currentVersion = CURRENT_DOCS_VERSION;
   protected readonly locales: readonly { code: Locale; label: string }[] = [
     { code: 'ru', label: 'Русский' },
     { code: 'en', label: 'English' },

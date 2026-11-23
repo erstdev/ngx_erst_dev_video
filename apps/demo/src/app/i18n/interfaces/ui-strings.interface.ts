@@ -4,6 +4,7 @@ export interface UiStrings {
   readonly navHome: string;
   readonly navDocs: string;
   readonly overview: string;
+  readonly version: string;
   readonly language: string;
   readonly example: string;
   readonly api: string;
