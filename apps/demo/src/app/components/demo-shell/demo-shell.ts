@@ -1,29 +1,24 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   inject,
   input,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
-import { DEMO_STATUS_KEYS } from '../../constants/demo-status.constants';
-import type { DemoStatus } from '../../types/demo-status.type';
-import { findDemoByPath } from './utils/find-demo-by-path.util';
+import { DEMO_GROUPS } from '../../constants/demo-groups.constants';
+import { DocsLayoutComponent } from '../../docs/components/docs-layout/docs-layout';
+import { DocsTabsComponent } from '../../docs/components/docs-tabs/docs-tabs';
 import { LocaleService } from '../../i18n/services/locale.service';
-import { isLocale } from '../../i18n/utils/is-locale.util';
 
 /**
- * Общий каркас страницы демо: заголовок, статус, описание, «живое демо»
- * и список планируемого поведения.
- *
- * Страница конкретного кирпича передаёт сюда метаданные и проецирует
- * содержимое в слот живого примера. Ссылка на API берётся из реестра.
+ * Каркас страницы примера: заголовок компонента, описание, ответственности
+ * и слот «живого демо». Вкладки «Пример» и «API» даёт `app-docs-tabs`.
  */
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-demo-shell',
-  imports: [RouterLink],
+  imports: [DocsLayoutComponent, DocsTabsComponent],
   templateUrl: './demo-shell.html',
   styleUrl: './demo-shell.scss',
 })
@@ -31,7 +26,6 @@ export class DemoShellComponent {
   readonly title = input.required<string>();
   readonly pkg = input.required<string>();
   readonly selector = input<string>('');
-  readonly status = input<DemoStatus>('planned');
   readonly description = input.required<string>();
   readonly responsibilities = input<readonly string[]>([]);
   readonly pro = input(false);
@@ -39,27 +33,20 @@ export class DemoShellComponent {
   protected readonly i18n = inject(LocaleService);
   private readonly router = inject(Router);
 
-  protected readonly entry = computed(() => {
+  /**
+   * Пакет, кирпич и адрес API из URL и реестра:
+   * `/<локаль>/docs/<пакет>/<кирпич>`.
+   */
+  protected readonly route = this.parseRoute();
+
+  private parseRoute(): { pkg: string; brick: string; apiPath: string } {
     const [pathname] = this.router.url.split(/[?#]/);
-    const segments = pathname.split('/').filter(Boolean);
-    const demoPath = isLocale(segments[0])
-      ? segments.slice(1).join('/')
-      : segments.join('/');
+    const [, , pkg = '', brick = ''] = pathname.split('/').filter(Boolean);
+    const path = `docs/${pkg}/${brick}`;
+    const entry = DEMO_GROUPS.flatMap((group) => group.demos).find(
+      (demo) => demo.path === path,
+    );
 
-    return findDemoByPath(demoPath);
-  });
-
-  protected readonly docsLink = computed(() => {
-    const entry = this.entry();
-
-    return entry ? `/${this.i18n.locale()}/${entry.demo.docsPath}` : null;
-  });
-
-  protected readonly statusLabel = computed(() =>
-    this.i18n.t(DEMO_STATUS_KEYS[this.status()]),
-  );
-
-  protected readonly statusClass = computed(
-    () => `chip chip--${this.status()}`,
-  );
+    return { pkg, brick, apiPath: entry?.docsPath ?? `${path}/api` };
+  }
 }

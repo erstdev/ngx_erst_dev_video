@@ -1,0 +1,23 @@
+.docs-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+.docs-tabs__tab {
+  padding: 0.45rem 0.75rem;
+  border-bottom: 2px solid transparent;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.docs-tabs__tab:hover {
+  color: #e5e7eb;
+}
+
+.docs-tabs__tab.is-active {
+  border-bottom-color: #34d399;
+  color: #34d399;
+}

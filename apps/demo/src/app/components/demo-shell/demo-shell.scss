@@ -1,21 +1,6 @@
 :host {
   display: block;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 2rem 1rem 4rem;
   color: #e5e7eb;
-}
-
-.demo-page__back {
-  display: inline-block;
-  margin-bottom: 1rem;
-  color: #9ca3af;
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-
-.demo-page__back:hover {
-  color: #34d399;
 }
 
 .demo-page__header {
@@ -43,30 +28,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.demo-page__tabs {
-  display: flex;
-  gap: 0.25rem;
-  margin-top: 1rem;
-  border-bottom: 1px solid #1f2937;
-}
-
-.demo-page__tab {
-  padding: 0.45rem 0.75rem;
-  border-bottom: 2px solid transparent;
-  color: #9ca3af;
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-
-.demo-page__tab:hover {
-  color: #e5e7eb;
-}
-
-.demo-page__tab.is-active {
-  border-bottom-color: #34d399;
-  color: #34d399;
 }
 
 .demo-page__selector {

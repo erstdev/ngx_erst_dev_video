@@ -3,10 +3,10 @@ export interface UiStrings {
   readonly siteName: string;
   readonly navHome: string;
   readonly navDocs: string;
+  readonly overview: string;
   readonly language: string;
   readonly example: string;
   readonly api: string;
-  readonly allExamples: string;
   readonly fullPlayer: string;
   readonly liveDemo: string;
   readonly selector: string;
@@ -19,7 +19,4 @@ export interface UiStrings {
   readonly notFound: string;
   readonly loading: string;
   readonly loadError: string;
-  readonly statusReady: string;
-  readonly statusWip: string;
-  readonly statusPlanned: string;
 }

@@ -1,6 +1,5 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 import {
   VideoDirective,
@@ -10,8 +9,9 @@ import {
   type VideoState,
 } from '@erst_dev/ngx-video-core';
 
-import { LocaleService } from '../../../../i18n/services/locale.service';
 import { CodeSnippetComponent } from '../../../../components/code-snippet/code-snippet';
+import { DocsLayoutComponent } from '../../../../docs/components/docs-layout/docs-layout';
+import { DocsTabsComponent } from '../../../../docs/components/docs-tabs/docs-tabs';
 import { STATE_LABELS } from '../constants/video-service-demo.constants';
 
 /**
@@ -23,21 +23,22 @@ import { STATE_LABELS } from '../constants/video-service-demo.constants';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-video-service-demo',
-  imports: [AsyncPipe, CodeSnippetComponent, RouterLink, VideoDirective],
+  imports: [
+    AsyncPipe,
+    CodeSnippetComponent,
+    DocsLayoutComponent,
+    DocsTabsComponent,
+    VideoDirective,
+  ],
   templateUrl: './video-service-demo.html',
   styleUrl: './video-service-demo.scss',
 })
 export class VideoServiceDemo {
   protected readonly video = inject(VideoService);
-  protected readonly i18n = inject(LocaleService);
 
   protected readonly formatTime = formatTime;
 
   protected readonly rates = [0.5, 1, 1.5, 2];
-
-  protected apiLink(): string {
-    return `/${this.i18n.locale()}/docs/core`;
-  }
 
   protected readonly src =
     'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';

@@ -1,213 +1,217 @@
-<section class="demo">
-  <a class="demo__back" [routerLink]="i18n.homeLink()"
-    >← {{ i18n.t('allExamples') }}</a
-  >
+<app-docs-layout>
+  <app-docs-tabs
+    pkg="core"
+    brick="video-service"
+    apiPath="docs/core"
+    active="example"
+  />
 
-  <nav class="demo__tabs">
-    <span class="demo__tab is-active">{{ i18n.t('example') }}</span>
-    <a class="demo__tab" [routerLink]="apiLink()">{{ i18n.t('api') }}</a>
-  </nav>
+  <section class="demo">
+    <header class="demo__header">
+      <h1 class="demo__title">ngx-video-core</h1>
+      <p class="demo__subtitle">
+        Сырой <code>&lt;video&gt;</code> под управлением
+        <code>VideoService</code>. Никаких компонентов-кирпичей — только сервис
+        и директива.
+      </p>
+    </header>
 
-  <header class="demo__header">
-    <h1 class="demo__title">ngx-video-core</h1>
-    <p class="demo__subtitle">
-      Сырой <code>&lt;video&gt;</code> под управлением
-      <code>VideoService</code>. Никаких компонентов-кирпичей — только сервис и
-      директива.
-    </p>
-  </header>
+    <div class="player">
+      <video
+        ngxVideo
+        class="player__video"
+        [src]="src"
+        preload="metadata"
+        playsinline
+        (click)="video.toggle()"
+      ></video>
+    </div>
 
-  <div class="player">
-    <video
-      ngxVideo
-      class="player__video"
-      [src]="src"
-      preload="metadata"
-      playsinline
-      (click)="video.toggle()"
-    ></video>
-  </div>
+    <div class="controls">
+      <button type="button" class="controls__button" (click)="video.toggle()">
+        {{ video.isPlaying() ? 'Пауза' : 'Играть' }}
+      </button>
 
-  <div class="controls">
-    <button type="button" class="controls__button" (click)="video.toggle()">
-      {{ video.isPlaying() ? 'Пауза' : 'Играть' }}
-    </button>
+      <input
+        type="range"
+        class="controls__range controls__range--timeline"
+        min="0"
+        [max]="video.duration() || 0"
+        step="0.1"
+        [value]="video.time()"
+        (input)="onSeek($event)"
+        aria-label="Позиция воспроизведения"
+      />
 
-    <input
-      type="range"
-      class="controls__range controls__range--timeline"
-      min="0"
-      [max]="video.duration() || 0"
-      step="0.1"
-      [value]="video.time()"
-      (input)="onSeek($event)"
-      aria-label="Позиция воспроизведения"
-    />
+      <span class="controls__time">
+        {{ formatTime(video.time()) }} / {{ formatTime(video.duration()) }}
+      </span>
 
-    <span class="controls__time">
-      {{ formatTime(video.time()) }} / {{ formatTime(video.duration()) }}
-    </span>
+      <button
+        type="button"
+        class="controls__button"
+        (click)="video.toggleMute()"
+      >
+        {{ video.muted() ? 'Без звука' : 'Звук' }}
+      </button>
 
-    <button type="button" class="controls__button" (click)="video.toggleMute()">
-      {{ video.muted() ? 'Без звука' : 'Звук' }}
-    </button>
+      <input
+        type="range"
+        class="controls__range controls__range--volume"
+        min="0"
+        max="1"
+        step="0.01"
+        [value]="video.volume()"
+        (input)="onVolume($event)"
+        aria-label="Громкость"
+      />
 
-    <input
-      type="range"
-      class="controls__range controls__range--volume"
-      min="0"
-      max="1"
-      step="0.01"
-      [value]="video.volume()"
-      (input)="onVolume($event)"
-      aria-label="Громкость"
-    />
+      <label class="controls__speed">
+        Скорость
+        <select [value]="video.playbackRate()" (change)="onRate($event)">
+          @for (rate of rates; track rate) {
+          <option [value]="rate">{{ rate }}x</option>
+          }
+        </select>
+      </label>
 
-    <label class="controls__speed">
-      Скорость
-      <select [value]="video.playbackRate()" (change)="onRate($event)">
-        @for (rate of rates; track rate) {
-        <option [value]="rate">{{ rate }}x</option>
-        }
-      </select>
-    </label>
+      <button
+        type="button"
+        class="controls__button"
+        (click)="video.toggleFullscreen()"
+      >
+        {{ video.fullscreen() ? 'Выйти' : 'Фуллскрин' }}
+      </button>
+    </div>
 
-    <button
-      type="button"
-      class="controls__button"
-      (click)="video.toggleFullscreen()"
-    >
-      {{ video.fullscreen() ? 'Выйти' : 'Фуллскрин' }}
-    </button>
-  </div>
+    <section class="snippets">
+      <h2 class="snippets__title">Код примера</h2>
+      <p class="snippets__hint">
+        Раскройте блок — внутри HTML и TypeScript, которые можно скопировать в
+        свой проект.
+      </p>
 
-  <section class="snippets">
-    <h2 class="snippets__title">Код примера</h2>
-    <p class="snippets__hint">
-      Раскройте блок — внутри HTML и TypeScript, которые можно скопировать в
-      свой проект.
-    </p>
+      <app-code-snippet title="Подключение сервиса" [code]="code.setup" />
+      <app-code-snippet title="Команды управления" [code]="code.commands" />
+      <app-code-snippet title="Сигналы и Observable" [code]="code.reactivity" />
+      <app-code-snippet title="Несколько плееров" [code]="code.multiple" />
+      <app-code-snippet title="Обработка ошибок" [code]="code.errors" />
+    </section>
 
-    <app-code-snippet title="Подключение сервиса" [code]="code.setup" />
-    <app-code-snippet title="Команды управления" [code]="code.commands" />
-    <app-code-snippet title="Сигналы и Observable" [code]="code.reactivity" />
-    <app-code-snippet title="Несколько плееров" [code]="code.multiple" />
-    <app-code-snippet title="Обработка ошибок" [code]="code.errors" />
+    <table class="fields">
+      <caption class="fields__caption">
+        Все публичные поля
+        <code>VideoService</code>
+        — значения обновляются в реальном времени
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Параметр</th>
+          <th scope="col">Значение</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr class="fields__group">
+          <th colspan="2" scope="colgroup">Сигналы состояния</th>
+        </tr>
+        <tr>
+          <th scope="row">time</th>
+          <td>{{ timeValue(video.time()) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">duration</th>
+          <td>{{ timeValue(video.duration()) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">state</th>
+          <td>{{ stateValue(video.state()) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">volume</th>
+          <td>{{ volumeValue(video.volume()) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">muted</th>
+          <td>{{ yesNo(video.muted()) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">playbackRate</th>
+          <td>{{ rateValue(video.playbackRate()) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">buffered</th>
+          <td>{{ timeValue(video.buffered()) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">fullscreen</th>
+          <td>{{ yesNo(video.fullscreen()) }}</td>
+        </tr>
+        <tr [class.fields__row--error]="video.hasError()">
+          <th scope="row">error</th>
+          <td>{{ errorValue(video.error()) }}</td>
+        </tr>
+      </tbody>
+
+      <tbody>
+        <tr class="fields__group">
+          <th colspan="2" scope="colgroup">Производные значения</th>
+        </tr>
+        <tr>
+          <th scope="row">progress</th>
+          <td>{{ progressValue(video.progress()) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">isPlaying</th>
+          <td>{{ yesNo(video.isPlaying()) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">hasError</th>
+          <td>{{ yesNo(video.hasError()) }}</td>
+        </tr>
+      </tbody>
+
+      <tbody>
+        <tr class="fields__group">
+          <th colspan="2" scope="colgroup">RxJS-зеркала (Observable)</th>
+        </tr>
+        <tr>
+          <th scope="row">time$</th>
+          <td>{{ timeValue(video.time$ | async) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">duration$</th>
+          <td>{{ timeValue(video.duration$ | async) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">state$</th>
+          <td>{{ stateValue(video.state$ | async) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">volume$</th>
+          <td>{{ volumeValue(video.volume$ | async) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">muted$</th>
+          <td>{{ yesNo(video.muted$ | async) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">playbackRate$</th>
+          <td>{{ rateValue(video.playbackRate$ | async) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">buffered$</th>
+          <td>{{ timeValue(video.buffered$ | async) }}</td>
+        </tr>
+        <tr>
+          <th scope="row">fullscreen$</th>
+          <td>{{ yesNo(video.fullscreen$ | async) }}</td>
+        </tr>
+        <tr [class.fields__row--error]="video.hasError()">
+          <th scope="row">error$</th>
+          <td>{{ errorValue(video.error$ | async) }}</td>
+        </tr>
+      </tbody>
+    </table>
   </section>
-
-  <table class="fields">
-    <caption class="fields__caption">
-      Все публичные поля
-      <code>VideoService</code>
-      — значения обновляются в реальном времени
-    </caption>
-    <thead>
-      <tr>
-        <th scope="col">Параметр</th>
-        <th scope="col">Значение</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr class="fields__group">
-        <th colspan="2" scope="colgroup">Сигналы состояния</th>
-      </tr>
-      <tr>
-        <th scope="row">time</th>
-        <td>{{ timeValue(video.time()) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">duration</th>
-        <td>{{ timeValue(video.duration()) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">state</th>
-        <td>{{ stateValue(video.state()) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">volume</th>
-        <td>{{ volumeValue(video.volume()) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">muted</th>
-        <td>{{ yesNo(video.muted()) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">playbackRate</th>
-        <td>{{ rateValue(video.playbackRate()) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">buffered</th>
-        <td>{{ timeValue(video.buffered()) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">fullscreen</th>
-        <td>{{ yesNo(video.fullscreen()) }}</td>
-      </tr>
-      <tr [class.fields__row--error]="video.hasError()">
-        <th scope="row">error</th>
-        <td>{{ errorValue(video.error()) }}</td>
-      </tr>
-    </tbody>
-
-    <tbody>
-      <tr class="fields__group">
-        <th colspan="2" scope="colgroup">Производные значения</th>
-      </tr>
-      <tr>
-        <th scope="row">progress</th>
-        <td>{{ progressValue(video.progress()) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">isPlaying</th>
-        <td>{{ yesNo(video.isPlaying()) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">hasError</th>
-        <td>{{ yesNo(video.hasError()) }}</td>
-      </tr>
-    </tbody>
-
-    <tbody>
-      <tr class="fields__group">
-        <th colspan="2" scope="colgroup">RxJS-зеркала (Observable)</th>
-      </tr>
-      <tr>
-        <th scope="row">time$</th>
-        <td>{{ timeValue(video.time$ | async) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">duration$</th>
-        <td>{{ timeValue(video.duration$ | async) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">state$</th>
-        <td>{{ stateValue(video.state$ | async) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">volume$</th>
-        <td>{{ volumeValue(video.volume$ | async) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">muted$</th>
-        <td>{{ yesNo(video.muted$ | async) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">playbackRate$</th>
-        <td>{{ rateValue(video.playbackRate$ | async) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">buffered$</th>
-        <td>{{ timeValue(video.buffered$ | async) }}</td>
-      </tr>
-      <tr>
-        <th scope="row">fullscreen$</th>
-        <td>{{ yesNo(video.fullscreen$ | async) }}</td>
-      </tr>
-      <tr [class.fields__row--error]="video.hasError()">
-        <th scope="row">error$</th>
-        <td>{{ errorValue(video.error$ | async) }}</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+</app-docs-layout>

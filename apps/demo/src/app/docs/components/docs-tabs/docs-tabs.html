@@ -1,0 +1,14 @@
+<nav class="docs-tabs">
+  <a
+    class="docs-tabs__tab"
+    [class.is-active]="active() === 'example'"
+    [routerLink]="exampleLink()"
+    >{{ i18n.t('example') }}</a
+  >
+  <a
+    class="docs-tabs__tab"
+    [class.is-active]="active() === 'api'"
+    [routerLink]="apiLink()"
+    >{{ i18n.t('api') }}</a
+  >
+</nav>

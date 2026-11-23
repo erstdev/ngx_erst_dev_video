@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,18 +7,16 @@ import {
 import { RouterLink } from '@angular/router';
 
 import { DEMO_GROUPS } from '../../constants/demo-groups.constants';
-import { DEMO_STATUS_KEYS } from '../../constants/demo-status.constants';
 import type { DemoEntry } from '../../interfaces/demo-entry.interface';
 import type { DemoGroup } from '../../interfaces/demo-group.interface';
 import type { DemoGroupId } from '../../types/demo-group-id.type';
-import type { DemoStatus } from '../../types/demo-status.type';
 import { LocaleService } from '../../i18n/services/locale.service';
 import { CodeSnippetComponent } from '../../components/code-snippet/code-snippet';
 import { LANDING_CONTENT } from '../constants/landing-content.constants';
 
 /**
- * Главная-витрина сайта: что это за библиотеки, из каких пакетов состоят,
- * быстрый старт и индекс всех примеров. Отдельной точки входа нет.
+ * Главная-витрина сайта: что это за библиотеки, из каких пакетов состоят
+ * и быстрый старт. Каталог примеров живёт в разделе `/docs`.
  */
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +28,6 @@ import { LANDING_CONTENT } from '../constants/landing-content.constants';
 export class Home {
   protected readonly groups = DEMO_GROUPS;
   protected readonly i18n = inject(LocaleService);
-  private readonly document = inject(DOCUMENT);
   protected readonly content = computed(
     () => LANDING_CONTENT[this.i18n.locale()],
   );
@@ -58,28 +54,8 @@ export class Home {
     '}',
   ].join('\n');
 
-  protected statusLabel(status: DemoStatus): string {
-    return this.i18n.t(DEMO_STATUS_KEYS[status]);
-  }
-
   protected link(path: string): string {
     return `/${this.i18n.locale()}/${path}`;
-  }
-
-  /**
-   * Прокрутка к индексу примеров. Обычный href="#examples" под <base href="/">
-   * разрешается от корня и теряет локаль, поэтому ведём вручную.
-   */
-  protected scrollToExamples(event: MouseEvent): void {
-    event.preventDefault();
-    this.document
-      .getElementById('examples')
-      ?.scrollIntoView({ block: 'start' });
-    this.document.defaultView?.history.replaceState(
-      null,
-      '',
-      `${this.i18n.homeLink()}#examples`,
-    );
   }
 
   protected demoTitle(demo: DemoEntry): string {

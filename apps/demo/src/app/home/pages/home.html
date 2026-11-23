@@ -10,9 +10,6 @@
       <a class="button button--primary" [routerLink]="i18n.docsLink()"
         >{{ c.ctaDocs }}</a
       >
-      <a class="button" href="#examples" (click)="scrollToExamples($event)"
-        >{{ c.ctaExamples }}</a
-      >
     </div>
 
     <ul class="hero__facts">
@@ -61,7 +58,7 @@
         <ul class="package__bricks">
           @for (demo of group.demos; track demo.id) {
           <li>
-            <a class="package__brick" [routerLink]="link(demo.docsPath)"
+            <a class="package__brick" [routerLink]="link(demo.path)"
               >{{ demoTitle(demo) }}</a
             >
           </li>
@@ -103,46 +100,5 @@
         <app-code-snippet title="player.component.ts" [code]="usageCode" />
       </div>
     </div>
-  </section>
-
-  <section class="section examples" id="examples">
-    <header class="section__header">
-      <h2 class="section__title">{{ c.examplesTitle }}</h2>
-      <p class="section__subtitle">{{ c.examplesSubtitle }}</p>
-    </header>
-
-    @for (group of groups; track group.id) {
-    <section class="group">
-      <header class="group__header">
-        <h3 class="group__title">
-          <a [routerLink]="link(group.docsPath)">{{ group.title }}</a>
-        </h3>
-        @if (group.pro) {
-        <span class="chip chip--pro">PRO</span>
-        }
-        <code class="group__pkg">{{ group.pkg }}</code>
-      </header>
-
-      <ul class="group__list">
-        @for (demo of group.demos; track demo.id) {
-        <li class="group__item">
-          <span class="group__name">{{ demoTitle(demo) }}</span>
-
-          <span class="group__actions">
-            <a class="group__action" [routerLink]="link(demo.path)"
-              >{{ i18n.t('example') }}</a
-            >
-            <a class="group__action" [routerLink]="link(demo.docsPath)"
-              >{{ i18n.t('api') }}</a
-            >
-            <span [class]="'chip chip--' + demo.status"
-              >{{ statusLabel(demo.status) }}</span
-            >
-          </span>
-        </li>
-        }
-      </ul>
-    </section>
-    }
   </section>
 </section>

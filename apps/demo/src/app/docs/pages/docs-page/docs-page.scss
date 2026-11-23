@@ -1,23 +1,4 @@
-/* Страница документации: хлебные крошки, уведомление о фолбэке и оглавление. */
-
-.docs-breadcrumbs {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
-  color: #6b7280;
-  font-size: 0.8125rem;
-}
-
-.docs-breadcrumbs a {
-  color: #9ca3af;
-  text-decoration: none;
-}
-
-.docs-breadcrumbs a:hover {
-  color: #34d399;
-}
+/* Страница документации: уведомление о фолбэке и оглавление. */
 
 .docs-notice {
   margin: 0 0 1rem;
@@ -70,7 +51,7 @@
 }
 
 /* Сгенерированный HTML (innerHTML) скоупингом не покрывается, поэтому
-   типографика `.docs-content` живёт в глобальном styles.scss. */
+   типографика `.docs-content` живёт в глобальном файле стилей. */
 
 @media (max-width: 900px) {
   .docs-toc__list {

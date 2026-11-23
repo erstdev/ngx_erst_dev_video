@@ -16,7 +16,8 @@ import { filter } from 'rxjs';
 import { isLocale } from '../../../i18n/utils/is-locale.util';
 import { LocaleService } from '../../../i18n/services/locale.service';
 import { splitOnce } from '../../../utils/split-once.util';
-import { DocsNavComponent } from '../../components/docs-nav/docs-nav';
+import { DocsLayoutComponent } from '../../components/docs-layout/docs-layout';
+import { DocsTabsComponent } from '../../components/docs-tabs/docs-tabs';
 import { DocsService } from '../../services/docs.service';
 import type { DocsPageData } from '../../interfaces/docs-page-data.interface';
 import { decodeFragment } from '../../utils/decode-fragment.util';
@@ -32,7 +33,7 @@ import { decodeFragment } from '../../utils/decode-fragment.util';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-docs-page',
-  imports: [DocsNavComponent, RouterLink],
+  imports: [DocsLayoutComponent, DocsTabsComponent, RouterLink],
   templateUrl: './docs-page.html',
   styleUrl: './docs-page.scss',
 })
@@ -51,14 +52,6 @@ export class DocsPage {
   protected readonly loading = signal(true);
   protected readonly failed = signal(false);
 
-  protected readonly activeRoute = computed(() => {
-    const brick = this.brick();
-
-    return brick ? `docs/${this.pkg()}/${brick}` : `docs/${this.pkg()}`;
-  });
-  protected readonly pkgLink = computed(
-    () => `/${this.locale()}/docs/${this.pkg()}`,
-  );
   protected readonly toc = computed(() =>
     (this.page()?.headings ?? []).filter(
       (heading) => heading.level === 2 || heading.level === 3,

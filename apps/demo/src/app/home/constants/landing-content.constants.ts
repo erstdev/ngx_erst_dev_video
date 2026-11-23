@@ -9,7 +9,6 @@ export const LANDING_CONTENT = {
     heroSubtitle:
       'ngx-video — headless-библиотеки для Angular. core держит состояние video, остальные пакеты добавляют контролы, таймлайн, источники и захват. Разметку и стили выбираете вы.',
     ctaDocs: 'Открыть документацию',
-    ctaExamples: 'Смотреть примеры',
     facts: [
       'Angular 22+',
       'Standalone',
@@ -82,9 +81,6 @@ export const LANDING_CONTENT = {
     installNote:
       'Пакеты пока не опубликованы в npm: внутри монорепо они подключаются через paths в tsconfig.base.json.',
     usageLabel: 'Минимальный плеер',
-    examplesTitle: 'Все примеры',
-    examplesSubtitle:
-      '22 живые страницы: каждая показывает кирпич в работе и его код. API-справка лежит в разделе документации.',
   },
   en: {
     heroEyebrow: 'Angular 22 · headless · signals',
@@ -92,7 +88,6 @@ export const LANDING_CONTENT = {
     heroSubtitle:
       'ngx-video is a set of headless Angular libraries. core owns the video state; the other packages add controls, a timeline, streaming sources, and capture. You keep the markup and the styles.',
     ctaDocs: 'Read the docs',
-    ctaExamples: 'Browse examples',
     facts: [
       'Angular 22+',
       'Standalone',
@@ -166,8 +161,5 @@ export const LANDING_CONTENT = {
     installNote:
       'The packages are not published to npm yet; inside the monorepo they are wired through paths in tsconfig.base.json.',
     usageLabel: 'Minimal player',
-    examplesTitle: 'All examples',
-    examplesSubtitle:
-      '22 live pages: each one shows a building block in action together with its code. The API reference lives in the docs section.',
   },
 } as const satisfies Record<Locale, LandingContent>;

@@ -10,7 +10,6 @@ export interface LandingContent {
   readonly heroTitle: string;
   readonly heroSubtitle: string;
   readonly ctaDocs: string;
-  readonly ctaExamples: string;
   readonly facts: readonly string[];
   readonly featuresTitle: string;
   readonly featuresSubtitle: string;
@@ -25,6 +24,4 @@ export interface LandingContent {
   readonly installLabel: string;
   readonly installNote: string;
   readonly usageLabel: string;
-  readonly examplesTitle: string;
-  readonly examplesSubtitle: string;
 }

@@ -10,6 +10,19 @@
   font-size: 0.875rem;
 }
 
+.docs-nav__overview {
+  display: block;
+  margin-bottom: 1.5rem;
+  color: #e5e7eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.docs-nav__overview:hover,
+.docs-nav__overview.is-active {
+  color: #34d399;
+}
+
 .docs-nav__group {
   margin-bottom: 1.25rem;
 }
@@ -54,20 +67,9 @@
   text-decoration: none;
 }
 
-.docs-nav__example {
-  flex: 0 0 auto;
-  color: #6b7280;
-  font-size: 0.6875rem;
-  text-decoration: none;
-}
-
 /* Бейдж «ru» не должен выдавливать длинные названия из строки. */
 .docs-nav__item .docs-badge {
   flex: 0 0 auto;
-}
-
-.docs-nav__example:hover {
-  color: #34d399;
 }
 
 .docs-nav__status {

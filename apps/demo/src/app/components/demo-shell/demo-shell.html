@@ -1,7 +1,10 @@
-<article class="demo-page">
-  <a class="demo-page__back" [routerLink]="i18n.homeLink()"
-    >← {{ i18n.t('allExamples') }}</a
-  >
+<app-docs-layout>
+  <app-docs-tabs
+    [pkg]="route.pkg"
+    [brick]="route.brick"
+    [apiPath]="route.apiPath"
+    active="example"
+  />
 
   <header class="demo-page__header">
     <div class="demo-page__titles">
@@ -9,20 +12,12 @@
       <p class="demo-page__pkg">{{ pkg() }}</p>
     </div>
 
+    @if (pro()) {
     <div class="demo-page__badges">
-      @if (pro()) {
       <span class="chip chip--pro">PRO</span>
-      }
-      <span [class]="statusClass()">{{ statusLabel() }}</span>
     </div>
-  </header>
-
-  <nav class="demo-page__tabs">
-    <span class="demo-page__tab is-active">{{ i18n.t('example') }}</span>
-    @if (docsLink(); as link) {
-    <a class="demo-page__tab" [routerLink]="link">{{ i18n.t('api') }}</a>
     }
-  </nav>
+  </header>
 
   @if (selector()) {
   <p class="demo-page__selector">
@@ -46,4 +41,4 @@
       <ng-content />
     </div>
   </section>
-</article>
+</app-docs-layout>

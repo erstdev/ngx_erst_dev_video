@@ -3,32 +3,29 @@ import {
   Component,
   effect,
   inject,
-  input,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
-import { findDemoById } from '../../utils/find-demo-by-id.util';
 import { LocaleService } from '../../../i18n/services/locale.service';
 import { isLocale } from '../../../i18n/utils/is-locale.util';
 import { DocsService } from '../../services/docs.service';
 import type { DocsIndex } from '../../interfaces/docs-index.interface';
 
 /**
- * Сайдбар документации: пакеты и кирпичи из `index.json`.
- * У кирпича две ссылки — API-справка и живой пример (если он есть в реестре).
+ * Сайдбар документации: пакеты и входящие в них кирпичи из `index.json`.
+ *
+ * Пункт открывает страницу компонента с вкладками «Пример» и «API»;
+ * отдельной ссылки «Пример» здесь нет — она не нужна.
  */
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-docs-nav',
-  imports: [RouterLink],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './docs-nav.html',
   styleUrl: './docs-nav.scss',
 })
 export class DocsNavComponent {
-  readonly locale = input.required<string>();
-  readonly activeRoute = input('');
-
   protected readonly i18n = inject(LocaleService);
   private readonly docs = inject(DocsService);
 
@@ -37,7 +34,7 @@ export class DocsNavComponent {
 
   constructor() {
     effect((onCleanup) => {
-      const locale = this.locale();
+      const locale = this.i18n.locale();
       let cancelled = false;
       onCleanup(() => {
         cancelled = true;
@@ -63,12 +60,6 @@ export class DocsNavComponent {
   }
 
   protected link(route: string): string {
-    return `/${this.locale()}/${route}`;
-  }
-
-  protected exampleLink(pkgId: string, brickId: string): string | null {
-    const demo = findDemoById(pkgId, brickId);
-
-    return demo ? `/${this.locale()}/${demo.path}` : null;
+    return `/${this.i18n.locale()}/${route}`;
   }
 }

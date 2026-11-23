@@ -1,6 +1,4 @@
 import type { UiKey } from '../i18n/types/ui-key.type';
-import type { DemoStatus } from '../types/demo-status.type';
-
 /** Один кирпич в реестре сайта. */
 export interface DemoEntry {
   /** Идентификатор внутри группы (совпадает с именем каталога демо). */
@@ -17,5 +15,4 @@ export interface DemoEntry {
   readonly title: string;
   /** Ключ перевода для заголовков, которые отличаются в локалях. */
   readonly titleKey?: UiKey;
-  readonly status: DemoStatus;
 }
