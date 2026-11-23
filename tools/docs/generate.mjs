@@ -23,11 +23,21 @@
  */
 
 import { existsSync } from 'node:fs';
-import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { Marked } from 'marked';
+
+import {
+  LOCALES,
+  PRIVATE_REPO_URL_PATTERNS,
+  createReadmeRegistry,
+  englishReadmePath,
+  rewriteHref,
+  safeDecode,
+  splitOnce,
+} from './lib/readme-links.mjs';
 
 const ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -37,33 +47,6 @@ const ROOT = path.resolve(
 const PROJECTS_DIR = path.join(ROOT, 'projects');
 const OUTPUT_DIR = path.join(ROOT, 'apps', 'demo', 'public', 'docs-content');
 
-/** Локали сайта. Должны совпадать с `SUPPORTED_LOCALES` в приложении. */
-const LOCALES = ['ru', 'en'];
-
-/** Порядок пакетов в навигации — как в roadmap. */
-const PACKAGE_ORDER = [
-  'core',
-  'controls',
-  'timeline',
-  'extras',
-  'sources',
-  'capture',
-];
-
-/**
- * Приватный репозиторий проекта. Ссылки на него не должны попадать в
- * пользовательскую документацию: README используют относительные пути, а
- * генератор переписывает их на внутренние маршруты `/docs/...`.
- */
-const PRIVATE_REPO = 'erstdev/ngx_erst_dev_video';
-const PRIVATE_REPO_URL_PATTERNS = [
-  new RegExp(`https?://github\\.com/${PRIVATE_REPO}(?:[/?#]|$)`, 'i'),
-  /https?:\/\/gitlab\.com\/erst_dev\/ngx_erst_dev_video(?:[/?#]|$)/i,
-];
-
-/** Карта «путь README в репозитории → маршрут документации». */
-const docsMap = new Map();
-
 main().catch((error) => {
   console.error('\n✖ Генерация документации не удалась.');
   console.error(error instanceof Error ? error.message : error);
@@ -72,8 +55,12 @@ main().catch((error) => {
 
 async function main() {
   const generatedAt = new Date().toISOString();
-  const packages = await collectSources();
-  const pages = await buildPages(packages);
+  const { packages: sources, docsMap } = await createReadmeRegistry({
+    root: ROOT,
+    projectsDir: PROJECTS_DIR,
+  });
+  const packages = await collectSources(sources);
+  const pages = await buildPages(packages, docsMap);
   const internalLinks = validatePages(pages);
 
   await writeAssets(packages, pages, generatedAt);
@@ -102,92 +89,21 @@ async function main() {
 }
 
 /**
- * Собирает пакеты и кирпичи из файловой системы.
- * Пакет — `projects/<pkg>/README.md`, кирпич — любой `README.md` под
- * `projects/<pkg>/src/lib/**`. Имя каталога README становится id кирпича.
+ * Дополняет реестр README тем, что нужно сайту: заголовком пакета и именем
+ * в npm. Сама раскладка README — в `createReadmeRegistry`.
  */
-async function collectSources() {
-  if (!existsSync(PROJECTS_DIR)) {
-    throw new Error(`Не найден каталог проектов: ${PROJECTS_DIR}`);
-  }
-
-  const order = new Map(PACKAGE_ORDER.map((id, index) => [id, index]));
-  const entries = await readdir(PROJECTS_DIR, { withFileTypes: true });
-  const packageIds = entries
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .filter((id) => existsSync(path.join(PROJECTS_DIR, id, 'README.md')))
-    .sort(
-      (a, b) =>
-        (order.get(a) ?? 99) - (order.get(b) ?? 99) || a.localeCompare(b),
-    );
-
+async function collectSources(sources) {
   const packages = [];
 
-  for (const id of packageIds) {
-    const sourcePath = path.join(PROJECTS_DIR, id, 'README.md');
-    const source = toPosix(path.relative(ROOT, sourcePath));
-    const route = `docs/${id}`;
-    registerReadme(source, route);
-
-    const npmName = await readPackageName(id);
-    const bricks = [];
-
-    const libDir = path.join(PROJECTS_DIR, id, 'src', 'lib');
-    if (existsSync(libDir)) {
-      for (const readmePath of await collectReadmes(libDir)) {
-        const brick = path.basename(path.dirname(readmePath));
-        const brickSource = toPosix(path.relative(ROOT, readmePath));
-        const brickRoute = `${route}/${brick}`;
-
-        if (docsMap.has(brickSource)) {
-          throw new Error(`Дублирующийся README: ${brickSource}`);
-        }
-
-        registerReadme(brickSource, brickRoute);
-        bricks.push({ id: brick, source: brickSource, route: brickRoute });
-      }
-    }
-
-    bricks.sort((a, b) => a.id.localeCompare(b.id));
+  for (const source of sources) {
     packages.push({
-      id,
-      title: capitalize(id),
-      npmName,
-      source,
-      route,
-      bricks,
+      ...source,
+      title: capitalize(source.id),
+      npmName: await readPackageName(source.id),
     });
   }
 
-  if (!packages.length) {
-    throw new Error('Не найдено ни одного пакета с README.md');
-  }
-
   return packages;
-}
-
-/** Регистрирует русский README и его английскую пару как один маршрут. */
-function registerReadme(source, route) {
-  docsMap.set(source, route);
-  docsMap.set(source.replace(/README\.md$/, 'README.en.md'), route);
-}
-
-/** Рекурсивно находит только русские README (английские — производные). */
-async function collectReadmes(dir) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files = [];
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...(await collectReadmes(fullPath)));
-    } else if (entry.isFile() && entry.name === 'README.md') {
-      files.push(fullPath);
-    }
-  }
-
-  return files;
 }
 
 async function readPackageName(id) {
@@ -203,30 +119,36 @@ async function readPackageName(id) {
 }
 
 /** Рендерит все страницы обеих локалей. */
-async function buildPages(packages) {
+async function buildPages(packages, docsMap) {
   const pages = [];
 
   for (const pkg of packages) {
     for (const locale of LOCALES) {
       pages.push(
-        await buildPage({
-          locale,
-          pkg: pkg.id,
-          brick: null,
-          source: pkg.source,
-          route: pkg.route,
-        }),
+        await buildPage(
+          {
+            locale,
+            pkg: pkg.id,
+            brick: null,
+            source: pkg.source,
+            route: pkg.route,
+          },
+          docsMap,
+        ),
       );
 
       for (const brick of pkg.bricks) {
         pages.push(
-          await buildPage({
-            locale,
-            pkg: pkg.id,
-            brick: brick.id,
-            source: brick.source,
-            route: brick.route,
-          }),
+          await buildPage(
+            {
+              locale,
+              pkg: pkg.id,
+              brick: brick.id,
+              source: brick.source,
+              route: brick.route,
+            },
+            docsMap,
+          ),
         );
       }
     }
@@ -235,8 +157,8 @@ async function buildPages(packages) {
   return pages;
 }
 
-async function buildPage({ locale, pkg, brick, source, route }) {
-  const englishSource = source.replace(/README\.md$/, 'README.en.md');
+async function buildPage({ locale, pkg, brick, source, route }, docsMap) {
+  const englishSource = englishReadmePath(source);
   let sourcePath = source;
   let fallback = false;
 
@@ -252,6 +174,7 @@ async function buildPage({ locale, pkg, brick, source, route }) {
   const context = {
     locale,
     sourcePath,
+    docsMap,
     ids: new Set(),
     headings: [],
     warnings: [],
@@ -333,78 +256,6 @@ function createRenderer(context) {
   };
 }
 
-/**
- * Переписывает ссылку на внутреннюю страницу документации.
- * Внешние ссылки остаются как есть, но помечаются `external`.
- */
-function rewriteHref(rawHref, context) {
-  const href = String(rawHref ?? '').trim();
-
-  if (!href) return { href: '', external: false };
-  if (href.startsWith('#')) return { href, external: false };
-  if (/^(mailto:|tel:)/i.test(href)) return { href, external: false };
-
-  if (/^https?:\/\//i.test(href)) {
-    const internal = githubUrlToRoute(href, context.locale);
-    if (internal) return { href: internal, external: false };
-
-    if (isPrivateRepoUrl(href)) {
-      context.warnings.push(`ссылка на приватный репозиторий удалена: ${href}`);
-      return { href: '', external: false, drop: true };
-    }
-
-    return { href, external: true };
-  }
-
-  if (href.startsWith('//')) {
-    return { href: `https:${href}`, external: true };
-  }
-
-  if (href.startsWith('/')) {
-    return { href, external: false };
-  }
-
-  const [beforeHash, hash = ''] = splitOnce(href, '#');
-  const pathPart = beforeHash.split('?')[0];
-
-  if (!pathPart) return { href, external: false };
-
-  const resolved = resolveRepoPath(context.sourcePath, pathPart);
-  const route = docsMap.get(resolved);
-
-  if (route) {
-    return {
-      href: `/${context.locale}/${route}${hash ? `#${hash}` : ''}`,
-      external: false,
-    };
-  }
-
-  context.warnings.push(
-    `относительная ссылка "${href}" не ведёт на README — показана без ссылки`,
-  );
-
-  return { href: '', external: false, drop: true };
-}
-
-/** GitHub-ссылка на README превращается во внутренний маршрут `/docs/...`. */
-function githubUrlToRoute(href, locale) {
-  const match = href.match(
-    /^https?:\/\/github\.com\/erstdev\/ngx_erst_dev_video\/(?:blob|tree)\/[^/]+\/([^?#]+)(?:\?[^#]*)?(#.*)?$/i,
-  );
-
-  if (!match) return null;
-
-  const repoPath = safeDecode(match[1]);
-  const route = docsMap.get(repoPath);
-
-  return route ? `/${locale}/${route}${match[2] ?? ''}` : null;
-}
-
-/** Ссылки на приватный репозиторий не должны попадать на сайт. */
-function isPrivateRepoUrl(href) {
-  return PRIVATE_REPO_URL_PATTERNS.some((pattern) => pattern.test(href));
-}
-
 function resolveImage(href, context) {
   const src = String(href ?? '').trim();
 
@@ -421,14 +272,6 @@ function resolveImage(href, context) {
   );
 
   return null;
-}
-
-function resolveRepoPath(sourcePath, relativePath) {
-  const resolved = path.posix.normalize(
-    path.posix.join(path.posix.dirname(sourcePath), relativePath),
-  );
-
-  return resolved.replace(/^\.\//, '');
 }
 
 function uniqueId(text, context) {
@@ -486,27 +329,8 @@ function escapeAttribute(value) {
   return escapeHtml(value);
 }
 
-function safeDecode(value) {
-  try {
-    return decodeURIComponent(value);
-  } catch {
-    return value;
-  }
-}
-
-function splitOnce(value, separator) {
-  const index = value.indexOf(separator);
-  return index === -1
-    ? [value, '']
-    : [value.slice(0, index), value.slice(index + separator.length)];
-}
-
 function capitalize(value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
-}
-
-function toPosix(value) {
-  return value.split(path.sep).join('/');
 }
 
 /**

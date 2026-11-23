@@ -6,6 +6,7 @@
     "start": "nx serve demo",
     "docs:generate": "node tools/docs/generate.mjs",
     "docs:verify": "node tools/docs/verify-translations.mjs",
+    "docs:pack": "node tools/docs/pack-readme.mjs",
     "build": "nx build demo",
     "build:all": "nx run-many --target=build --all",
     "lint": "nx run-many --target=lint --all",
