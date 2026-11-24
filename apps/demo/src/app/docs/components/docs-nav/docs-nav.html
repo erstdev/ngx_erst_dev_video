@@ -3,16 +3,18 @@
     class="docs-nav__overview"
     [routerLink]="link('docs')"
     routerLinkActive="is-active"
+    ariaCurrentWhenActive="page"
     [routerLinkActiveOptions]="{ exact: true }"
     >{{ i18n.t('overview') }}</a
   >
 
   @if (index(); as data) { @for (pkg of data.packages; track pkg.id) {
-  <section class="docs-nav__group">
+  <div class="docs-nav__group">
     <a
       class="docs-nav__package"
       [routerLink]="link(pkg.route)"
       routerLinkActive="is-active"
+      ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
     >
       {{ pkg.title }}
@@ -27,6 +29,7 @@
           [attr.title]="brick.title"
           [routerLink]="link(brick.route)"
           routerLinkActive="is-active"
+          ariaCurrentWhenActive="page"
         >
           {{ brick.title }}
         </a>
@@ -39,7 +42,7 @@
       }
     </ul>
     }
-  </section>
+  </div>
   } } @else if (failed()) {
   <p class="docs-nav__status">{{ i18n.t('loadError') }}</p>
   } @else {

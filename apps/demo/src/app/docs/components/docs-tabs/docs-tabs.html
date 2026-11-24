@@ -1,13 +1,15 @@
-<nav class="docs-tabs">
+<nav class="docs-tabs" [attr.aria-label]="i18n.t('tabsNav')">
   <a
     class="docs-tabs__tab"
     [class.is-active]="active() === 'example'"
+    [attr.aria-current]="active() === 'example' ? 'page' : null"
     [routerLink]="exampleLink()"
     >{{ i18n.t('example') }}</a
   >
   <a
     class="docs-tabs__tab"
     [class.is-active]="active() === 'api'"
+    [attr.aria-current]="active() === 'api' ? 'page' : null"
     [routerLink]="apiLink()"
     >{{ i18n.t('api') }}</a
   >

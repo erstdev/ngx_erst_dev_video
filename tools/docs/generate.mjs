@@ -171,6 +171,7 @@ async function buildPage({ locale, pkg, brick, source, route }, docsMap) {
   }
 
   const markdown = await readFile(path.join(ROOT, sourcePath), 'utf8');
+  const description = describeMarkdown(markdown);
   const context = {
     locale,
     sourcePath,
@@ -191,6 +192,7 @@ async function buildPage({ locale, pkg, brick, source, route }, docsMap) {
     brick,
     route,
     title,
+    description,
     file: brick ? `${pkg}/${brick}.json` : `${pkg}.json`,
     source: sourcePath,
     sourceLocale: fallback ? 'ru' : locale,
@@ -299,6 +301,23 @@ function slugify(text) {
     .replace(/[^\p{L}\p{N}\s_-]/gu, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
+}
+
+/**
+ * Первый абзац README — основа meta description страницы.
+ * Разметку снимаем тем же `plainText`, что и для заголовков.
+ */
+function describeMarkdown(markdown) {
+  const marked = new Marked({ gfm: true });
+  const paragraph = marked
+    .lexer(markdown)
+    .find((token) => token.type === 'paragraph');
+
+  if (!paragraph) return '';
+
+  const text = plainText(marked.parseInline(paragraph.text));
+
+  return text.length > 160 ? `${text.slice(0, 157).trimEnd()}…` : text;
 }
 
 function plainText(html) {
@@ -419,6 +438,7 @@ async function writeAssets(packages, pages, generatedAt) {
           source: page.source,
           sourceLocale: page.sourceLocale,
           fallback: page.fallback,
+          description: page.description,
           headings: page.headings,
           html: page.html,
         },

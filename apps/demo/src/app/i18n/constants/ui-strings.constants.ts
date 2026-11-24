@@ -9,11 +9,16 @@ import type { Locale } from '../types/locale.type';
 export const UI_STRINGS = {
   ru: {
     siteName: 'ngx-video',
+    siteDescription:
+      'Angular-библиотеки для видео-плеера: состояние, контролы, таймлайн, HLS/DASH, жесты, субтитры и захват видео.',
+    skipToContent: 'Перейти к содержимому',
+    mainNav: 'Основная навигация',
     navHome: 'Главная',
     navDocs: 'Документация',
     overview: 'Обзор',
     version: 'Версия',
     language: 'Язык',
+    tabsNav: 'Разделы страницы',
     example: 'Пример',
     api: 'API',
     fullPlayer: 'Полный плеер',
@@ -32,14 +37,20 @@ export const UI_STRINGS = {
     loading: 'Загружаем…',
     loadError:
       'Не удалось загрузить страницу. Обновите страницу и попробуйте снова.',
+    footerCopyright: '© 2026 ngx-video · MIT',
   },
   en: {
     siteName: 'ngx-video',
+    siteDescription:
+      'Angular libraries for a video player: state, controls, timeline, HLS/DASH, gestures, subtitles and video capture.',
+    skipToContent: 'Skip to content',
+    mainNav: 'Main navigation',
     navHome: 'Home',
     navDocs: 'Docs',
     overview: 'Overview',
     version: 'Version',
     language: 'Language',
+    tabsNav: 'Page sections',
     example: 'Example',
     api: 'API',
     fullPlayer: 'Full player',
@@ -57,5 +68,6 @@ export const UI_STRINGS = {
     notFound: 'Page not found',
     loading: 'Loading…',
     loadError: 'Could not load the page. Refresh the page and try again.',
+    footerCopyright: '© 2026 ngx-video · MIT',
   },
 } as const satisfies Record<Locale, UiStrings>;

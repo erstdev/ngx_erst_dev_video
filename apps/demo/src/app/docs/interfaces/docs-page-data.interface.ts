@@ -7,6 +7,7 @@ export interface DocsPageData {
   readonly pkg: string;
   readonly brick: string | null;
   readonly title: string;
+  readonly description: string;
   readonly route: string;
   readonly source: string;
   readonly sourceLocale: Locale;

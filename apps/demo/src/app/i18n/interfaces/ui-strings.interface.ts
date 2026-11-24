@@ -1,11 +1,15 @@
 /** Набор UI-строк одной локали: навигация, кнопки, подписи и статусы. */
 export interface UiStrings {
   readonly siteName: string;
+  readonly siteDescription: string;
+  readonly skipToContent: string;
+  readonly mainNav: string;
   readonly navHome: string;
   readonly navDocs: string;
   readonly overview: string;
   readonly version: string;
   readonly language: string;
+  readonly tabsNav: string;
   readonly example: string;
   readonly api: string;
   readonly fullPlayer: string;
@@ -20,4 +24,5 @@ export interface UiStrings {
   readonly notFound: string;
   readonly loading: string;
   readonly loadError: string;
+  readonly footerCopyright: string;
 }

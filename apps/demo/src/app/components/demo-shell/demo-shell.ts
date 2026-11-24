@@ -1,15 +1,18 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
   input,
 } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { DEMO_GROUPS } from '../../constants/demo-groups.constants';
+import { SITE_NAME } from '../../constants/site.constants';
 import { DocsLayoutComponent } from '../../docs/components/docs-layout/docs-layout';
 import { DocsTabsComponent } from '../../docs/components/docs-tabs/docs-tabs';
 import { LocaleService } from '../../i18n/services/locale.service';
+import { SeoService } from '../../services/seo.service';
 
 /**
  * Каркас страницы примера: заголовок компонента, описание, ответственности
@@ -32,12 +35,34 @@ export class DemoShellComponent {
 
   protected readonly i18n = inject(LocaleService);
   private readonly router = inject(Router);
+  private readonly seo = inject(SeoService);
 
   /**
    * Пакет, кирпич и адрес API из URL и реестра:
    * `/<локаль>/docs/<пакет>/<кирпич>`.
    */
   protected readonly route = this.parseRoute();
+
+  constructor() {
+    effect(() => {
+      const title = this.title();
+      const locale = this.i18n.locale();
+      const base = `/${locale}/docs`;
+      const { pkg, brick } = this.route;
+
+      this.seo.apply({
+        title: `${title} — ${SITE_NAME}`,
+        description: this.description(),
+        type: 'webpage',
+        breadcrumbs: [
+          { name: this.i18n.t('navHome'), path: `/${locale}` },
+          { name: this.i18n.t('docsTitle'), path: base },
+          { name: pkg, path: `${base}/${pkg}` },
+          { name: title, path: `${base}/${pkg}/${brick}` },
+        ],
+      });
+    });
+  }
 
   private parseRoute(): { pkg: string; brick: string; apiPath: string } {
     const [pathname] = this.router.url.split(/[?#]/);

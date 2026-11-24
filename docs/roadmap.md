@@ -121,6 +121,13 @@ VPS для этого не нужен, поэтому делается до де
 - [x] **Главная-витрина** на `/`: что это за библиотеки, установка, ссылки на разделы.
       `home/pages` — вводный блок, возможности, шесть пакетов и быстрый старт;
       каталог примеров живёт в `/docs`.
+- [x] **SEO-слой**: `SeoService` ставит `title`, `description`, `robots`, canonical,
+      `hreflang` (`en`/`ru`/`x-default`), Open Graph/Twitter и JSON-LD (`WebSite`,
+      `CollectionPage`, `TechArticle`, `WebPage` с `BreadcrumbList`). Описания страниц
+      документации берутся из первого абзаца README на сборке. Семантика: skip-link,
+      `main#main`, `aria-current="page"`, подписи `nav`, футер. Абсолютные
+      canonical/hreflang/OG-ссылки появятся, когда в `SITE_URL`
+      (`app/constants/site.constants.ts`) будет домен.
 - [ ] **Prerender обеих локалей**: инфраструктура готова — `@angular/ssr`,
       `main.server.ts`, `app.routes.server.ts`, `outputMode: "static"`, hydration;
       пререндерятся главные `/en` и `/ru`. Осталось: серверный источник данных для
@@ -134,6 +141,8 @@ VPS для этого не нужен, поэтому делается до де
       `/en/docs/controls/play-button/api`) локально отвечают 200. Конфиг fallback
       и кеша — [deployment.md](deployment.md), применить на VPS.
 - [ ] **VPS и домен, зафиксировать `SITE_URL`** — покупка в **декабре**.
+      `SITE_URL`: переменная окружения для `docs:pack` и константа в
+      `apps/demo/src/app/constants/site.constants.ts` для canonical и hreflang.
       _Блокирует:_ HTTPS, деплой и ссылки в README.
 - [ ] **HTTPS и статика**: Caddy (авто-TLS) или nginx + certbot, `try_files`
       на `index.html`, кеширование ассетов. Конфиги и проверки — [deployment.md](deployment.md).

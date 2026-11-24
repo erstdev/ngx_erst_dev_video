@@ -10,6 +10,8 @@ import { RouterLink } from '@angular/router';
 
 import { LocaleService } from '../../../i18n/services/locale.service';
 import { isLocale } from '../../../i18n/utils/is-locale.util';
+import { SITE_NAME } from '../../../constants/site.constants';
+import { SeoService } from '../../../services/seo.service';
 import { DocsLayoutComponent } from '../../components/docs-layout/docs-layout';
 import { DocsService } from '../../services/docs.service';
 import type { DocsIndex } from '../../interfaces/docs-index.interface';
@@ -27,6 +29,7 @@ export class DocsIndexPage {
 
   protected readonly i18n = inject(LocaleService);
   private readonly docs = inject(DocsService);
+  private readonly seo = inject(SeoService);
 
   protected readonly index = signal<DocsIndex | null>(null);
   protected readonly failed = signal(false);
@@ -55,6 +58,23 @@ export class DocsIndexPage {
         .catch(() => {
           if (!cancelled) this.failed.set(true);
         });
+    });
+
+    effect(() => {
+      if (!this.index()) return;
+
+      const locale = this.i18n.locale();
+      const base = `/${locale}`;
+
+      this.seo.apply({
+        title: `${this.i18n.t('docsTitle')} — ${SITE_NAME}`,
+        description: this.i18n.t('docsSubtitle'),
+        type: 'collection',
+        breadcrumbs: [
+          { name: this.i18n.t('navHome'), path: base },
+          { name: this.i18n.t('docsTitle'), path: `${base}/docs` },
+        ],
+      });
     });
   }
 

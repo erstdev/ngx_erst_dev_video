@@ -1,11 +1,14 @@
+<a class="skip-link" href="#main">{{ i18n.t('skipToContent') }}</a>
+
 <header class="app-bar">
   <a class="app-bar__brand" [routerLink]="i18n.homeLink()">ngx-video</a>
 
-  <nav class="app-bar__nav" [attr.aria-label]="i18n.t('navHome')">
+  <nav class="app-bar__nav" [attr.aria-label]="i18n.t('mainNav')">
     <a
       class="app-bar__link"
       [routerLink]="i18n.homeLink()"
       routerLinkActive="is-active"
+      ariaCurrentWhenActive="page"
       [routerLinkActiveOptions]="{ exact: true }"
     >
       {{ i18n.t('navHome') }}
@@ -14,6 +17,7 @@
       class="app-bar__link"
       [routerLink]="i18n.docsLink()"
       routerLinkActive="is-active"
+      ariaCurrentWhenActive="page"
     >
       {{ i18n.t('navDocs') }}
     </a>
@@ -46,6 +50,10 @@
   </label>
 </header>
 
-<main class="app-main">
+<main id="main" class="app-main" tabindex="-1">
   <router-outlet></router-outlet>
 </main>
+
+<footer class="app-footer">
+  <p class="app-footer__text">{{ i18n.t('footerCopyright') }}</p>
+</footer>

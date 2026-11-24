@@ -2,16 +2,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { DEMO_GROUPS } from '../../constants/demo-groups.constants';
+import { SITE_NAME } from '../../constants/site.constants';
 import type { DemoEntry } from '../../interfaces/demo-entry.interface';
 import type { DemoGroup } from '../../interfaces/demo-group.interface';
 import type { DemoGroupId } from '../../types/demo-group-id.type';
 import { LocaleService } from '../../i18n/services/locale.service';
 import { CodeSnippetComponent } from '../../components/code-snippet/code-snippet';
+import { SeoService } from '../../services/seo.service';
 import { LANDING_CONTENT } from '../constants/landing-content.constants';
 
 /**
@@ -28,9 +31,23 @@ import { LANDING_CONTENT } from '../constants/landing-content.constants';
 export class Home {
   protected readonly groups = DEMO_GROUPS;
   protected readonly i18n = inject(LocaleService);
+  private readonly seo = inject(SeoService);
+
   protected readonly content = computed(
     () => LANDING_CONTENT[this.i18n.locale()],
   );
+
+  constructor() {
+    effect(() => {
+      const content = this.content();
+
+      this.seo.apply({
+        title: `${content.heroTitle} — ${SITE_NAME}`,
+        description: content.heroSubtitle,
+        type: 'website',
+      });
+    });
+  }
 
   protected readonly installCode =
     'npm install @erst_dev/ngx-video-core @erst_dev/ngx-video-controls';

@@ -15,6 +15,8 @@ import { filter } from 'rxjs';
 
 import { isLocale } from '../../../i18n/utils/is-locale.util';
 import { LocaleService } from '../../../i18n/services/locale.service';
+import { SITE_NAME } from '../../../constants/site.constants';
+import { SeoService } from '../../../services/seo.service';
 import { splitOnce } from '../../../utils/split-once.util';
 import { DocsLayoutComponent } from '../../components/docs-layout/docs-layout';
 import { DocsTabsComponent } from '../../components/docs-tabs/docs-tabs';
@@ -44,6 +46,7 @@ export class DocsPage {
 
   protected readonly i18n = inject(LocaleService);
   private readonly docs = inject(DocsService);
+  private readonly seo = inject(SeoService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
@@ -107,6 +110,36 @@ export class DocsPage {
         takeUntilDestroyed(),
       )
       .subscribe(() => this.scrollToFragment());
+
+    effect(() => {
+      const doc = this.page();
+      if (!doc) return;
+
+      const locale = this.i18n.locale();
+      const base = `/${locale}/docs`;
+      const brick = this.brick();
+      const pkg = this.pkg();
+      const breadcrumbs = [
+        { name: this.i18n.t('navHome'), path: `/${locale}` },
+        { name: this.i18n.t('docsTitle'), path: base },
+      ];
+
+      if (brick) {
+        breadcrumbs.push({ name: pkg, path: `${base}/${pkg}` });
+        breadcrumbs.push({ name: doc.title, path: `${base}/${pkg}/${brick}` });
+      } else {
+        breadcrumbs.push({ name: doc.title, path: `${base}/${pkg}` });
+      }
+
+      this.seo.apply({
+        title: brick
+          ? `${doc.title} API — ${SITE_NAME}`
+          : `${doc.title} — ${SITE_NAME}`,
+        description: doc.description,
+        type: 'article',
+        breadcrumbs,
+      });
+    });
   }
 
   /** Оглавление: тот же якорь, но без перезагрузки страницы. */
