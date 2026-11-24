@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
   signal,
@@ -9,11 +10,15 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { LocaleService } from '../../../i18n/services/locale.service';
 import { isLocale } from '../../../i18n/utils/is-locale.util';
-import { DocsService } from '../../services/docs.service';
-import type { DocsIndex } from '../../interfaces/docs-index.interface';
+import { DocsStore } from '../../services/docs-store.service';
 
 /**
  * Сайдбар документации: пакеты и входящие в них кирпичи из `index.json`.
+ *
+ * На пререндеренных страницах индекс уже лежит в `TransferState` (его положил
+ * resolver), поэтому сайдбар попадает в HTML при первом рендере и hydration
+ * видит ту же разметку. На демо-страницах, которые остаются клиентскими,
+ * индекс догружается JSON-ассетом.
  *
  * Пункт открывает страницу компонента с вкладками «Пример» и «API»;
  * отдельной ссылки «Пример» здесь нет — она не нужна.
@@ -27,35 +32,23 @@ import type { DocsIndex } from '../../interfaces/docs-index.interface';
 })
 export class DocsNavComponent {
   protected readonly i18n = inject(LocaleService);
-  private readonly docs = inject(DocsService);
+  private readonly store = inject(DocsStore);
 
-  protected readonly index = signal<DocsIndex | null>(null);
+  protected readonly index = computed(() =>
+    this.store.index(this.i18n.locale()),
+  );
   protected readonly failed = signal(false);
 
   constructor() {
-    effect((onCleanup) => {
+    effect(() => {
       const locale = this.i18n.locale();
-      let cancelled = false;
-      onCleanup(() => {
-        cancelled = true;
-      });
-
-      this.index.set(null);
       this.failed.set(false);
 
-      if (!isLocale(locale)) {
-        this.failed.set(true);
-        return;
-      }
+      if (!isLocale(locale) || this.index()) return;
 
-      void this.docs
-        .loadIndex(locale)
-        .then((index) => {
-          if (!cancelled) this.index.set(index);
-        })
-        .catch(() => {
-          if (!cancelled) this.failed.set(true);
-        });
+      void this.store.ensureIndex(locale).then((index) => {
+        if (!index) this.failed.set(true);
+      });
     });
   }
 

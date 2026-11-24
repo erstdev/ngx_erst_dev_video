@@ -2,35 +2,37 @@ import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  afterNextRender,
   computed,
   effect,
   inject,
   input,
-  signal,
 } from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 
-import { isLocale } from '../../../i18n/utils/is-locale.util';
 import { LocaleService } from '../../../i18n/services/locale.service';
 import { SITE_NAME } from '../../../constants/site.constants';
 import { SeoService } from '../../../services/seo.service';
 import { splitOnce } from '../../../utils/split-once.util';
 import { DocsLayoutComponent } from '../../components/docs-layout/docs-layout';
 import { DocsTabsComponent } from '../../components/docs-tabs/docs-tabs';
-import { DocsService } from '../../services/docs.service';
 import type { DocsPageData } from '../../interfaces/docs-page-data.interface';
 import { decodeFragment } from '../../utils/decode-fragment.util';
 
 /**
  * Страница API-справки `/docs/<пакет>` и `/docs/<пакет>/<кирпич>`.
  *
- * HTML приходит из сгенерированного JSON-ассета. `bypassSecurityTrustHtml`
- * используется осознанно: генератор экранирует сырой HTML из README и сам
- * собирает разметку, а стандартный санитайзер Angular вырезал бы `id`
- * заголовков — без них не работают якоря.
+ * HTML приходит из resolver'а: на сборке — из сгенерированного серверного
+ * модуля, в браузере — из `TransferState` после пререндера или из JSON-ассета
+ * при клиентском переходе. Поэтому статья готова к первому рендеру и hydration
+ * не находит расхождений.
+ *
+ * `bypassSecurityTrustHtml` используется осознанно: генератор экранирует сырой
+ * HTML из README и сам собирает разметку, а стандартный санитайзер Angular
+ * вырезал бы `id` заголовков — без них не работают якоря.
  */
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,65 +45,27 @@ export class DocsPage {
   readonly locale = input.required<string>();
   readonly pkg = input.required<string>();
   readonly brick = input('');
+  /** Страница из resolver'а: статья есть до первого рендера. */
+  readonly docsPage = input<DocsPageData | null>(null);
 
   protected readonly i18n = inject(LocaleService);
-  private readonly docs = inject(DocsService);
   private readonly seo = inject(SeoService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
 
-  protected readonly page = signal<DocsPageData | null>(null);
-  protected readonly loading = signal(true);
-  protected readonly failed = signal(false);
-
   protected readonly toc = computed(() =>
-    (this.page()?.headings ?? []).filter(
+    (this.docsPage()?.headings ?? []).filter(
       (heading) => heading.level === 2 || heading.level === 3,
     ),
   );
   protected readonly safeHtml = computed<SafeHtml | string>(() => {
-    const page = this.page();
+    const page = this.docsPage();
 
     return page ? this.sanitizer.bypassSecurityTrustHtml(page.html) : '';
   });
 
   constructor() {
-    effect((onCleanup) => {
-      const locale = this.locale();
-      const pkg = this.pkg();
-      const brick = this.brick();
-      let cancelled = false;
-
-      onCleanup(() => {
-        cancelled = true;
-      });
-
-      this.loading.set(true);
-      this.failed.set(false);
-      this.page.set(null);
-
-      if (!isLocale(locale)) {
-        this.loading.set(false);
-        this.failed.set(true);
-        return;
-      }
-
-      void this.docs
-        .loadPage(locale, pkg, brick || undefined)
-        .then((page) => {
-          if (cancelled) return;
-          this.page.set(page);
-          this.loading.set(false);
-          setTimeout(() => this.scrollToFragment());
-        })
-        .catch(() => {
-          if (cancelled) return;
-          this.failed.set(true);
-          this.loading.set(false);
-        });
-    });
-
     this.router.events
       .pipe(
         filter(
@@ -111,8 +75,12 @@ export class DocsPage {
       )
       .subscribe(() => this.scrollToFragment());
 
+    // Данные приходят resolver'ом, но DOM ещё не отрисован: якорь ищем после
+    // первого рендера. На сервере колбэк не выполняется.
+    afterNextRender(() => this.scrollToFragment());
+
     effect(() => {
-      const doc = this.page();
+      const doc = this.docsPage();
       if (!doc) return;
 
       const locale = this.i18n.locale();

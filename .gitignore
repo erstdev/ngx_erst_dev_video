@@ -13,6 +13,8 @@
 
 # Сгенерированная документация сайта (tools/docs/generate.mjs)
 /apps/demo/public/docs-content/
+# Серверный модуль документации для prerender — тоже генерируется
+/apps/demo/src/app/docs/generated/
 
 # --- Кеши Nx и Angular -------------------------------------------------------
 .nx/cache

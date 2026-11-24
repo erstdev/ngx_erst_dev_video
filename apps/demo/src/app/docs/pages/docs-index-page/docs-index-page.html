@@ -4,7 +4,7 @@
     <p class="docs-hero__subtitle">{{ i18n.t('docsSubtitle') }}</p>
   </header>
 
-  @if (index(); as data) { @for (pkg of data.packages; track pkg.id) {
+  @if (docsIndex(); as data) { @for (pkg of data.packages; track pkg.id) {
   <section class="docs-package">
     <header class="docs-package__header">
       <h2 class="docs-package__title">
@@ -28,9 +28,7 @@
     </ul>
     }
   </section>
-  } } @else if (failed()) {
+  } } @else {
   <p class="docs-status">{{ i18n.t('loadError') }}</p>
-  } @else {
-  <p class="docs-status">{{ i18n.t('loading') }}</p>
   }
 </app-docs-layout>

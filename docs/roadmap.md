@@ -128,15 +128,18 @@ VPS для этого не нужен, поэтому делается до де
       `main#main`, `aria-current="page"`, подписи `nav`, футер. Абсолютные
       canonical/hreflang/OG-ссылки появятся, когда в `SITE_URL`
       (`app/constants/site.constants.ts`) будет домен.
-- [ ] **Prerender обеих локалей**: инфраструктура готова — `@angular/ssr`,
-      `main.server.ts`, `app.routes.server.ts`, `outputMode: "static"`, hydration;
-      пререндерятся главные `/en` и `/ru`. Осталось: серверный источник данных для
-      `docs-content` (сейчас `fetch` в Node не работает), `getPrerenderParams` для
-      пакетов и кирпичей и перевод 6 README + 19 API на `RenderMode.Prerender`.
-      Живые демо остаются `RenderMode.Client`.
+- [x] **Prerender обеих локалей и документации**: `@angular/ssr`, `main.server.ts`,
+      `app.routes.server.ts`, `outputMode: "static"`, hydration. Генератор пишет
+      серверный модуль (`apps/demo/src/app/docs/generated/`), docs-маршруты получают
+      данные из resolver'ов, клиенту их отдаёт `TransferState`. `RenderMode.Prerender`
+      у `/:locale`, `/:locale/docs`, `/:locale/docs/:pkg`,
+      `/:locale/docs/:pkg/:brick/api`; `getPrerenderParams` — из сгенерированных
+      списков. 54 статических страницы (2 главные + 2 `/docs` + 12 README пакетов +
+      38 API), живые демо — `RenderMode.Client`.
 - [x] **Сборка сайта**: прод-билд `apps/demo` с `baseHref=/` (домен корневой).
       Angular с серверной точкой входа кладёт SPA-shell `index.csr.html`;
-      `demo:prepare-static` копирует его в `index.html` для статики и `serve-static`.
+      `demo:prepare-static` копирует его в `index.html` для статики, `serve-static`
+      и в каталоги клиентских маршрутов (демо).
       Глубокие ссылки (`/en`, `/en/docs`, `/ru/docs/core`,
       `/en/docs/controls/play-button/api`) локально отвечают 200. Конфиг fallback
       и кеша — [deployment.md](deployment.md), применить на VPS.

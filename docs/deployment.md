@@ -3,16 +3,18 @@
 Черновик к шагу 2: VPS и домен покупаются в декабре, конфиг пока не применяется.
 Файл фиксирует, что именно нужно настроить, чтобы не отлаживать это на сервере.
 
-Сайт — статика из `dist/apps/demo/browser`: пререндеренные `en/index.html` и
-`ru/index.html`, SPA-shell `index.csr.html` (его создаёт Angular), его копия
-`index.html` (после `nx run demo:prepare-static`), хешированные JS/CSS,
-`favicon.ico` и `docs-content/*.json`.
+Сайт — статика из `dist/apps/demo/browser`: 54 пререндеренные страницы (главные,
+`/docs`, README пакетов и API), SPA-shell `index.csr.html` (его создаёт Angular) и
+его копии `index.html` — в корне и в каталогах клиентских маршрутов (демо), после
+`nx run demo:prepare-static`; хешированные JS/CSS, `favicon.ico` и
+`docs-content/*.json`.
 
 ## Что важно
 
 - `baseHref=/`: сайт живёт в корне домена, а не в подпапке.
-- **Пререндер:** главные `/en` и `/ru` — готовый HTML с контентом
-  (`ng-server-context="ssg"`). Остальные страницы пока клиентские.
+- **Пререндер:** главные `/en` и `/ru`, `/<локаль>/docs`, README пакетов и API —
+  готовый HTML с контентом (`ng-server-context="ssg"`). Живые демо
+  (`/<локаль>/docs/<пакет>/<кирпич>`) остаются клиентскими: им нужен браузер.
 - **SPA-fallback:** на неизвестный путь сервер отдаёт `index.html` (это shell),
   иначе глубокая ссылка и F5 дают 404 — приложение не успевает загрузиться.
 - **Fallback только для страниц:** `docs-content/*.json`, `main-*.js`, `styles-*.css`
@@ -28,9 +30,11 @@ npx nx run demo:prepare-static # index.csr.html → index.html
 ```
 
 `prepare-static` обязателен: при наличии серверной точки входа Angular называет
-SPA-shell `index.csr.html`, а статике нужен `index.html`. Пререндеренные страницы
-(`en/index.html`, `ru/index.html`) скрипт не трогает. Серверный бандл в прод не
-уезжает — деплоится только `browser/`.
+SPA-shell `index.csr.html`, а статике нужен `index.html`. Скрипт копирует shell в
+корень и в каталоги клиентских маршрутов: каталог, появившийся ради вложенной
+пререндеренной API-страницы, иначе отдаёт листинг или 403 вместо приложения.
+Пререндеренные страницы скрипт не трогает. Серверный бандл в прод не уезжает —
+деплоится только `browser/`.
 
 ## nginx
 
@@ -91,8 +95,10 @@ example.com {
 curl -I https://example.com/                                  # 200, index.html (shell)
 curl -I https://example.com/en                                # 200, пререндеренный HTML
 curl -I https://example.com/ru                                # 200, пререндеренный HTML
-curl -I https://example.com/en/docs                           # 200, index.html (fallback)
-curl -I https://example.com/en/docs/controls/play-button/api  # 200, fallback
+curl -I https://example.com/en/docs                           # 200, пререндеренный HTML
+curl -I https://example.com/en/docs/core                      # 200, README пакета
+curl -I https://example.com/en/docs/controls/play-button/api  # 200, API-справка
+curl -I https://example.com/en/docs/controls/play-button      # 200, shell (демо)
 curl -I https://example.com/docs-content/en/core.json         # 200, application/json
 curl -I https://example.com/docs-content/en/missing.json      # 404
 curl -I https://example.com/no-such-page                      # 200, index.html (SPA)

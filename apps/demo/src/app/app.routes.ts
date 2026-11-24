@@ -1,6 +1,8 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 
+import { docsIndexResolver } from './docs/resolvers/docs-index.resolver';
+import { docsPageResolver } from './docs/resolvers/docs-page.resolver';
 import { localeGuard } from './i18n/guards/locale.guard';
 import { LocaleService } from './i18n/services/locale.service';
 
@@ -168,6 +170,7 @@ const demoRoutes: Routes = [
 const docsRoutes: Routes = [
   {
     path: 'docs',
+    resolve: { docsIndex: docsIndexResolver },
     loadComponent: () =>
       import('./docs/pages/docs-index-page/docs-index-page').then(
         (m) => m.DocsIndexPage,
@@ -175,11 +178,13 @@ const docsRoutes: Routes = [
   },
   {
     path: 'docs/:pkg',
+    resolve: { docsIndex: docsIndexResolver, docsPage: docsPageResolver },
     loadComponent: () =>
       import('./docs/pages/docs-page/docs-page').then((m) => m.DocsPage),
   },
   {
     path: 'docs/:pkg/:brick/api',
+    resolve: { docsIndex: docsIndexResolver, docsPage: docsPageResolver },
     loadComponent: () =>
       import('./docs/pages/docs-page/docs-page').then((m) => m.DocsPage),
   },

@@ -7,6 +7,11 @@
  * `apps/demo/public/docs-content/<локаль>/...`. В браузер парсер Markdown не
  * попадает — приложение читает уже готовый HTML.
  *
+ * Рядом с JSON генератор пишет серверный TypeScript-модуль с тем же
+ * содержимым (`apps/demo/src/app/docs/generated/`): при prerender в Node нет
+ * HTTP-сервера, и страницы берут README оттуда. Модуль импортирует только
+ * серверная конфигурация, в браузерный бандл он не попадает.
+ *
  * Что делает генератор:
  *   - переписывает относительные ссылки на README в `/<локаль>/docs/...`;
  *   - ссылки на приватный репозиторий (GitHub/GitLab) не выводит: известные
@@ -46,6 +51,20 @@ const ROOT = path.resolve(
 );
 const PROJECTS_DIR = path.join(ROOT, 'projects');
 const OUTPUT_DIR = path.join(ROOT, 'apps', 'demo', 'public', 'docs-content');
+/** Серверный источник для prerender: только импорт из `app.config.server.ts`. */
+const SERVER_MODULE_DIR = path.join(
+  ROOT,
+  'apps',
+  'demo',
+  'src',
+  'app',
+  'docs',
+  'generated',
+);
+const SERVER_MODULE_PATH = path.join(
+  SERVER_MODULE_DIR,
+  'docs-content.generated.ts',
+);
 
 main().catch((error) => {
   console.error('\n✖ Генерация документации не удалась.');
@@ -86,6 +105,7 @@ async function main() {
     for (const warning of warnings) console.log(`  - ${warning}`);
   }
   console.log(`  Ассеты: ${path.relative(ROOT, OUTPUT_DIR)}/`);
+  console.log(`  Серверный модуль: ${path.relative(ROOT, SERVER_MODULE_PATH)}`);
 }
 
 /**
@@ -418,7 +438,27 @@ function checkAnchor(sourcePage, rawHash, targetPage, errors) {
   }
 }
 
-/** Раскладывает JSON-ассеты по локалям и общий index.json. */
+/**
+ * Содержимое страницы в том виде, в котором его получают приложение:
+ * одинаково для JSON-ассета и для серверного модуля.
+ */
+function toPageData(page) {
+  return {
+    locale: page.locale,
+    pkg: page.pkg,
+    brick: page.brick,
+    title: page.title,
+    route: page.route,
+    source: page.source,
+    sourceLocale: page.sourceLocale,
+    fallback: page.fallback,
+    description: page.description,
+    headings: page.headings,
+    html: page.html,
+  };
+}
+
+/** Раскладывает JSON-ассеты по локалям, общий index.json и серверный модуль. */
 async function writeAssets(packages, pages, generatedAt) {
   await rm(OUTPUT_DIR, { recursive: true, force: true });
   await mkdir(OUTPUT_DIR, { recursive: true });
@@ -428,27 +468,12 @@ async function writeAssets(packages, pages, generatedAt) {
     await mkdir(path.dirname(outputPath), { recursive: true });
     await writeFile(
       outputPath,
-      `${JSON.stringify(
-        {
-          locale: page.locale,
-          pkg: page.pkg,
-          brick: page.brick,
-          title: page.title,
-          route: page.route,
-          source: page.source,
-          sourceLocale: page.sourceLocale,
-          fallback: page.fallback,
-          description: page.description,
-          headings: page.headings,
-          html: page.html,
-        },
-        null,
-        2,
-      )}\n`,
+      `${JSON.stringify(toPageData(page), null, 2)}\n`,
       'utf8',
     );
   }
 
+  const indexes = {};
   for (const locale of LOCALES) {
     const localePages = pages.filter((page) => page.locale === locale);
     const packageEntries = packages.map((pkg) => {
@@ -475,25 +500,23 @@ async function writeAssets(packages, pages, generatedAt) {
       };
     });
 
+    indexes[locale] = {
+      locale,
+      generatedAt,
+      packages: packageEntries,
+      pages: localePages.map((page) => ({
+        pkg: page.pkg,
+        brick: page.brick,
+        title: page.title,
+        route: page.route,
+        file: page.file,
+        fallback: page.fallback,
+      })),
+    };
+
     await writeFile(
       path.join(OUTPUT_DIR, locale, 'index.json'),
-      `${JSON.stringify(
-        {
-          locale,
-          generatedAt,
-          packages: packageEntries,
-          pages: localePages.map((page) => ({
-            pkg: page.pkg,
-            brick: page.brick,
-            title: page.title,
-            route: page.route,
-            file: page.file,
-            fallback: page.fallback,
-          })),
-        },
-        null,
-        2,
-      )}\n`,
+      `${JSON.stringify(indexes[locale], null, 2)}\n`,
       'utf8',
     );
   }
@@ -529,6 +552,70 @@ async function writeAssets(packages, pages, generatedAt) {
     )}\n`,
     'utf8',
   );
+
+  await writeServerModule(packages, pages, indexes);
+}
+
+/**
+ * Пишет серверный модуль документации: тот же контент, что в JSON-ассетах,
+ * но доступный при сборке импортом. Параметры prerender тоже берутся отсюда,
+ * поэтому списки локалей, пакетов и кирпичей не дублируются в маршрутах.
+ */
+async function writeServerModule(packages, pages, indexes) {
+  await mkdir(SERVER_MODULE_DIR, { recursive: true });
+
+  const pageEntries = pages.map((page) => {
+    const key = page.brick
+      ? `${page.locale}/${page.pkg}/${page.brick}`
+      : `${page.locale}/${page.pkg}`;
+
+    return `  ${JSON.stringify(key)}: ${JSON.stringify(toPageData(page))},`;
+  });
+  const indexEntries = LOCALES.map(
+    (locale) =>
+      `  ${JSON.stringify(locale)}: ${JSON.stringify(indexes[locale])},`,
+  );
+  const apiPages = pages.filter(
+    (page) => page.locale === LOCALES[0] && page.brick,
+  );
+  const apiEntries = apiPages.map(
+    (page) =>
+      `  { pkg: ${JSON.stringify(page.pkg)}, brick: ${JSON.stringify(page.brick)} },`,
+  );
+
+  const content = `/**
+ * Сгенерировано tools/docs/generate.mjs — не редактировать вручную.
+ *
+ * Серверный источник документации для prerender: ровно те же страницы и
+ * индексы, что лежат в public/docs-content, но импортом — при сборке в Node
+ * нет HTTP-сервера. Модуль читают только app.config.server.ts и
+ * app.routes.server.ts, поэтому в браузерный бандл он не попадает.
+ */
+import type { DocsIndex } from '../interfaces/docs-index.interface';
+import type { DocsPageData } from '../interfaces/docs-page-data.interface';
+
+/** Страницы документации: ключ — 'локаль/пакет' или 'локаль/пакет/кирпич'. */
+export const DOCS_PAGES = {
+${pageEntries.join('\n')}
+} as unknown as Readonly<Record<string, DocsPageData>>;
+
+/** Индексы документации по локалям: обзор /docs и сайдбар. */
+export const DOCS_INDEXES = {
+${indexEntries.join('\n')}
+} as unknown as Readonly<Record<string, DocsIndex>>;
+
+/** Пакеты с README — параметры prerender для '/локаль/docs/пакет'. */
+export const DOCS_PACKAGES: readonly string[] = [${packages
+    .map((pkg) => JSON.stringify(pkg.id))
+    .join(', ')}];
+
+/** Кирпичи с README — параметры prerender для '/локаль/docs/пакет/кирпич/api'. */
+export const DOCS_API_PAGES: readonly { pkg: string; brick: string }[] = [
+${apiEntries.join('\n')}
+];
+`;
+
+  await writeFile(SERVER_MODULE_PATH, content, 'utf8');
 }
 
 function findPage(pages, route) {

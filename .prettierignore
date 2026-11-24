@@ -4,3 +4,5 @@
 /.nx/workspace-data
 package-lock.json
 .angular
+# Генерируется tools/docs/generate.mjs (данные, а не код)
+/apps/demo/src/app/docs/generated/

@@ -1,26 +1,52 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
-/** Локали сайта: главные страницы пререндерятся для каждой. */
-const LOCALES = ['en', 'ru'];
+import {
+  DOCS_API_PAGES,
+  DOCS_PACKAGES,
+} from './docs/generated/docs-content.generated';
+import { SUPPORTED_LOCALES } from './i18n/constants/locale.constants';
 
 /**
  * Режимы рендера маршрутов при сборке.
  *
- * Пока статическими делаем только главные страницы: их содержимое — константы,
- * ему не нужны браузер и запросы. Документация и живые демо остаются
- * клиентскими: README грузятся JSON-запросом, а демо работают с медиа и
- * браузерными API. Их пререндер — следующий шаг, когда появится серверный
- * источник данных для документации.
+ * Документация статическая: README и API-справка одинаковы для всех
+ * посетителей, а данные доступны на сборке через сгенерированный серверный
+ * модуль. Живые демо остаются клиентскими: им нужны браузер, медиа и
+ * `MediaRecorder`.
+ *
+ * Списки параметров берутся из того же сгенерированного модуля, что и данные,
+ * поэтому маршруты не могут разойтись с содержимым.
  */
+const localeParams = (): Record<string, string>[] =>
+  SUPPORTED_LOCALES.map((locale) => ({ locale }));
+
 export const serverRoutes: ServerRoute[] = [
   {
     path: ':locale',
     renderMode: RenderMode.Prerender,
-    getPrerenderParams: async () => LOCALES.map((locale) => ({ locale })),
+    getPrerenderParams: async () => localeParams(),
   },
-  { path: ':locale/docs', renderMode: RenderMode.Client },
-  { path: ':locale/docs/:pkg', renderMode: RenderMode.Client },
+  {
+    path: ':locale/docs',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: async () => localeParams(),
+  },
+  {
+    path: ':locale/docs/:pkg',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: async () =>
+      SUPPORTED_LOCALES.flatMap((locale) =>
+        DOCS_PACKAGES.map((pkg) => ({ locale, pkg })),
+      ),
+  },
   { path: ':locale/docs/:pkg/:brick', renderMode: RenderMode.Client },
-  { path: ':locale/docs/:pkg/:brick/api', renderMode: RenderMode.Client },
+  {
+    path: ':locale/docs/:pkg/:brick/api',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: async () =>
+      SUPPORTED_LOCALES.flatMap((locale) =>
+        DOCS_API_PAGES.map(({ pkg, brick }) => ({ locale, pkg, brick })),
+      ),
+  },
   { path: '**', renderMode: RenderMode.Client },
 ];

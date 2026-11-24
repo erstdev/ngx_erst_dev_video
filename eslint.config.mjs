@@ -5,7 +5,8 @@ export default [
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
   {
-    ignores: ['**/dist', '**/out-tsc'],
+    // Сгенерированные данные документации: не код, а контент из README.
+    ignores: ['**/dist', '**/out-tsc', '**/docs/generated'],
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],

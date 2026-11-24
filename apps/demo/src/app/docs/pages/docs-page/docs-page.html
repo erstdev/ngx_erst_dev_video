@@ -1,14 +1,7 @@
 <app-docs-layout>
   @if (brick()) {
   <app-docs-tabs [pkg]="pkg()" [brick]="brick()" active="api" />
-  } @if (loading()) {
-  <p class="docs-status">{{ i18n.t('loading') }}</p>
-  } @else if (failed()) {
-  <div class="docs-status">
-    <p>{{ i18n.t('notFound') }}</p>
-    <p><a [routerLink]="i18n.docsLink()">{{ i18n.t('docsTitle') }}</a></p>
-  </div>
-  } @else if (page(); as doc) { @if (doc.fallback) {
+  } @if (docsPage(); as doc) { @if (doc.fallback) {
   <p class="docs-notice">{{ i18n.t('translationFallback') }}</p>
   } @if (toc().length) {
   <nav class="docs-toc" [attr.aria-label]="i18n.t('onThisPage')">
@@ -33,5 +26,10 @@
     [innerHTML]="safeHtml()"
     (click)="onContentClick($event)"
   ></div>
+  } @else {
+  <div class="docs-status">
+    <p>{{ i18n.t('notFound') }}</p>
+    <p><a [routerLink]="i18n.docsLink()">{{ i18n.t('docsTitle') }}</a></p>
+  </div>
   }
 </app-docs-layout>

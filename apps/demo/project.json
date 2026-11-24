@@ -14,7 +14,10 @@
         "{workspaceRoot}/projects/**/README.en.md",
         "{workspaceRoot}/tools/docs/**/*"
       ],
-      "outputs": ["{workspaceRoot}/apps/demo/public/docs-content"],
+      "outputs": [
+        "{workspaceRoot}/apps/demo/public/docs-content",
+        "{workspaceRoot}/apps/demo/src/app/docs/generated"
+      ],
       "options": {
         "command": "node tools/docs/generate.mjs"
       }
