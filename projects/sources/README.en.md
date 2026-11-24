@@ -28,7 +28,7 @@ parent.
 - `hls.js` 1.x (peer dependency; needed only for `HlsSourceDirective`)
 - `dashjs` 5.x (peer dependency; needed only for `DashSourceDirective`)
 
-The package is not yet published to npm (working version `0.0.1`). Inside the
+The package is not yet published to npm (version `1.0.0` is in preparation). Inside the
 monorepo it is wired up through `paths` in `tsconfig.base.json`.
 
 ## Installation

@@ -1,6 +1,6 @@
 {
   "name": "@erst_dev/ngx-video-controls",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Ready-made Angular player controls: play button, volume slider, time display, fullscreen button and buffering indicator.",
   "keywords": [
     "angular",
@@ -21,7 +21,7 @@
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",
-    "@erst_dev/ngx-video-core": "^0.0.1"
+    "@erst_dev/ngx-video-core": "^1.0.0"
   },
   "sideEffects": false,
   "publishConfig": {

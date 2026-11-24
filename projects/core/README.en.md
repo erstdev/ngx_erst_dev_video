@@ -19,7 +19,7 @@ and control of the media element.
 - Angular 22+
 - RxJS 7.8+
 
-The package is not yet published to npm (working version `0.0.1`). Inside the
+The package is not yet published to npm (version `1.0.0` is in preparation). Inside the
 monorepo it is wired up through `paths` in `tsconfig.base.json`.
 
 ## Installation

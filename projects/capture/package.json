@@ -1,6 +1,6 @@
 {
   "name": "@erst_dev/ngx-video-capture",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Screenshot, clip recording and GIF capture from a playing video in Angular, with no changes to your player markup.",
   "keywords": [
     "angular",
@@ -21,7 +21,7 @@
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",
-    "@erst_dev/ngx-video-core": "^0.0.1"
+    "@erst_dev/ngx-video-core": "^1.0.0"
   },
   "sideEffects": false,
   "publishConfig": {

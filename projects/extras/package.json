@@ -1,6 +1,6 @@
 {
   "name": "@erst_dev/ngx-video-extras",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Angular video player extras: click-to-play overlay, error display, speed control, keyboard shortcuts, gestures and WebVTT subtitles.",
   "keywords": [
     "angular",
@@ -21,7 +21,7 @@
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",
-    "@erst_dev/ngx-video-core": "^0.0.1"
+    "@erst_dev/ngx-video-core": "^1.0.0"
   },
   "sideEffects": false,
   "publishConfig": {

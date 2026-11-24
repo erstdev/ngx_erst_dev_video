@@ -1,6 +1,6 @@
 {
   "name": "@erst_dev/ngx-video-timeline",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Timeline for Angular video players: progress, buffer, seek by click, drag or keyboard, frame preview and chapter markers.",
   "keywords": [
     "angular",
@@ -20,7 +20,7 @@
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",
-    "@erst_dev/ngx-video-core": "^0.0.1"
+    "@erst_dev/ngx-video-core": "^1.0.0"
   },
   "sideEffects": false,
   "publishConfig": {

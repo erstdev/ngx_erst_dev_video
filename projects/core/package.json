@@ -1,6 +1,6 @@
 {
   "name": "@erst_dev/ngx-video-core",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Headless Angular video service and directive: playback state, controls and time formatting for ngx-video.",
   "keywords": [
     "angular",

@@ -31,7 +31,7 @@ documentation site.
   `VideoService` and error types)
 - A browser with Canvas and `MediaRecorder` for clip recording
 
-The package is not published to npm yet (working version `0.0.1`). Inside the
+The package is not published to npm yet (version `1.0.0` is in preparation). Inside the
 monorepo it is wired through `paths` in `tsconfig.base.json`.
 
 ## Installation
