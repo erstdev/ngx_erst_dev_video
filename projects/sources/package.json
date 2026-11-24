@@ -19,6 +19,11 @@
   "bugs": {
     "url": "https://github.com/erstdev/ngx_erst_dev_video/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erstdev/ngx_erst_dev_video.git",
+    "directory": "projects/sources"
+  },
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",

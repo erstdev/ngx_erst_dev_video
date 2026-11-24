@@ -61,10 +61,9 @@ VPS для этого не нужен, поэтому делается до де
 **Подготовка публикации (не зависит от сайта, можно вести параллельно шагу 2):**
 
 - [ ] **Метаданные во все 6 манифестов.** Заполнены: `description` (английский),
-      `keywords`, `license` (`MIT`), `author` (`Eric Abramyan`), `bugs` (issues на GitHub).
-      Осталось: `repository` (+ `directory`) — репозиторий стал публичным, поле пока не
-      добавлено; `homepage` — после домена.
-      _Блокирует:_ публикацию — без них на npm не будет описания и ссылок.
+      `keywords`, `license` (`MIT`), `author` (`Eric Abramyan`), `bugs` (issues на GitHub),
+      `repository` (+ `directory` = `projects/<пакет>`). Остался `homepage` — после домена.
+      _Блокирует:_ публикацию — без него на npm не будет ссылки на сайт.
 - [x] **`LICENSE` в тарбол**: копия лицензии лежит в каждой папке пакета
       (`projects/<пакет>/LICENSE`), `ng-packagr` сам копирует её в
       `dist/projects/<пакет>/LICENSE`; в тарболе есть `LICENSE` и `README.md`.
