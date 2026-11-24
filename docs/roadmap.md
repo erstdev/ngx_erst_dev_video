@@ -70,9 +70,11 @@ VPS для этого не нужен, поэтому делается до де
       `dist/projects/<пакет>/LICENSE`; в тарболе есть `LICENSE` и `README.md`.
       При изменении лицензии обновлять все шесть копий: assets из корня монорепо
       `ng-packagr` запрещает.
-- [ ] **Partial compilation** (`@nx/angular:package`): текущий `@nx/angular:ng-packagr-lite`
-      добавляет `prepublishOnly`, который блокирует `npm publish`.
-      _Блокирует:_ публикацию.
+- [x] **Partial compilation** (`@nx/angular:package`): сборка переведена на публикационный
+      исполнитель, в `tsconfig.lib.prod.json` включён `compilationMode: "partial"`.
+      В `dist` — `fesm2022` и `types`, объявления `ɵɵngDeclare...`, `prepublishOnly`
+      больше нет. Сборка пакетов зависит от зависимостей (`dependsOn: ["^build"]`):
+      без этого параллельный прогон ловит пустой `dist` у `core`.
 - [ ] **Версии и `peerDependencies`**: поднять все пакеты до `0.1.0`, у `controls` — `core ^0.1.0`.
       При переходе на partial — пересмотреть диапазон Angular (сейчас `^22.0.0`).
       _Блокирует:_ публикацию.
