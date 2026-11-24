@@ -49,6 +49,8 @@
     "@angular/cli": "~22.3.0",
     "@angular/compiler-cli": "~22.3.0",
     "@angular/language-service": "~22.3.0",
+    "@angular/platform-server": "~22.3.0",
+    "@angular/ssr": "~22.3.0",
     "@eslint/js": "^10.0.1",
     "@nx/angular": "24.1.0-beta.2",
     "@nx/eslint": "24.1.0-beta.2",

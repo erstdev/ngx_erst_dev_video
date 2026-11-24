@@ -27,6 +27,8 @@
       "options": {
         "outputPath": "dist/apps/demo",
         "baseHref": "/",
+        "outputMode": "static",
+        "server": "apps/demo/src/main.server.ts",
         "browser": "apps/demo/src/main.ts",
         "tsConfig": "apps/demo/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
@@ -77,17 +79,24 @@
         "signal": true
       }
     },
+    "prepare-static": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "node tools/site/prepare-static.mjs"
+      }
+    },
     "serve-static": {
       "continuous": true,
       "executor": "@nx/web:file-server",
       "readyWhen": {
         "signal": true
       },
-      "dependsOn": ["build"],
+      "dependsOn": ["prepare-static"],
       "options": {
-        "buildTarget": "demo:build",
         "staticFilePath": "dist/apps/demo/browser",
-        "spa": true
+        "spa": true,
+        "watch": false
       }
     }
   }

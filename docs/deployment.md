@@ -3,20 +3,34 @@
 Черновик к шагу 2: VPS и домен покупаются в декабре, конфиг пока не применяется.
 Файл фиксирует, что именно нужно настроить, чтобы не отлаживать это на сервере.
 
-Сайт — статика из `dist/apps/demo/browser`: `index.html`, хешированные JS/CSS,
-`favicon.ico`, `docs-content/*.json` и `404.html` (копия `index.html`, её создаёт
-сборка).
+Сайт — статика из `dist/apps/demo/browser`: пререндеренные `en/index.html` и
+`ru/index.html`, SPA-shell `index.csr.html` (его создаёт Angular), его копия
+`index.html` (после `nx run demo:prepare-static`), хешированные JS/CSS,
+`favicon.ico` и `docs-content/*.json`.
 
 ## Что важно
 
-- `baseHref=/`: сайт живёт в корне домена, а не в подпапке. Все маршруты клиентские:
-  файлов `en/docs/...` на диске нет.
-- **SPA-fallback:** на неизвестный путь сервер отдаёт `index.html`, иначе глубокая
-  ссылка и F5 дают 404 — приложение не успевает загрузиться.
+- `baseHref=/`: сайт живёт в корне домена, а не в подпапке.
+- **Пререндер:** главные `/en` и `/ru` — готовый HTML с контентом
+  (`ng-server-context="ssg"`). Остальные страницы пока клиентские.
+- **SPA-fallback:** на неизвестный путь сервер отдаёт `index.html` (это shell),
+  иначе глубокая ссылка и F5 дают 404 — приложение не успевает загрузиться.
 - **Fallback только для страниц:** `docs-content/*.json`, `main-*.js`, `styles-*.css`
   и другие файлы должны отдаваться как файлы, а отсутствующие — честным 404. Если
   вернуть на них `index.html`, `fetch` получит HTML вместо JSON.
 - `index.html` не кешируем (он ссылается на новые хеши), хешированные ассеты — надолго.
+
+## Сборка
+
+```sh
+npx nx run demo:build          # сборка + пререндер страниц
+npx nx run demo:prepare-static # index.csr.html → index.html
+```
+
+`prepare-static` обязателен: при наличии серверной точки входа Angular называет
+SPA-shell `index.csr.html`, а статике нужен `index.html`. Пререндеренные страницы
+(`en/index.html`, `ru/index.html`) скрипт не трогает. Серверный бандл в прод не
+уезжает — деплоится только `browser/`.
 
 ## nginx
 
@@ -74,7 +88,9 @@ example.com {
 ## Проверка после деплоя
 
 ```sh
-curl -I https://example.com/                                  # 200, index.html
+curl -I https://example.com/                                  # 200, index.html (shell)
+curl -I https://example.com/en                                # 200, пререндеренный HTML
+curl -I https://example.com/ru                                # 200, пререндеренный HTML
 curl -I https://example.com/en/docs                           # 200, index.html (fallback)
 curl -I https://example.com/en/docs/controls/play-button/api  # 200, fallback
 curl -I https://example.com/docs-content/en/core.json         # 200, application/json
@@ -82,8 +98,8 @@ curl -I https://example.com/docs-content/en/missing.json      # 404
 curl -I https://example.com/no-such-page                      # 200, index.html (SPA)
 ```
 
-Локально то же самое проверяется через `npx nx run demo:serve-static --port=4300`:
-цель запускается с `"spa": true`.
+Локально: `npx nx run demo:serve-static --port=4300` (цель сама собирает сайт,
+готовит `index.html` и запускается с `"spa": true`).
 
 ## Что осталось на декабрь
 

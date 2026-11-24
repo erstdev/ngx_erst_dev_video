@@ -121,13 +121,18 @@ VPS для этого не нужен, поэтому делается до де
 - [x] **Главная-витрина** на `/`: что это за библиотеки, установка, ссылки на разделы.
       `home/pages` — вводный блок, возможности, шесть пакетов и быстрый старт;
       каталог примеров живёт в `/docs`.
-- [ ] **Prerender обеих локалей** (для SEO и быстрой первой отрисовки): список
-      маршрутов в `@angular/build:application`, по одному HTML на локаль.
-- [x] **Сборка сайта**: прод-билд `apps/demo` с `baseHref=/` (домен корневой);
-      сборка кладёт `404.html` — копию `index.html`. Глубокие ссылки проверены
-      локально через `serve-static` (`spa: true`): `/en`, `/en/docs`,
-      `/ru/docs/core`, `/en/docs/controls/play-button/api` отвечают 200. Серверный
-      конфиг fallback и кеша — черновик [deployment.md](deployment.md), применить на VPS.
+- [ ] **Prerender обеих локалей**: инфраструктура готова — `@angular/ssr`,
+      `main.server.ts`, `app.routes.server.ts`, `outputMode: "static"`, hydration;
+      пререндерятся главные `/en` и `/ru`. Осталось: серверный источник данных для
+      `docs-content` (сейчас `fetch` в Node не работает), `getPrerenderParams` для
+      пакетов и кирпичей и перевод 6 README + 19 API на `RenderMode.Prerender`.
+      Живые демо остаются `RenderMode.Client`.
+- [x] **Сборка сайта**: прод-билд `apps/demo` с `baseHref=/` (домен корневой).
+      Angular с серверной точкой входа кладёт SPA-shell `index.csr.html`;
+      `demo:prepare-static` копирует его в `index.html` для статики и `serve-static`.
+      Глубокие ссылки (`/en`, `/en/docs`, `/ru/docs/core`,
+      `/en/docs/controls/play-button/api`) локально отвечают 200. Конфиг fallback
+      и кеша — [deployment.md](deployment.md), применить на VPS.
 - [ ] **VPS и домен, зафиксировать `SITE_URL`** — покупка в **декабре**.
       _Блокирует:_ HTTPS, деплой и ссылки в README.
 - [ ] **HTTPS и статика**: Caddy (авто-TLS) или nginx + certbot, `try_files`

@@ -50,7 +50,8 @@ export class App {
       )
       .subscribe(() => {
         if (!this.router.parseUrl(this.router.url).fragment) {
-          this.document.defaultView?.scrollTo({ top: 0 });
+          // На сервере (пререндер) `defaultView` — заглушка без scrollTo.
+          this.document.defaultView?.scrollTo?.({ top: 0 });
         }
       });
   }
