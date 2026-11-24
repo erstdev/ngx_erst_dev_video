@@ -14,6 +14,7 @@
   - `docs/roadmap.md` — план работ по пунктам: задачи, статусы, справочник;
   - `docs/journal.md` — история;
   - `docs/workflow.md` — процесс;
+  - `docs/deployment.md` — деплой сайта: статика, SPA-fallback, nginx/Caddy, кеш;
   - `docs/references.md` — ссылки и авторство.
 
 ## Что не читать

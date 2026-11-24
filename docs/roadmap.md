@@ -123,12 +123,16 @@ VPS для этого не нужен, поэтому делается до де
       каталог примеров живёт в `/docs`.
 - [ ] **Prerender обеих локалей** (для SEO и быстрой первой отрисовки): список
       маршрутов в `@angular/build:application`, по одному HTML на локаль.
-- [ ] **Сборка сайта**: один билд `apps/demo`, `baseHref=/` (домен корневой),
-      SPA-fallback на глубокие ссылки.
+- [x] **Сборка сайта**: прод-билд `apps/demo` с `baseHref=/` (домен корневой);
+      сборка кладёт `404.html` — копию `index.html`. Глубокие ссылки проверены
+      локально через `serve-static` (`spa: true`): `/en`, `/en/docs`,
+      `/ru/docs/core`, `/en/docs/controls/play-button/api` отвечают 200. Серверный
+      конфиг fallback и кеша — черновик [deployment.md](deployment.md), применить на VPS.
 - [ ] **VPS и домен, зафиксировать `SITE_URL`** — покупка в **декабре**.
       _Блокирует:_ HTTPS, деплой и ссылки в README.
 - [ ] **HTTPS и статика**: Caddy (авто-TLS) или nginx + certbot, `try_files`
-      на `index.html`, кеширование ассетов. _Требует:_ домен.
+      на `index.html`, кеширование ассетов. Конфиги и проверки — [deployment.md](deployment.md).
+      _Требует:_ домен.
 - [ ] **Деплой из CI по SSH/rsync**: секреты (host, user, SSH key, путь), отдельный
       deploy-пользователь, firewall, автообновления. _Требует:_ собранный сайт и VPS.
 - [ ] **На сервере только статика:** без Node, исходников, `.git`, `node_modules` и source maps.
