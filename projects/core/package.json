@@ -1,6 +1,21 @@
 {
   "name": "@erst_dev/ngx-video-core",
   "version": "0.0.1",
+  "description": "Headless Angular video service and directive: playback state, controls and time formatting for ngx-video.",
+  "keywords": [
+    "angular",
+    "video",
+    "player",
+    "ngx-video",
+    "video-service",
+    "video-directive",
+    "html5-video"
+  ],
+  "author": "Eric Abramyan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erstdev/ngx_erst_dev_video/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",

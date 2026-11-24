@@ -1,6 +1,23 @@
 {
   "name": "@erst_dev/ngx-video-capture",
   "version": "0.0.1",
+  "description": "Screenshot, clip recording and GIF capture from a playing video in Angular, with no changes to your player markup.",
+  "keywords": [
+    "angular",
+    "video",
+    "player",
+    "ngx-video",
+    "screenshot",
+    "screen-recording",
+    "media-recorder",
+    "gif",
+    "canvas"
+  ],
+  "author": "Eric Abramyan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erstdev/ngx_erst_dev_video/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",

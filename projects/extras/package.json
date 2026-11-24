@@ -1,6 +1,23 @@
 {
   "name": "@erst_dev/ngx-video-extras",
   "version": "0.0.1",
+  "description": "Angular video player extras: click-to-play overlay, error display, speed control, keyboard shortcuts, gestures and WebVTT subtitles.",
+  "keywords": [
+    "angular",
+    "video",
+    "player",
+    "ngx-video",
+    "keyboard-shortcuts",
+    "gestures",
+    "subtitles",
+    "webvtt",
+    "playback-speed"
+  ],
+  "author": "Eric Abramyan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erstdev/ngx_erst_dev_video/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",

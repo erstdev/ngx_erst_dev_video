@@ -1,6 +1,22 @@
 {
   "name": "@erst_dev/ngx-video-timeline",
   "version": "0.0.1",
+  "description": "Timeline for Angular video players: progress, buffer, seek by click, drag or keyboard, frame preview and chapter markers.",
+  "keywords": [
+    "angular",
+    "video",
+    "player",
+    "ngx-video",
+    "timeline",
+    "video-timeline",
+    "seek",
+    "chapter-markers"
+  ],
+  "author": "Eric Abramyan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erstdev/ngx_erst_dev_video/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",

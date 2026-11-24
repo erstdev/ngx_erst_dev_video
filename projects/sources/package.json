@@ -1,6 +1,24 @@
 {
   "name": "@erst_dev/ngx-video-sources",
   "version": "0.0.1",
+  "description": "HLS and DASH streaming sources plus a quality switcher for Angular video players built on ngx-video.",
+  "keywords": [
+    "angular",
+    "video",
+    "player",
+    "ngx-video",
+    "hls",
+    "dash",
+    "adaptive-streaming",
+    "quality-switcher",
+    "hls-js",
+    "dashjs"
+  ],
+  "author": "Eric Abramyan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erstdev/ngx_erst_dev_video/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",
