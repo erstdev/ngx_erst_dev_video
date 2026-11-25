@@ -94,6 +94,8 @@
 
 | 2026-11-24 | Сайт: документация и API пререндерятся. Генератор пишет серверный модуль `apps/demo/src/app/docs/generated/` (те же страницы и индексы, что в JSON), docs-маршруты получают данные через resolver'ы, клиенту их отдаёт `TransferState` — первый рендер совпадает, hydration без расхождений. `RenderMode.Prerender` для `/:locale`, `/:locale/docs`, `/:locale/docs/:pkg`, `/:locale/docs/:pkg/:brick/api`; `getPrerenderParams` из сгенерированных списков. 54 статических страницы (2 главные + 2 `/docs` + 12 README + 38 API), демо — `RenderMode.Client`. `demo:prepare-static` дополнительно кладёт shell в каталоги клиентских маршрутов, иначе глубокие ссылки демо отдавали листинг или 403. |
 
+| 2026-11-25 | План: в шаг 1 добавлено оформление GitHub-репозитория (About, topics, social preview 1280×640, hero и бейджи README, issue/PR-шаблоны, `SECURITY.md`), в шаг 3 — ведение релизов (тег `vX.Y.Z` на набор пакетов, `CHANGELOG.md`, release notes, хотфиксы и `npm deprecate`), в шаге 4 уточнены release-джобы и npm-бейджи. |
+
 > Обновляй таблицу при каждом существенном изменении. Мелочи (опечатки) — не считаются.
 
 ---
