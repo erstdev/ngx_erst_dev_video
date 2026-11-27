@@ -1,115 +1,146 @@
-# Деплой сайта
+# Деплой сайта на GitHub Pages
 
-Черновик к шагу 2: VPS и домен покупаются в декабре, конфиг пока не применяется.
-Файл фиксирует, что именно нужно настроить, чтобы не отлаживать это на сервере.
+Черновик к шагу 2: хостинг — **GitHub Pages**, бесплатно для публичного
+репозитория. Файл фиксирует, что настроить и проверить, чтобы не отлаживать это на
+живом сайте.
 
-Сайт — статика из `dist/apps/demo/browser`: 54 пререндеренные страницы (главные,
-`/docs`, README пакетов и API), SPA-shell `index.csr.html` (его создаёт Angular) и
-его копии `index.html` — в корне и в каталогах клиентских маршрутов (демо), после
-`nx run demo:prepare-static`; хешированные JS/CSS, `favicon.ico` и
-`docs-content/*.json`.
+Сайт — статика из `dist/apps/demo/browser`. Адрес:
+`https://erstdev.github.io/ngx_erst_dev_video/`. Проект живёт под подпутём
+`/ngx_erst_dev_video/`, домен не покупаем: HTTPS и CDN даёт GitHub, сервер не нужен.
 
 ## Что важно
 
-- `baseHref=/`: сайт живёт в корне домена, а не в подпапке.
-- **Пререндер:** главные `/en` и `/ru`, `/<локаль>/docs`, README пакетов и API —
-  готовый HTML с контентом (`ng-server-context="ssg"`). Живые демо
-  (`/<локаль>/docs/<пакет>/<кирпич>`) остаются клиентскими: им нужен браузер.
-- **SPA-fallback:** на неизвестный путь сервер отдаёт `index.html` (это shell),
-  иначе глубокая ссылка и F5 дают 404 — приложение не успевает загрузиться.
-- **Fallback только для страниц:** `docs-content/*.json`, `main-*.js`, `styles-*.css`
-  и другие файлы должны отдаваться как файлы, а отсутствующие — честным 404. Если
-  вернуть на них `index.html`, `fetch` получит HTML вместо JSON.
-- `index.html` не кешируем (он ссылается на новые хеши), хешированные ассеты — надолго.
+- **Базовый путь.** `baseHref` — `/ngx_erst_dev_video/`, `SITE_URL` —
+  `https://erstdev.github.io/ngx_erst_dev_video` без хвостового слэша. Все
+  внутренние ссылки, canonical, hreflang, Open Graph и JSON-LD — с подпутём.
+- **Завершающий слэш.** Pages отдаёт 301 на `/...` для каталогов, поэтому
+  canonical/hreflang/sitemap и ссылки из README нормализуются к виду
+  `/en/docs/core/`. Адрес без слэша работает, но получает лишний редирект.
+- **Пререндер.** 54 статических страницы с `ng-server-context="ssg"`: главные,
+  `/docs`, README пакетов и API — в каждой статья, сайдбар и SEO-теги. Живые демо
+  остаются клиентскими, но их каталоги получают shell: прямые ссылки открываются,
+  а не отдают 404.
+- **404.html.** Pages не умеет rewrite: неизвестный путь отдаёт `404.html` (shell)
+  со статусом 404, приложение показывает «не найдено». Для демо-маршрутов это не
+  нужно — у них есть `index.html`.
+- **Файлы.** `docs-content/*.json` отдаются как `application/json`; отсутствующий
+  файл — честный 404, иначе `fetch` получит HTML вместо JSON.
+- **Кеш.** Управлять `Cache-Control` на Pages нельзя: `index.html` и хешированные
+  ассеты кешируются на усмотрение GitHub (короткий TTL). Для immutable-кеша и
+  security-заголовков нужен внешний CDN или свой сервер — для запуска не требуется.
+- **Лимиты бесплатного Pages:** публичный репозиторий, 1 ГБ опубликованного сайта,
+  100 ГБ трафика в месяц, 10 сборок в час. Наш сайт — около 6 МБ.
+- **GitLab-зеркало сайт не деплоит:** Pages настроен только в GitHub, GitLab CI
+  остаётся проверками.
+
+## Где живёт адрес
+
+| Место                                           | Что задаёт                                           |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| `apps/demo/project.json`                        | `baseHref: "/ngx_erst_dev_video/"`                   |
+| `apps/demo/src/app/constants/site.constants.ts` | `SITE_URL` и `SITE_BASE`                             |
+| `tools/docs/generate.mjs`                       | `SITE_BASE` из окружения — ссылки в README-страницах |
+| `docs:pack`                                     | `SITE_URL` из окружения — ссылки в npm-README        |
+| workflow `deploy`                               | ничего: готовый `dist` из build-джобы                |
 
 ## Сборка
 
 ```sh
-npx nx run demo:build          # сборка + пререндер страниц
-npx nx run demo:prepare-static # index.csr.html → index.html
+npm ci
+npx nx run demo:build
+node tools/site/prepare-static.mjs
 ```
 
-`prepare-static` обязателен: при наличии серверной точки входа Angular называет
-SPA-shell `index.csr.html`, а статике нужен `index.html`. Скрипт копирует shell в
-корень и в каталоги клиентских маршрутов: каталог, появившийся ради вложенной
-пререндеренной API-страницы, иначе отдаёт листинг или 403 вместо приложения.
-Пререндеренные страницы скрипт не трогает. Серверный бандл в прод не уезжает —
-деплоится только `browser/`.
+`prepare-static` обязателен: Angular с серверной точкой входа кладёт SPA-shell
+`index.csr.html`, а статике нужен `index.html`. Скрипт копирует shell в корень, в
+`404.html` и в каталоги клиентских маршрутов (демо), добавляет `.nojekyll`.
+Пререндеренные страницы не трогает. Артефакт деплоя — `dist/apps/demo/browser`,
+серверный бандл в прод не уезжает.
 
-## nginx
+Локально Pages эмулирует цель `demo:serve-pages` (появляется в шаге 2): Node-сервер
+без зависимостей отдаёт сайт под `/ngx_erst_dev_video/`, каталоги — через
+`index.html`, остальное — через `404.html`. Она заменяет `serve-static`, который
+отдаёт сайт с базой `/` и для Pages не подходит.
 
-```nginx
-server {
-    listen 443 ssl http2;
-    server_name example.com;
-    root /var/www/ngx-video;
-    index index.html;
+## Деплой
 
-    # документация и файлы: отсутствующий файл — это 404, а не index.html
-    location ^~ /docs-content/ {
-        try_files $uri =404;
-    }
+Джоба в GitHub Actions после зелёного `build` — в `ci.yml` или отдельном
+`pages.yml`:
 
-    # хешированные ассеты кешируем надолго
-    location ~* \.(?:js|css|woff2?|png|jpe?g|gif|svg|ico)$ {
-        try_files $uri =404;
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-
-    location = /index.html {
-        add_header Cache-Control "no-cache";
-    }
-
-    # всё остальное — SPA
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-}
+```yaml
+deploy:
+  name: deploy
+  needs: [build]
+  if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+  runs-on: ubuntu-latest
+  timeout-minutes: 10
+  permissions:
+    pages: write
+    id-token: write
+  environment:
+    name: github-pages
+    url: ${{ steps.deployment.outputs.page_url }}
+  concurrency:
+    group: pages
+    cancel-in-progress: false
+  steps:
+    - name: Скачать сборку
+      uses: actions/download-artifact@v4
+      with:
+        name: dist
+        path: dist
+    - name: Подготовить статику
+      run: node tools/site/prepare-static.mjs
+    - name: Настроить Pages
+      uses: actions/configure-pages@v5
+    - name: Загрузить артефакт
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: dist/apps/demo/browser
+    - name: Опубликовать
+      id: deployment
+      uses: actions/deploy-pages@v4
 ```
 
-## Caddy
+Один раз вручную: Settings → Pages → Build and deployment → Source:
+**GitHub Actions**. Секретов и отдельного токена нет; `npm ci` в деплое не нужен —
+`dist` приходит из build-джобы, а `prepare-static` использует только Node.
 
-```caddy
-example.com {
-    root * /var/www/ngx-video
-    encode gzip
-
-    @files path /docs-content/* *.js *.css *.woff2 *.png *.jpg *.jpeg *.gif *.svg *.ico
-    handle @files {
-        file_server
-    }
-
-    header /index.html Cache-Control "no-cache"
-
-    handle {
-        try_files {path} /index.html
-        file_server
-    }
-}
-```
+Откат: перезапуск старого запуска workflow (или деплой коммита до правки) —
+Pages хранит историю деплоев. GitLab-пайплайн деплой не дублирует.
 
 ## Проверка после деплоя
 
 ```sh
-curl -I https://example.com/                                  # 200, index.html (shell)
-curl -I https://example.com/en                                # 200, пререндеренный HTML
-curl -I https://example.com/ru                                # 200, пререндеренный HTML
-curl -I https://example.com/en/docs                           # 200, пререндеренный HTML
-curl -I https://example.com/en/docs/core                      # 200, README пакета
-curl -I https://example.com/en/docs/controls/play-button/api  # 200, API-справка
-curl -I https://example.com/en/docs/controls/play-button      # 200, shell (демо)
-curl -I https://example.com/docs-content/en/core.json         # 200, application/json
-curl -I https://example.com/docs-content/en/missing.json      # 404
-curl -I https://example.com/no-such-page                      # 200, index.html (SPA)
+SITE=https://erstdev.github.io/ngx_erst_dev_video
+
+curl -I "$SITE/"                                  # 200, shell (index.html)
+curl -I "$SITE/en/"                               # 200, пререндеренный HTML
+curl -I "$SITE/ru/"                               # 200, пререндеренный HTML
+curl -I "$SITE/en/docs/"                          # 200, обзор документации
+curl -I "$SITE/en/docs/core/"                     # 200, README пакета
+curl -I "$SITE/en/docs/controls/play-button/api/" # 200, API-справка
+curl -I "$SITE/en/docs/controls/play-button/"     # 200, shell (демо)
+curl -I "$SITE/docs-content/en/core.json"         # 200, application/json
+curl -I "$SITE/docs-content/en/missing.json"      # 404
+curl -I "$SITE/no-such-page"                      # 404 + 404.html (SPA)
+curl -I "$SITE/sitemap.xml"                       # 200
+curl -I "$SITE/robots.txt"                        # 200
 ```
 
-Локально: `npx nx run demo:serve-static --port=4300` (цель сама собирает сайт,
-готовит `index.html` и запускается с `"spa": true`).
+Дополнительно:
 
-## Что осталось на декабрь
+- canonical в HTML — `https://erstdev.github.io/ngx_erst_dev_video/en/docs/core/`;
+- hreflang `en`/`ru`/`x-default` — с подпутём и слэшем;
+- в статье — текст README, сайдбар с пакетами, `ng-state` с `docs-index` и
+  `docs-page`;
+- ссылка без слэша (`/en/docs/core`) даёт 301 на слэш — это нормально, внутренние
+  ссылки уже со слэшем;
+- в консоли нет ошибок hydration (`NG05xx`).
 
-- HTTPS: Caddy получает сертификат сам, для nginx — certbot.
-- Домен и `SITE_URL`, DNS на IP VPS.
-- Деплой из CI по SSH/rsync; на сервере только статика.
-- Проверить после включения HTTPS все маршруты и глубокие ссылки.
+## Что осталось на потом
+
+- Свой домен (платно): `CNAME` в артефакте, DNS, `baseHref` → `/`, `SITE_URL` без
+  подпути, генератор без `SITE_BASE`, 301 со старого адреса. Отдельная задача.
+- Кеш и security-заголовки: только внешний CDN или свой сервер.
+- GitLab Pages: не нужен, пока зеркало приватное и сайт на GitHub.
